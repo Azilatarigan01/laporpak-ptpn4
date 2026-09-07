@@ -5,73 +5,95 @@
 ![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?style=for-the-badge&logo=php&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Production%20Ready-008053?style=for-the-badge)
 
 ---
 
-## 📌 Tentang Proyek
-**Lapor Pak!** adalah aplikasi web berbasis Laravel yang dirancang untuk mendukung tata kelola perusahaan yang baik (*Good Corporate Governance*) dan perlindungan saluran aspirasi (*Whistleblowing System*) bagi seluruh insan perkebunan di lingkungan **PT Perkebunan Nusantara IV Regional II Kebun Dolok Sinumbah**.
+## 🎬 Live Interactive Demo Showcase
 
-Sistem ini memfasilitasi karyawan untuk menyampaikan laporan kendala operasional, saran perbaikan fasilitas kerja, maupun keselamatan kerja (K3) dengan jaminan kerahasiaan identitas, pelacakan tiket digital real-time, serta tindak lanjut langsung dari jajaran Manajemen dan Kepala Bagian.
+![Lapor Pak Live Demo Flow](docs/demo/live_demo.webp)
+
+> 📹 **Video Demo Walkthrough (1–2 Menit):** Cocok untuk peninjauan cepat oleh Tim Rekruter / HR & Technical Reviewer.
 
 ---
 
-## ✨ Fitur Utama Sistem
+## 📌 Tentang Proyek & Latar Belakang (STAR Framework)
 
-### 1. 👥 Portal Publik & Karyawan
-- **Formulir Pengaduan Multi-Tingkat (*Cascading AJAX Select2*):**
-  - Pemilihan berjenjang: *Area Kerja &rarr; Bagian Realisasi &rarr; Posisi / Jabatan &rarr; Nama Karyawan*.
-  - *Auto-fill* Nomor Induk Karyawan (NIKSAP) secara instan.
-  - Upload berkas pendukung (*Foto Bukti Kejadian & Dokumen PDF*).
-  - Pembuatan otomatis **Kode Tiket Pengaduan Unik** (contoh: `PD260908-1234`).
-- **Pusat Pelacakan Real-Time (*Live Tracking*):**
-  - Pelacakan status menggunakan **Nomor Tiket** atau **NIKSAP Karyawan**.
-  - **Alur Progres 3 Tahap Visual:**
-    1. `Diterima`: Laporan tercatat dalam antrean unit.
-    2. `Sedang Diproses`: Ditinjau oleh Personalia / Manajemen Unit.
-    3. `Selesai`: Ditangani tuntas disertai tanggapan resmi pimpinan.
-- **Cetak Lembar Pengaduan PDF Resmi:**
-  - Export lembar disposisi laporan berstandar korporat menggunakan *DomPDF*.
+- **Situation (Kondisi):** Unit Perkebunan Kelapa Sawit PTPN IV Kebun Dolok Sinumbah membutuhkan saluran pengaduan dan aspirasi internal karyawan yang terintegrasi, transparan, dan terpercaya guna mendukung *Good Corporate Governance* (GCG) dan Keselamatan Kerja (K3).
+- **Task (Tantangan):** Membangun sistem berbasis web yang memudahkan karyawan mengajukan keluhan/aspirasi dengan validasi data real-time, perlindungan identitas (*whistleblowing*), pelacakan tiket digital mandiri, serta panel disposisi respon pimpinan.
+- **Action (Solusi Teknis):** Mengembangkan aplikasi full-stack menggunakan Laravel dengan arsitektur MVC, integrasi AJAX cascading dropdowns untuk data multi-afdeling, generator tiket acak unik, ekspor dokumen Berita Acara PDF, dan dashboard analitik eksekutif.
+- **Result (Hasil):** Sistem siap pakai (*production-ready*) dengan alur pelaporan terstruktur dari registrasi tiket hingga disposisi penyelesaian resmi oleh manajemen.
+
+---
+
+## ✨ Fitur Unggulan Sistem
+
+### 1. 👥 Portal Karyawan & Publik
+- **Formulir Pengaduan Multi-Tingkat (*Cascading Dynamic Select2*):**
+  - Pemilihan hierarki berjenjang: *Afdeling / Unit Kerja &rarr; Bagian &rarr; Jabatan &rarr; Nama Karyawan*.
+  - Auto-fill Nomor Induk Karyawan (NIKSAP) otomatis.
+  - Upload berkas lampiran pendukung (*Foto Bukti & Dokumen PDF*).
+  - Generator otomatis **Kode Tiket Pengaduan Unik** (contoh: `PD260908-1234`).
+- **Pusat Pelacakan Real-Time (*Live Ticket Tracking*):**
+  - Pelacakan status instan menggunakan **Kode Tiket** atau **NIKSAP**.
+  - Indikator 3 Tahap Status Visual: `Diterima` &rarr; `Sedang Diproses` &rarr; `Selesai`.
+- **Cetak Dokumen PDF Berita Acara Resmi:**
+  - Export berkas pengaduan ke format PDF standar korporasi secara otomatis menggunakan *DomPDF*.
 - **Portal Berita & Informasi Kebun:**
-  - Artikel seputar panen, sertifikasi RSPO/ISPO, dan agenda perusahaan.
+  - Update operasional panen, sertifikasi RSPO/ISPO, dan agenda kebun.
 
-### 2. 🔐 Panel Administrator & Kepala Bagian
+### 2. 🔐 Panel Administrator & Pimpinan
 - **Dashboard Analitik Eksekutif:**
-  - 4 Kartu Metrik Ringkasan (*Total Laporan, Selesai, Dalam Proses, Total Karyawan & Pimpinan*).
-  - Bilah Distribusi Rasio Penyelesaian Aspirasi.
-  - Jam Real-Time (*WIB - Asia/Jakarta*) dinamis.
-- **Manajemen Pimpinan & Hierarki Jabatan:**
-  - Fitur interaktif **Drag-and-Drop Reordering** & tombol geser naik/turun susunan hierarki pimpinan.
-- **Manajemen Pengaduan Terpadu:**
+  - 4 Kartu Metrik Ringkasan (*Total Laporan Masuk, Selesai, Dalam Proses, Total SDM*).
+  - Indikator rasio tingkat penyelesaian aspirasi.
+  - Real-time WIB Digital Clock Ticker dinamis.
+- **Manajemen Pimpinan & Hierarki Dinamis:**
+  - Pengurutan jabatan pimpinan secara visual dengan fitur **Drag-and-Drop** (`SortableJS`) & tombol reorder cepat.
+- **Tindak Lanjut & Disposisi Pengaduan:**
   - Filter status laporan (*Semua, Diterima, Dalam Proses, Selesai*).
-  - Modal verifikasi & formulir tanggapan/balasan resmi manajemen.
-  - Pencarian cepat berbasis nama pelapor, tiket, atau afdeling.
-- **Manajemen Data Karyawan & Berita:**
-  - CRUD master data karyawan dan berita kebun terintegrasi.
+  - Modal disposisi & verifikasi resmi pimpinan dengan lampiran balasan.
+- **Master Data Karyawan & Berita:**
+  - Manajemen CRUD terpadu data karyawan dan publikasi berita kebun.
 
 ---
 
-## 🛠️ Tech Stack & Library
-- **Backend Framework:** Laravel 9 (PHP 8.2)
+## 🎙️ Naskah Video Demo Rekaman (Loom Script)
+
+Jika Anda ingin merekam video demo 1–2 menit untuk HR/Portofolio:
+
+1. **[00:00 - 00:25] Pembukaan & Landing Page:**
+   > *"Halo, perkenalkan nama saya Nur Azila Tarigan. Ini adalah LAPOR PAK!, sistem layanan aspirasi dan pengaduan karyawan terpadu yang saya kembangkan untuk PTPN IV Regional II Kebun Dolok Sinumbah..."*
+2. **[00:25 - 00:50] Alur Input Pengaduan:**
+   > *"Karyawan dapat memilih unit afdeling, jabatan, dan nama dengan dropdown interaktif cascading. NIKSAP terisi otomatis, karyawan mengunggah bukti dan langsung mendapatkan kode tiket pengaduan unik..."*
+3. **[00:50 - 01:15] Pelacakan Status & Cetak PDF:**
+   > *"Dengan kode tiket tersebut, pelapor dapat memantau status tindak lanjut secara real-time. Pelapor juga dapat mengunduh Berita Acara resmi berformat PDF..."*
+4. **[01:15 - 01:45] Dashboard Admin & Disposisi Pimpinan:**
+   > *"Di sisi manajemen, dashboard analitik menyajikan ringkasan metrik laporan. Pimpinan dapat memberikan tanggapan resmi, memperbarui status, serta mengatur susunan hierarki pimpinan secara drag-and-drop..."*
+
+---
+
+## 🛠️ Tech Stack & Dependencies
+- **Backend Framework:** Laravel 9 / 10 (PHP 8.2)
 - **Database:** MySQL
-- **Frontend & Styling:** Bootstrap 5, Custom Agribusiness EcoBuild CSS, Google Fonts (Plus Jakarta Sans & Inter)
-- **Library Pendukung:**
-  - `Select2` (Cascading Dynamic AJAX Dropdowns)
-  - `SortableJS` (Drag-and-drop Hierarchy Reordering)
-  - `Barryvdh/DomPDF` (Export Lembar Laporan PDF)
-  - `Bootstrap Icons` & `Material Design Icons`
+- **Frontend:** Bootstrap 5, Custom Agribusiness Theme, Google Fonts (Plus Jakarta Sans & Inter)
+- **Libraries:**
+  - `Select2` (Cascading Dynamic AJAX)
+  - `SortableJS` (Drag-and-Drop Reordering)
+  - `Barryvdh/DomPDF` (Automated PDF Generator)
+  - `Bootstrap Icons` & `MDI Icons`
 
 ---
 
-## 🔑 Akun & Kredensial Uji Coba (Demo)
-| Role Pengguna | Email Login | Password | Hak Akses |
+## 🔑 Akun & Kredensial Demo
+| Role | Email Login | Password | Akses Fitur |
 |---|---|---|---|
-| **Super Administrator** | `admin@gmail.com` | `123456` | Akses penuh dashboard, CRUD pengaduan, karyawan, hierarki pimpinan, berita, dan admin |
-| **Kepala Bagian / Pimpinan** | `kepalabagian@gmail.com` | `123456` | Verifikasi laporan, tindak lanjut & respon resmi, data karyawan |
-| **Asisten TU** | `asistentu@gmail.com` | `123456` | Panel pengawas operasional |
+| **Super Administrator** | `admin@gmail.com` | `123456` | Akses penuh dashboard, disposisi, CRUD karyawan & pimpinan |
+| **Kepala Bagian** | `kepalabagian@gmail.com` | `123456` | Verifikasi laporan & tanggapan resmi manajemen |
+| **Asisten TU** | `asistentu@gmail.com` | `123456` | Pengawasan laporan operasional unit |
 
 ---
 
-## 💻 Panduan Instalasi Lokal (Local Setup)
+## 💻 Panduan Instalasi Lokal (Setup Guide)
 
 1. **Clone Repositori:**
    ```bash
@@ -84,37 +106,28 @@ Sistem ini memfasilitasi karyawan untuk menyampaikan laporan kendala operasional
    composer install
    ```
 
-3. **Konfigurasi Environment (`.env`):**
+3. **Konfigurasi File `.env`:**
    ```bash
    cp .env.example .env
    php artisan key:generate
    ```
-   *Sesuaikan konfigurasi database di `.env`:*
-   ```env
-   DB_CONNECTION=mysql
-   DB_HOST=127.0.0.1
-   DB_PORT=3306
-   DB_DATABASE=lapor
-   DB_USERNAME=root
-   DB_PASSWORD=
-   ```
 
 4. **Import Database:**
-   Import file SQL yang telah disediakan:
+   File dump database siap pakai telah disertakan di:
    ```bash
    database/database_laporpak.sql
    ```
-   *(Bisa di-import via phpMyAdmin atau MySQL CLI: `mysql -u root lapor < database/database_laporpak.sql`)*
+   *(Dapat di-import langsung melalui phpMyAdmin atau MySQL CLI).*
 
-5. **Jalankan Server Lokal:**
+5. **Jalankan Aplikasi:**
    ```bash
    php artisan serve
    ```
-   Akses di browser: `http://127.0.0.1:8000`
+   Buka di browser: `http://127.0.0.1:8000`
 
 ---
 
 ## 👤 Pengembang
 - **Nama:** Nur Azila Tarigan
 - **GitHub:** [@Azilatarigan01](https://github.com/Azilatarigan01)
-- **Institusi:** Kerja Praktik (KP) di PT Perkebunan Nusantara IV Regional II Kebun Dolok Sinumbah
+- **Proyek Kerja Praktik (KP):** PT Perkebunan Nusantara IV (Persero) Regional II Kebun Dolok Sinumbah
