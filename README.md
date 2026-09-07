@@ -1,5 +1,5 @@
-# 🌿 Lapor Pak! – Sistem Informasi Layanan Aspirasi & Pengaduan Karyawan
-### PT Perkebunan Nusantara IV (Persero) Regional II Kebun Dolok Sinumbah
+ Lapor Pak! – Sistem Informasi Layanan Aspirasi & Pengaduan Karyawan
+PT Perkebunan Nusantara IV (Persero) Regional II Kebun Dolok Sinumbah
 
 ![Laravel](https://img.shields.io/badge/Laravel-9.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
 ![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?style=for-the-badge&logo=php&logoColor=white)
@@ -12,8 +12,6 @@
 ## 🎬 Live Interactive Demo Showcase
 
 ![Lapor Pak Live Demo Flow](docs/demo/live_demo.webp)
-
-> 📹 **Video Demo Walkthrough (1–2 Menit):** Cocok untuk peninjauan cepat oleh Tim Rekruter / HR & Technical Reviewer.
 
 ---
 
@@ -56,19 +54,6 @@
   - Manajemen CRUD terpadu data karyawan dan publikasi berita kebun.
 
 ---
-
-## 🎙️ Naskah Video Demo Rekaman (Loom Script)
-
-Jika Anda ingin merekam video demo 1–2 menit untuk HR/Portofolio:
-
-1. **[00:00 - 00:25] Pembukaan & Landing Page:**
-   > *"Halo, perkenalkan nama saya Nur Azila Tarigan. Ini adalah LAPOR PAK!, sistem layanan aspirasi dan pengaduan karyawan terpadu yang saya kembangkan untuk PTPN IV Regional II Kebun Dolok Sinumbah..."*
-2. **[00:25 - 00:50] Alur Input Pengaduan:**
-   > *"Karyawan dapat memilih unit afdeling, jabatan, dan nama dengan dropdown interaktif cascading. NIKSAP terisi otomatis, karyawan mengunggah bukti dan langsung mendapatkan kode tiket pengaduan unik..."*
-3. **[00:50 - 01:15] Pelacakan Status & Cetak PDF:**
-   > *"Dengan kode tiket tersebut, pelapor dapat memantau status tindak lanjut secara real-time. Pelapor juga dapat mengunduh Berita Acara resmi berformat PDF..."*
-4. **[01:15 - 01:45] Dashboard Admin & Disposisi Pimpinan:**
-   > *"Di sisi manajemen, dashboard analitik menyajikan ringkasan metrik laporan. Pimpinan dapat memberikan tanggapan resmi, memperbarui status, serta mengatur susunan hierarki pimpinan secara drag-and-drop..."*
 
 ---
 
