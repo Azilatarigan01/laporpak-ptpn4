@@ -72,47 +72,52 @@
 
     /* Top Navbar EcoBuild Style */
     .eco-header {
-      background: rgba(7, 30, 19, 0.95);
+      background: rgba(7, 30, 19, 0.96);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 14px 0;
+      padding: 12px 0;
       transition: all 0.3s ease;
       z-index: 1000;
     }
+    .eco-header .container {
+      max-width: 1420px;
+    }
     .eco-brand-title {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       font-weight: 800;
       color: #ffffff;
       margin: 0;
       line-height: 1.15;
+      white-space: nowrap !important;
     }
     .eco-brand-sub {
-      font-size: 0.68rem;
+      font-size: 0.72rem;
       color: var(--eco-lime);
       font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap !important;
     }
     .eco-nav-link {
       color: #e2e8f0 !important;
       font-weight: 600;
-      font-size: 0.92rem;
-      padding: 8px 14px !important;
-      border-radius: 20px;
+      font-size: 0.84rem;
+      padding: 6px 11px !important;
+      border-radius: 18px;
       transition: all 0.25s ease;
       text-decoration: none;
+      white-space: nowrap !important;
     }
     .eco-nav-link:hover, .eco-nav-link.active {
       color: #ffffff !important;
-      background: rgba(82, 183, 136, 0.15);
+      background: rgba(82, 183, 136, 0.2);
     }
     .btn-eco-pill {
       background: linear-gradient(135deg, #52b788 0%, #2d6a4f 100%);
       color: #ffffff !important;
       font-weight: 700;
-      font-size: 0.88rem;
-      padding: 10px 22px;
+      font-size: 0.82rem;
+      padding: 8px 18px;
       border-radius: 30px;
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 4px 15px rgba(82, 183, 136, 0.35);
@@ -121,6 +126,8 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
     }
     .btn-eco-pill:hover {
       background: linear-gradient(135deg, #74c69d 0%, #40916c 100%);
@@ -711,16 +718,16 @@
   <header class="eco-header fixed-top">
     <div class="container d-flex align-items-center justify-content-between">
       <!-- Brand Logo -->
-      <a href="{{ url('/') }}" class="d-flex align-items-center text-decoration-none gap-2">
-        <img src="{{ asset('assets/img/logoo.png') }}" alt="PTPN IV Logo" style="height: 42px; width: auto;">
-        <div class="d-flex flex-column">
-          <span class="fw-bold text-white fs-5 lh-1" style="letter-spacing: -0.01em;">PTPN IV <span class="fw-bold" style="color: #74c69d; font-size: 0.95rem;">REGIONAL II</span></span>
-          <span class="text-white-50" style="font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase;">Kebun Dolok Sinumbah &bull; Lapor Pak!</span>
+      <a href="{{ url('/') }}" class="d-flex align-items-center text-decoration-none gap-2" style="white-space: nowrap !important; flex-shrink: 0 !important;">
+        <img src="{{ asset('assets/img/logoo.png') }}" alt="PTPN IV Logo" style="height: 44px; width: auto;" class="me-1">
+        <div class="d-flex flex-column text-start" style="white-space: nowrap !important;">
+          <div class="fw-bold text-white fs-5 lh-1" style="letter-spacing: -0.01em; white-space: nowrap !important;">PTPN IV <span style="color: #74c69d; font-size: 0.95rem; font-weight: 700;">REGIONAL II</span></div>
+          <span class="text-white-50 small mt-1" style="font-size: 0.72rem; letter-spacing: 0.04em; white-space: nowrap !important;">Kebun Dolok Sinumbah &bull; Lapor Pak!</span>
         </div>
       </a>
 
       <!-- Desktop Navmenu -->
-      <nav id="navmenu" class="navmenu d-none d-xl-flex align-items-center gap-1">
+      <nav id="navmenu" class="navmenu d-none d-xl-flex align-items-center gap-1" style="white-space: nowrap !important; flex-shrink: 0 !important;">
         <a href="{{ url('/') }}" class="eco-nav-link active">Beranda</a>
         <a href="{{ url('about') }}" class="eco-nav-link">Tentang Kami</a>
         <a href="{{ url('panduan') }}" class="eco-nav-link">Panduan Alur</a>
@@ -808,7 +815,7 @@
           <!-- Hero Right Visual Card -->
           <div class="col-lg-5" data-aos="zoom-in" data-aos-delay="200" data-aos-duration="900">
             <div class="hero-estate-card">
-              <img src="{{ asset('assets/img/hero-carousel/hero-carousel-1.jpg') }}" alt="Kebun Sawit Dolok Sinumbah">
+              <img src="{{ asset('assets/img/hero-carousel/4sawit.jpg') }}" alt="Kebun Kelapa Sawit Dolok Sinumbah">
               <div class="mt-3 text-white">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                   <span class="badge bg-success bg-opacity-25 text-light border border-success border-opacity-50 px-3 py-1 rounded-pill">
