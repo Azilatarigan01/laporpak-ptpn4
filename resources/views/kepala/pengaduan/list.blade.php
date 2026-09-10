@@ -66,12 +66,31 @@
               @endif
             </td>
             <td class="text-center pe-4">
+              @php
+                $rawPhone = preg_replace('/[^0-9]/', '', $item->no_hp ?? '');
+                if (str_starts_with($rawPhone, '0')) {
+                    $waPhone = '62' . substr($rawPhone, 1);
+                } elseif (str_starts_with($rawPhone, '62')) {
+                    $waPhone = $rawPhone;
+                } else {
+                    $waPhone = '62' . $rawPhone;
+                }
+                $waMsg = urlencode("*NOTIFIKASI RESMI PTPN IV REGIONAL II KEBUN DOLOK SINUMBAH*\n\nYth. Bapak/Ibu " . ($item->karyawan->nama_karyawan ?? 'Karyawan') . ",\n\nLaporan pengaduan Anda (#" . $item->kode_pengaduan . ") telah kami tinjau dan perbarui:\nStatus: *" . $item->status . "*\nCatatan Pimpinan: \"" . ($item->balasan ?: 'Laporan telah dikoordinasikan untuk penanganan lapangan.') . "\"\n\nCek detail: " . route('pengaduan.cek-status'));
+              @endphp
               <div class="d-flex justify-content-center align-items-center gap-1">
                 <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kepalaModal{{ $item->id_pengaduan }}">
                   <i class="mdi mdi-reply me-1"></i> Tindak Lanjut
                 </button>
-                <a href="{{ route('pengaduan.cetakPDF', $item->id_pengaduan) }}" target="_blank" class="btn btn-sm btn-outline-danger" title="Cetak PDF">
+                @if(!empty($rawPhone))
+                  <a href="https://wa.me/{{ $waPhone }}?text={{ $waMsg }}" target="_blank" class="btn btn-sm btn-outline-success" title="Kirim Pesan WhatsApp">
+                    <i class="mdi mdi-whatsapp"></i>
+                  </a>
+                @endif
+                <a href="{{ route('pengaduan.cetakPDF', $item->id_pengaduan) }}" target="_blank" class="btn btn-sm btn-outline-danger" title="Cetak Surat Laporan Resmi">
                   <i class="mdi mdi-file-pdf-box"></i>
+                </a>
+                <a href="{{ route('pengaduan.cetakDisposisi', $item->id_pengaduan) }}" target="_blank" class="btn btn-sm btn-outline-warning" title="Cetak Lembar Disposisi Lapangan (Perintah Kerja)">
+                  <i class="mdi mdi-clipboard-text-outline"></i>
                 </a>
               </div>
             </td>

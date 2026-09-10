@@ -126,15 +126,38 @@
               @endif
             </td>
             <td class="text-center pe-4">
+              @php
+                $rawPhone = preg_replace('/[^0-9]/', '', $item->no_hp ?? '');
+                if (str_starts_with($rawPhone, '0')) {
+                    $waPhone = '62' . substr($rawPhone, 1);
+                } elseif (str_starts_with($rawPhone, '62')) {
+                    $waPhone = $rawPhone;
+                } else {
+                    $waPhone = '62' . $rawPhone;
+                }
+                $waMsg = urlencode("*NOTIFIKASI RESMI PTPN IV REGIONAL II KEBUN DOLOK SINUMBAH*\n\nYth. Bapak/Ibu " . ($item->karyawan->nama_karyawan ?? 'Karyawan') . " (NIKSAP: " . $item->niksap . "),\n\nLaporan pengaduan Anda dengan nomor tiket *" . $item->kode_pengaduan . "* telah kami perbarui.\nStatus Saat Ini: *" . $item->status . "*\nCatatan Tanggapan: \"" . ($item->balasan ?: 'Laporan telah diterima dan masuk tahapan tindak lanjut.') . "\"\n\nSilakan periksa detail dan unduh lembar resmi pengaduan Anda di:\n" . route('pengaduan.cek-status') . "\n\nTerima kasih atas kerja samanya.\n_Manajemen Kebun Dolok Sinumbah_");
+              @endphp
               <div class="d-flex justify-content-center align-items-center gap-1">
                 <!-- Detail & Respon Modal Button -->
                 <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#detailModal{{ $item->id_pengaduan }}" title="Lihat Detail & Respon">
                   <i class="mdi mdi-eye-outline me-1"></i> Respon
                 </button>
 
+                @if(!empty($rawPhone))
+                  <!-- Direct WhatsApp Button -->
+                  <a href="https://wa.me/{{ $waPhone }}?text={{ $waMsg }}" target="_blank" class="btn btn-sm btn-outline-success" title="Kirim Notifikasi WhatsApp">
+                    <i class="mdi mdi-whatsapp"></i>
+                  </a>
+                @endif
+
                 <!-- Cetak PDF Button -->
-                <a href="{{ route('pengaduan.cetakPDF', $item->id_pengaduan) }}" target="_blank" class="btn btn-sm btn-outline-danger" title="Cetak PDF Resmi">
+                <a href="{{ route('pengaduan.cetakPDF', $item->id_pengaduan) }}" target="_blank" class="btn btn-sm btn-outline-danger" title="Cetak Surat Laporan Resmi">
                   <i class="mdi mdi-file-pdf-box"></i>
+                </a>
+
+                <!-- Cetak Lembar Disposisi Button -->
+                <a href="{{ route('pengaduan.cetakDisposisi', $item->id_pengaduan) }}" target="_blank" class="btn btn-sm btn-outline-warning" title="Cetak Lembar Disposisi Lapangan (Perintah Kerja)">
+                  <i class="mdi mdi-clipboard-text-outline"></i>
                 </a>
 
                 @if(Auth::user()->user_type == 1)
@@ -227,11 +250,21 @@
                           <small class="text-muted">Respon ini akan langsung dapat dibaca oleh karyawan saat memeriksa status pengaduan.</small>
                         </div>
 
-                        <div class="d-flex justify-content-end gap-2">
-                          <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Tutup</button>
-                          <button type="submit" class="btn btn-primary px-4">
-                            <i class="mdi mdi-check-circle me-1"></i> Simpan Status & Balasan
-                          </button>
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                          <div class="d-flex gap-2">
+                            <a href="{{ route('pengaduan.cetakPDF', $item->id_pengaduan) }}" target="_blank" class="btn btn-outline-danger">
+                              <i class="mdi mdi-file-pdf-box me-1"></i> Cetak Surat Pengaduan
+                            </a>
+                            <a href="{{ route('pengaduan.cetakDisposisi', $item->id_pengaduan) }}" target="_blank" class="btn btn-outline-warning text-dark">
+                              <i class="mdi mdi-clipboard-text-outline me-1"></i> Cetak Lembar Disposisi
+                            </a>
+                          </div>
+                          <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Tutup</button>
+                            <button type="submit" class="btn btn-primary px-4">
+                              <i class="mdi mdi-check-circle me-1"></i> Simpan Status & Balasan
+                            </button>
+                          </div>
                         </div>
                       </form>
                     </div>

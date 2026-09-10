@@ -145,10 +145,10 @@
         <a href="{{ url('about') }}" class="eco-nav-link active">Tentang Kami</a>
         <a href="{{ url('pengaduan') }}" class="eco-nav-link">Layanan Pengaduan</a>
         <a href="{{ route('detail') }}" class="eco-nav-link">Berita Kebun</a>
-        <a href="{{ url('/#leadership') }}" class="eco-nav-link">Pimpinan</a>
+        <a href="{{ url('/#leadership') }}" class="eco-nav-link">Struktur Organisasi</a>
         <a href="{{ route('pengaduan.cek-status') }}" class="eco-nav-link">Cek Status</a>
         <a href="{{ url('login') }}" class="btn-eco-pill ms-2">
-          <i class="bi bi-person-fill"></i> Portal Login
+          <i class="bi bi-shield-lock-fill"></i> Login Petugas
         </a>
       </nav>
     </div>

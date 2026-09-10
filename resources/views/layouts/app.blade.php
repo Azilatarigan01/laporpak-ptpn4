@@ -404,17 +404,23 @@
 
                 <li class="sidebar-category">Manajemen Pengaduan</li>
                 <li class="sidebar-nav-item">
-                    <a class="sidebar-nav-link {{ Route::currentRouteName() === 'pengaduan.list' || request()->routeIs('pengaduan.*') ? 'active' : '' }}" href="{{ route('pengaduan.list') }}">
+                    <a class="sidebar-nav-link {{ Route::currentRouteName() === 'pengaduan.list' || (request()->routeIs('pengaduan.*') && !request()->routeIs('admin.pengaduan.rekap*')) ? 'active' : '' }}" href="{{ route('pengaduan.list') }}">
                         <i class="bi bi-file-earmark-text-fill"></i>
                         <span>Data Pengaduan</span>
+                    </a>
+                </li>
+                <li class="sidebar-nav-item">
+                    <a class="sidebar-nav-link {{ request()->routeIs('admin.pengaduan.rekap*') ? 'active' : '' }}" href="{{ route('admin.pengaduan.rekap') }}">
+                        <i class="bi bi-file-earmark-spreadsheet-fill"></i>
+                        <span>Rekap & Laporan</span>
                     </a>
                 </li>
 
                 <li class="sidebar-category">Data Perusahaan</li>
                 <li class="sidebar-nav-item">
-                    <a class="sidebar-nav-link {{ request()->routeIs('kepala.*') ? 'active' : '' }}" href="{{ route('kepala.list') }}">
+                    <a class="sidebar-nav-link {{ request()->routeIs('kepala.*') && !request()->routeIs('kepala.dashboard') ? 'active' : '' }}" href="{{ route('kepala.list') }}">
                         <i class="bi bi-people-fill"></i>
-                        <span>Pimpinan & Hierarki</span>
+                        <span>Profil Pimpinan & Struktur</span>
                     </a>
                 </li>
                 <li class="sidebar-nav-item">
@@ -430,11 +436,11 @@
                     </a>
                 </li>
 
-                <li class="sidebar-category">Pengguna & Akun</li>
+                <li class="sidebar-category">Pengguna & Petugas</li>
                 <li class="sidebar-nav-item">
                     <a class="sidebar-nav-link {{ request()->routeIs('admin.list') || request()->routeIs('admin.add') || request()->routeIs('admin.edit') ? 'active' : '' }}" href="{{ route('admin.list') }}">
                         <i class="bi bi-shield-lock-fill"></i>
-                        <span>Akun Administrator</span>
+                        <span>Akun Petugas & Personalia</span>
                     </a>
                 </li>
                 <li class="sidebar-nav-item">
@@ -456,9 +462,15 @@
 
                 <li class="sidebar-category">Layanan Aspirasi</li>
                 <li class="sidebar-nav-item">
-                    <a class="sidebar-nav-link {{ request()->routeIs('kepala.pengaduan.*') ? 'active' : '' }}" href="{{ route('kepala.pengaduan.list') }}">
+                    <a class="sidebar-nav-link {{ Route::currentRouteName() === 'kepala.pengaduan.list' ? 'active' : '' }}" href="{{ route('kepala.pengaduan.list') }}">
                         <i class="bi bi-file-earmark-check-fill"></i>
                         <span>Data Pengaduan</span>
+                    </a>
+                </li>
+                <li class="sidebar-nav-item">
+                    <a class="sidebar-nav-link {{ request()->routeIs('kepala.pengaduan.rekap*') ? 'active' : '' }}" href="{{ route('kepala.pengaduan.rekap') }}">
+                        <i class="bi bi-file-earmark-spreadsheet-fill"></i>
+                        <span>Rekap & Laporan</span>
                     </a>
                 </li>
 
@@ -491,7 +503,7 @@
             </button>
             <div class="d-flex align-items-center gap-2">
                 <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 rounded-pill fw-bold">
-                    <i class="bi bi-shield-check me-1"></i> {{ Auth::user()->user_type == 1 ? 'Administrator Sistem' : (Auth::user()->jabatan ?: 'Kepala Bagian') }}
+                    <i class="bi bi-shield-check me-1"></i> {{ Auth::user()->jabatan ?: (Auth::user()->user_type == 1 ? 'Administrator / Bagian Personalia' : 'Petugas Unit') }}
                 </span>
                 <span class="text-muted small fw-semibold d-none d-md-inline">&bull; PTPN IV Regional II</span>
             </div>

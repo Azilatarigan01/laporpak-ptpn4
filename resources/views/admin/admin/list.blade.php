@@ -5,12 +5,12 @@
   <div class="col-12 mb-4">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
       <div>
-        <h3 class="fw-bold text-dark mb-1">Daftar Administrator Sistem</h3>
-        <p class="text-muted mb-0">Kelola akun administrator dengan hak akses penuh ke seluruh modul sistem pengaduan.</p>
+        <h3 class="fw-bold text-dark mb-1">Akun Petugas & Bagian Personalia</h3>
+        <p class="text-muted mb-0">Kelola akun petugas administrator dan tim bagian personalia yang bertugas mengelola, memverifikasi, dan menindaklanjuti pengaduan.</p>
       </div>
       <div>
         <a class="btn btn-primary" href="{{ route('admin.add') }}">
-          <i class="mdi mdi-account-plus me-1"></i> Tambah Admin Baru
+          <i class="mdi mdi-account-plus me-1"></i> Tambah Petugas / Personalia
         </a>
       </div>
     </div>
@@ -19,8 +19,8 @@
 
 <div class="card shadow-sm border-0">
   <div class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center">
-    <h5 class="fw-bold text-dark mb-0"><i class="mdi mdi-shield-account-outline me-2 text-success"></i>Daftar Akun Admin</h5>
-    <span class="badge bg-light text-dark border">Total: {{ $getRecord->total() }} Admin</span>
+    <h5 class="fw-bold text-dark mb-0"><i class="mdi mdi-shield-account-outline me-2 text-success"></i>Daftar Petugas & Bagian Personalia</h5>
+    <span class="badge bg-light text-dark border">Total: {{ $getRecord->total() }} Akun Petugas</span>
   </div>
 
   <div class="card-body p-0">
@@ -29,9 +29,10 @@
         <thead class="bg-light">
           <tr>
             <th class="ps-4" style="width: 60px;">No</th>
-            <th>Administrator</th>
-            <th>Email</th>
-            <th>Tanggal Terdaftar</th>
+            <th>Nama Petugas</th>
+            <th>Peran / Bagian</th>
+            <th>Email Login</th>
+            <th>Terdaftar</th>
             <th class="text-center pe-4" style="width: 140px;">Aksi</th>
           </tr>
         </thead>
@@ -51,25 +52,28 @@
                 <div>
                   <h6 class="mb-0 fw-bold text-dark">{{ $value->name }}</h6>
                   @if($value->id == Auth::id())
-                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25" style="font-size: 0.72rem;">Akun Anda</span>
-                  @else
-                    <span class="badge bg-light text-muted border" style="font-size: 0.72rem;">Admin</span>
+                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25" style="font-size: 0.72rem;">Sedang Login</span>
                   @endif
                 </div>
               </div>
             </td>
-            <td class="text-muted">{{ $value->email }}</td>
+            <td>
+              <span class="badge bg-light text-success border border-success border-opacity-25 fw-bold px-3 py-1">
+                <i class="mdi mdi-account-badge-horizontal-outline me-1"></i>{{ $value->jabatan ?: 'Staf Bagian Personalia' }}
+              </span>
+            </td>
+            <td class="text-muted fw-semibold">{{ $value->email }}</td>
             <td class="text-muted small">{{ $value->created_at ? $value->created_at->format('d M Y') : '-' }}</td>
             <td class="text-center pe-4">
               <div class="d-flex justify-content-center gap-1">
-                <a href="{{ route('admin.edit', $value->id) }}" class="btn btn-sm btn-outline-warning" title="Edit Admin">
+                <a href="{{ route('admin.edit', $value->id) }}" class="btn btn-sm btn-outline-warning" title="Edit Akun Petugas">
                   <i class="mdi mdi-pencil"></i>
                 </a>
                 @if($value->id != Auth::id())
-                <form action="{{ route('admin.delete', $value->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun admin {{ $value->name }}?')" class="d-inline">
+                <form action="{{ route('admin.delete', $value->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun {{ $value->name }}?')" class="d-inline">
                   @csrf
                   @method('DELETE')
-                  <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus Admin">
+                  <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus Akun">
                     <i class="mdi mdi-trash-can-outline"></i>
                   </button>
                 </form>
@@ -79,7 +83,7 @@
           </tr>
           @empty
           <tr>
-            <td colspan="5" class="text-center py-5 text-muted">Belum ada akun admin.</td>
+            <td colspan="6" class="text-center py-5 text-muted">Belum ada akun petugas/personalia.</td>
           </tr>
           @endforelse
         </tbody>

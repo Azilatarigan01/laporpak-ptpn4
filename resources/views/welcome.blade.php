@@ -509,10 +509,10 @@
     /* Pimpinan Kebun Section (Dynamic Hierarchy) */
     .pimpinan-eco-card {
       background: #ffffff;
-      border: 1px solid #e9ecef;
-      border-radius: 22px;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
       transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
       height: 100%;
       display: flex;
@@ -520,42 +520,58 @@
     }
     .pimpinan-eco-card:hover {
       transform: translateY(-8px);
-      box-shadow: 0 22px 35px -8px rgba(45, 106, 79, 0.18);
-      border-color: var(--eco-lime);
+      box-shadow: 0 24px 45px -10px rgba(45, 106, 79, 0.22);
+      border-color: #52b788;
     }
-    .pimpinan-photo-box {
-      height: 270px;
+    .pimpinan-card-header {
+      background: linear-gradient(135deg, #071e13 0%, #133c24 100%);
+      padding: 16px 20px 50px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       position: relative;
-      background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    }
+    .pimpinan-badge-unit {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #74c69d;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.05em;
+    }
+    .pimpinan-avatar-wrap {
+      margin-top: -45px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+    .pimpinan-avatar-frame {
+      width: 130px;
+      height: 130px;
+      margin: 0 auto;
+      border-radius: 50%;
+      border: 4px solid #ffffff;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
       overflow: hidden;
+      background: #e2e8f0;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .pimpinan-photo {
+    .pimpinan-avatar-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.5s ease;
+      object-position: center;
+      transition: transform 0.4s ease;
     }
-    .pimpinan-eco-card:hover .pimpinan-photo {
-      transform: scale(1.06);
-    }
-    .pimpinan-badge-rank {
-      position: absolute;
-      top: 14px;
-      left: 14px;
-      background: rgba(7, 30, 19, 0.9);
-      color: #ffffff;
-      font-size: 0.75rem;
-      font-weight: 800;
-      padding: 5px 12px;
-      border-radius: 20px;
-      backdrop-filter: blur(6px);
-      border: 1px solid rgba(255,255,255,0.25);
+    .pimpinan-eco-card:hover .pimpinan-avatar-img {
+      transform: scale(1.08);
     }
     .pimpinan-info-box {
-      padding: 24px;
+      padding: 16px 22px 24px 22px;
       text-align: center;
       flex-grow: 1;
       display: flex;
@@ -563,25 +579,33 @@
       justify-content: space-between;
     }
     .pimpinan-name-txt {
-      font-size: 1.18rem;
+      font-size: 1.15rem;
       font-weight: 800;
-      color: var(--slate-900);
+      color: #0f172a;
       margin-bottom: 4px;
+      line-height: 1.3;
     }
     .pimpinan-position-pill {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 700;
-      color: var(--eco-forest);
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
+      color: #1b4332;
+      background: #e8f5e9;
+      border: 1px solid #c8e6c9;
       padding: 4px 14px;
       border-radius: 20px;
       display: inline-block;
       margin-bottom: 12px;
     }
+    .pimpinan-quote-wrap {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 10px 14px;
+      border-left: 3px solid #52b788;
+      text-align: left;
+    }
     .pimpinan-quote-txt {
-      font-size: 0.85rem;
-      color: var(--slate-600);
+      font-size: 0.82rem;
+      color: #475569;
       font-style: italic;
       line-height: 1.5;
       margin: 0;
@@ -703,12 +727,13 @@
       <nav id="navmenu" class="navmenu d-none d-xl-flex align-items-center gap-1">
         <a href="{{ url('/') }}" class="eco-nav-link active">Beranda</a>
         <a href="{{ url('about') }}" class="eco-nav-link">Tentang Kami</a>
+        <a href="{{ url('panduan') }}" class="eco-nav-link">Panduan Alur</a>
         <a href="{{ url('pengaduan') }}" class="eco-nav-link">Layanan Pengaduan</a>
         <a href="{{ route('detail') }}" class="eco-nav-link">Berita Kebun</a>
-        <a href="#leadership" class="eco-nav-link">Pimpinan</a>
+        <a href="#leadership" class="eco-nav-link">Struktur Organisasi</a>
         <a href="{{ route('pengaduan.cek-status') }}" class="eco-nav-link">Cek Status</a>
         <a href="{{ url('login') }}" class="btn-eco-pill ms-2">
-          <i class="bi bi-person-fill"></i> Portal Login
+          <i class="bi bi-shield-lock-fill"></i> Login Petugas
         </a>
       </nav>
 
@@ -726,6 +751,7 @@
       <div class="d-flex flex-column gap-2">
         <a href="{{ url('/') }}" class="text-white text-decoration-none py-1"><i class="bi bi-house me-2"></i>Beranda</a>
         <a href="{{ url('about') }}" class="text-white text-decoration-none py-1"><i class="bi bi-info-circle me-2"></i>Tentang Kami</a>
+        <a href="{{ url('panduan') }}" class="text-white text-decoration-none py-1"><i class="bi bi-journal-text me-2"></i>Panduan Alur</a>
         <a href="{{ url('pengaduan') }}" class="text-white text-decoration-none py-1"><i class="bi bi-megaphone me-2"></i>Layanan Pengaduan</a>
         <a href="{{ route('detail') }}" class="text-white text-decoration-none py-1"><i class="bi bi-newspaper me-2"></i>Berita Kebun</a>
         <a href="{{ route('pengaduan.cek-status') }}" class="text-white text-decoration-none py-1"><i class="bi bi-search me-2"></i>Cek Status Laporan</a>
@@ -866,7 +892,7 @@
                     <span>Isi Formulir Pengaduan</span>
                     <i class="bi bi-arrow-right ms-1"></i>
                   </a>
-                  <a href="{{ route('pengaduan.cek-status') }}" class="btn btn-outline-light px-3 py-3 rounded-pill small fw-semibold">
+                  <a href="{{ route('panduan') }}" class="btn btn-outline-light px-3 py-3 rounded-pill small fw-semibold">
                     Panduan Alur <i class="bi bi-question-circle ms-1"></i>
                   </a>
                 </div>
@@ -1131,43 +1157,78 @@
       </div>
     </section>
 
-    <!-- JAJARAN MANAJEMEN & PIMPINAN (DYNAMIC DATABASE HIERARCHY) -->
+    <!-- JAJARAN MANAJEMEN & PROFIL PIMPINAN (STRUKTUR ORGANISASI RESMI) -->
     <section id="leadership" class="py-5" style="background-color: var(--eco-bg);">
       <div class="container py-4">
         <div class="text-center mb-5" data-aos="fade-up">
-          <span class="section-eyebrow">STRUKTUR KEPEMIMPINAN</span>
-          <h2 class="section-heading-dark">Jajaran Manajemen & Pimpinan Unit</h2>
-          <p class="text-muted mx-auto" style="max-width: 650px;">
-            Pimpinan dan Kepala Bagian yang berdedikasi tinggi mengelola operasional strategis PTPN IV Regional II Kebun Dolok Sinumbah.
+          <span class="section-eyebrow">STRUKTUR ORGANISASI & MANAJEMEN</span>
+          <h2 class="section-heading-dark">Jajaran Pimpinan Unit Kebun</h2>
+          <p class="text-muted mx-auto" style="max-width: 680px;">
+            Mengenal jajaran pimpinan dan manajemen strategis PT Perkebunan Nusantara IV (Persero) Regional II Unit Kebun Dolok Sinumbah yang berkomitmen mewujudkan tata kelola perkebunan yang unggul, bersih, dan berintegritas.
           </p>
         </div>
 
         <div class="row g-4 justify-content-center">
           @if(isset($pimpinan) && count($pimpinan) > 0)
             @foreach ($pimpinan as $index => $leader)
+              @php
+                $leaderPhoto = null;
+                if ($leader->profil) {
+                    if (file_exists(public_path('uploads/profiles/' . $leader->profil))) {
+                        $leaderPhoto = asset('uploads/profiles/' . $leader->profil);
+                    } elseif (file_exists(public_path('uploads/profil/' . $leader->profil))) {
+                        $leaderPhoto = asset('uploads/profil/' . $leader->profil);
+                    } elseif (file_exists(public_path('uploads/' . $leader->profil))) {
+                        $leaderPhoto = asset('uploads/' . $leader->profil);
+                    } elseif (file_exists(public_path($leader->profil))) {
+                        $leaderPhoto = asset($leader->profil);
+                    }
+                }
+              @endphp
               <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ 100 * ($index + 1) }}">
                 <div class="pimpinan-eco-card">
-                  <div class="pimpinan-photo-box">
-                    <span class="pimpinan-badge-rank">
-                      <i class="bi bi-award-fill text-warning me-1"></i> Urutan Hierarki #{{ $leader->urutan ?: ($index + 1) }}
+                  <!-- Header Card with Official Unit Badge -->
+                  <div class="pimpinan-card-header">
+                    <span class="pimpinan-badge-unit">
+                      <i class="bi bi-building me-1"></i> PTPN IV REGIONAL II
                     </span>
-                    @if($leader->profil && file_exists(public_path('uploads/profiles/' . $leader->profil)))
-                      <img src="{{ asset('uploads/profiles/' . $leader->profil) }}" class="pimpinan-photo" alt="{{ $leader->name }}">
-                    @else
-                      <div class="d-flex flex-column align-items-center justify-content-center h-100 w-100 text-success">
-                        <i class="bi bi-person-bounding-box fs-1 mb-2"></i>
-                        <span class="fw-bold small">{{ $leader->name }}</span>
-                      </div>
-                    @endif
+                    <span class="text-white-50 small"><i class="bi bi-shield-fill-check text-success me-1"></i>Pejabat Unit</span>
                   </div>
+
+                  <!-- Executive Avatar Frame (No overlapping badges) -->
+                  <div class="pimpinan-avatar-wrap">
+                    <div class="pimpinan-avatar-frame">
+                      @if($leaderPhoto)
+                        <img src="{{ $leaderPhoto }}" class="pimpinan-avatar-img" alt="{{ $leader->name }}">
+                      @else
+                        <div class="d-flex flex-column align-items-center justify-content-center h-100 w-100" style="background: linear-gradient(135deg, #133c24 0%, #2d6a4f 100%); color: #ffffff;">
+                          <i class="bi bi-person-fill fs-1"></i>
+                        </div>
+                      @endif
+                    </div>
+                  </div>
+
+                  <!-- Information Box -->
                   <div class="pimpinan-info-box">
                     <div>
                       <h4 class="pimpinan-name-txt">{{ $leader->name }}</h4>
-                      <span class="pimpinan-position-pill">{{ $leader->jabatan ?: 'Kepala Bagian PTPN IV' }}</span>
+                      <span class="pimpinan-position-pill">{{ $leader->jabatan ?: 'Kepala Bagian / Pimpinan' }}</span>
                     </div>
-                    <p class="pimpinan-quote-txt mt-2">
-                      "{{ $leader->deskripsi_jabatan ?: 'Berkomitmen mengedepankan integritas, produktivitas, dan pelayanan terbaik bagi insan perkebunan.' }}"
-                    </p>
+
+                    @if($leader->deskripsi_jabatan)
+                    <div class="pimpinan-quote-wrap mt-2">
+                      <i class="bi bi-quote text-success me-1"></i>
+                      <p class="pimpinan-quote-txt d-inline">
+                        {{ $leader->deskripsi_jabatan }}
+                      </p>
+                    </div>
+                    @else
+                    <div class="pimpinan-quote-wrap mt-2">
+                      <p class="pimpinan-quote-txt">
+                        "Berkomitmen mengedepankan integritas, produktivitas, dan tata kelola prima insan perkebunan."
+                      </p>
+                    </div>
+                    @endif
                   </div>
                 </div>
               </div>
@@ -1176,16 +1237,25 @@
             <!-- Fallback Mockup Pimpinan -->
             <div class="col-lg-4 col-md-6" data-aos="fade-up">
               <div class="pimpinan-eco-card">
-                <div class="pimpinan-photo-box">
-                  <span class="pimpinan-badge-rank">Hierarki #1</span>
-                  <img src="{{ asset('assets/img/team/team-1.jpg') }}" class="pimpinan-photo" alt="Manajer Kebun">
+                <div class="pimpinan-card-header">
+                  <span class="pimpinan-badge-unit">
+                    <i class="bi bi-building me-1"></i> PTPN IV REGIONAL II
+                  </span>
+                  <span class="text-white-50 small"><i class="bi bi-shield-fill-check text-success me-1"></i>Pejabat Unit</span>
+                </div>
+                <div class="pimpinan-avatar-wrap">
+                  <div class="pimpinan-avatar-frame">
+                    <img src="{{ asset('assets/img/team/team-1.jpg') }}" class="pimpinan-avatar-img" alt="Manajer Kebun">
+                  </div>
                 </div>
                 <div class="pimpinan-info-box">
                   <div>
                     <h4 class="pimpinan-name-txt">TRI MANGKURAT, SP</h4>
                     <span class="pimpinan-position-pill">Manajer Kebun Dolok Sinumbah</span>
                   </div>
-                  <p class="pimpinan-quote-txt">"Memimpin dengan keteladanan dan integritas untuk kemajuan bersama."</p>
+                  <div class="pimpinan-quote-wrap mt-2">
+                    <p class="pimpinan-quote-txt">"Memimpin dengan keteladanan dan integritas untuk kemajuan bersama insan perkebunan."</p>
+                  </div>
                 </div>
               </div>
             </div>

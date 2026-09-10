@@ -28,6 +28,7 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
+            'jabatan' => 'nullable|string|max:255',
             'profil' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
@@ -45,19 +46,20 @@ class AdminController extends Controller
         $user->name = trim($request->name);
         $user->email = trim($request->email);
         $user->password = Hash::make($request->password);
+        $user->jabatan = trim($request->jabatan ?? 'Staf Bagian Personalia');
         $user->user_type = 1;
         $user->is_delete = 0;
         $user->profil = $fileName;
         $user->save();
 
-        return redirect()->route('admin.list')->with('success', 'Akun Admin berhasil ditambahkan.');
+        return redirect()->route('admin.list')->with('success', 'Akun Petugas/Personalia berhasil ditambahkan.');
     }
 
     public function edit($id)
     {
         $data['getRecord'] = User::getSingle($id);
         if (!empty($data['getRecord']) && $data['getRecord']->user_type == 1) {
-            $data['header_title'] = "Edit Admin";
+            $data['header_title'] = "Edit Akun Petugas";
             return view('admin.admin.edit', $data);
         } else {
             abort(404);
@@ -70,12 +72,14 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $id,
             'password' => 'nullable|min:6',
+            'jabatan' => 'nullable|string|max:255',
             'profil' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         $user = User::findOrFail($id);
         $user->name = trim($request->name);
         $user->email = trim($request->email);
+        $user->jabatan = trim($request->jabatan ?? ($user->jabatan ?: 'Staf Bagian Personalia'));
 
         if (!empty($request->password)) {
             $user->password = Hash::make($request->password);
@@ -99,7 +103,7 @@ class AdminController extends Controller
 
         $user->save();
 
-        return redirect()->route('admin.list')->with('success', 'Data Admin berhasil diperbarui.');
+        return redirect()->route('admin.list')->with('success', 'Data Akun Petugas/Personalia berhasil diperbarui.');
     }
 
     public function delete($id)

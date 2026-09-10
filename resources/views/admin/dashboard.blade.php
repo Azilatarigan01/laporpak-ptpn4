@@ -104,25 +104,79 @@
   </div>
 </div>
 
-<!-- Progress Bar Distribusi Status -->
-<div class="card shadow-sm border-0 mb-4" style="border-radius: 20px;">
-  <div class="card-body p-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <div>
-        <h5 class="fw-bold text-dark mb-1"><i class="bi bi-bar-chart-fill text-success me-2"></i>Distribusi Rasio Penyelesaian Laporan</h5>
-        <small class="text-muted">Persentase penanganan aspirasi karyawan kebun Dolok Sinumbah</small>
+<!-- Interactive Analytics Charts Section -->
+<div class="row g-4 mb-4">
+  <!-- Chart 1: Tren Bulanan -->
+  <div class="col-lg-8">
+    <div class="card shadow-sm border-0 h-100" style="border-radius: 20px;">
+      <div class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="fw-bold text-dark mb-0"><i class="bi bi-graph-up text-success me-2"></i>Tren Pengaduan Karyawan Tahun {{ $currentYear }}</h5>
+          <small class="text-muted">Perbandingan laporan masuk vs laporan terselesaikan per bulan</small>
+        </div>
+        <a href="{{ route('admin.pengaduan.rekap') }}" class="btn btn-sm btn-outline-success rounded-pill px-3">
+          <i class="bi bi-file-earmark-spreadsheet me-1"></i> Rekap Lengkap
+        </a>
       </div>
-      <span class="badge bg-light text-dark border px-3 py-2">Total: {{ $totalPengaduan }} Laporan</span>
+      <div class="card-body p-4">
+        <div style="height: 280px; position: relative;">
+          <canvas id="monthlyTrendChart"></canvas>
+        </div>
+      </div>
     </div>
-    <div class="progress mb-3" style="height: 14px; border-radius: 10px; background-color: #f1f5f9;">
-      <div class="progress-bar bg-info" role="progressbar" style="width: {{ $persenSelesai }}%" title="Selesai: {{ $persenSelesai }}%"></div>
-      <div class="progress-bar bg-warning" role="progressbar" style="width: {{ $persenDalamProses }}%" title="Dalam Proses: {{ $persenDalamProses }}%"></div>
-      <div class="progress-bar bg-success" role="progressbar" style="width: {{ $persenDiterima }}%" title="Diterima: {{ $persenDiterima }}%"></div>
+  </div>
+
+  <!-- Chart 2: Distribusi per Afdeling -->
+  <div class="col-lg-4">
+    <div class="card shadow-sm border-0 h-100" style="border-radius: 20px;">
+      <div class="card-header bg-white py-3 px-4">
+        <h5 class="fw-bold text-dark mb-0"><i class="bi bi-pie-chart-fill text-info me-2"></i>Distribusi per Afdeling</h5>
+        <small class="text-muted">Proporsi keluhan berdasarkan unit kerja</small>
+      </div>
+      <div class="card-body p-4 d-flex align-items-center justify-content-center">
+        <div style="height: 260px; width: 100%; position: relative;">
+          <canvas id="afdelingDoughnutChart"></canvas>
+        </div>
+      </div>
     </div>
-    <div class="d-flex justify-content-between flex-wrap gap-2 small text-muted">
-      <span><span class="badge bg-info text-white me-1">&bull;</span> Selesai Ditangani: <strong>{{ $statusSelesai }}</strong> ({{ $persenSelesai }}%)</span>
-      <span><span class="badge bg-warning text-dark me-1">&bull;</span> Sedang Proses: <strong>{{ $statusDalamProses }}</strong> ({{ $persenDalamProses }}%)</span>
-      <span><span class="badge bg-success me-1">&bull;</span> Baru Diterima: <strong>{{ $statusDiterima }}</strong> ({{ $persenDiterima }}%)</span>
+  </div>
+</div>
+
+<!-- Chart 3 & Quick Action Banner -->
+<div class="row g-4 mb-4">
+  <div class="col-lg-7">
+    <div class="card shadow-sm border-0 h-100" style="border-radius: 20px;">
+      <div class="card-header bg-white py-3 px-4">
+        <h5 class="fw-bold text-dark mb-0"><i class="bi bi-tags-fill text-warning me-2"></i>Kategori Permasalahan Terbanyak</h5>
+        <small class="text-muted">Distribusi aspirasi berdasarkan jenis pengaduan</small>
+      </div>
+      <div class="card-body p-4">
+        <div style="height: 200px; position: relative;">
+          <canvas id="categoryBarChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card border-0 shadow-sm p-4 text-white h-100 d-flex flex-column justify-content-between" style="background: linear-gradient(135deg, #071e13 0%, #133c24 100%); border-radius: 20px;">
+      <div>
+        <span class="badge bg-success bg-opacity-25 text-white border border-success border-opacity-50 px-3 py-1 rounded-pill mb-2 fw-bold">
+          <i class="bi bi-file-earmark-excel me-1"></i> Laporan Eksekutif
+        </span>
+        <h4 class="fw-bold text-white mb-2">Export Rekap Bulanan</h4>
+        <p class="text-white-50 small mb-4" style="line-height: 1.6;">
+          Unduh rekapitulasi data pengaduan seluruh afdeling dalam format Excel (.xlsx/.csv) atau PDF resmi ber-Kop Surat untuk keperluan rapat evaluasi manajemen & laporan Kantor Direksi.
+        </p>
+      </div>
+      <div class="d-flex flex-wrap gap-2">
+        <a href="{{ route('admin.pengaduan.exportExcel') }}" class="btn btn-light text-success fw-bold px-3 py-2 rounded-pill shadow-sm">
+          <i class="bi bi-file-earmark-excel-fill me-1"></i> Unduh Excel
+        </a>
+        <a href="{{ route('admin.pengaduan.exportPdf') }}" target="_blank" class="btn btn-outline-light fw-bold px-3 py-2 rounded-pill">
+          <i class="bi bi-file-earmark-pdf me-1"></i> Cetak PDF Direksi
+        </a>
+      </div>
     </div>
   </div>
 </div>
@@ -201,4 +255,135 @@
     </div>
   </div>
 </div>
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 1. Monthly Trend Chart (Bar & Line Combo)
+    const ctxMonthly = document.getElementById('monthlyTrendChart');
+    if (ctxMonthly) {
+      new Chart(ctxMonthly, {
+        type: 'bar',
+        data: {
+          labels: {!! json_encode($monthlyLabels) !!},
+          datasets: [
+            {
+              label: 'Total Pengaduan Masuk',
+              data: {!! json_encode($monthlyValues) !!},
+              backgroundColor: 'rgba(45, 106, 79, 0.75)',
+              borderColor: '#2d6a4f',
+              borderWidth: 1.5,
+              borderRadius: 6,
+              order: 2
+            },
+            {
+              label: 'Pengaduan Selesai',
+              data: {!! json_encode($monthlySelesaiValues) !!},
+              type: 'line',
+              borderColor: '#0284c7',
+              backgroundColor: '#0284c7',
+              borderWidth: 2.5,
+              pointRadius: 4,
+              pointHoverRadius: 6,
+              tension: 0.3,
+              order: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: { font: { family: 'Plus Jakarta Sans', weight: 'bold' } }
+            },
+            tooltip: {
+              padding: 10,
+              cornerRadius: 8
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { stepSize: 1 }
+            },
+            x: {
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    // 2. Afdeling Doughnut Chart
+    const ctxAfdeling = document.getElementById('afdelingDoughnutChart');
+    if (ctxAfdeling) {
+      new Chart(ctxAfdeling, {
+        type: 'doughnut',
+        data: {
+          labels: {!! json_encode($afdelingLabels) !!},
+          datasets: [{
+            data: {!! json_encode($afdelingValues) !!},
+            backgroundColor: [
+              '#2d6a4f', '#52b788', '#0284c7', '#38bdf8', 
+              '#f59e0b', '#fbbf24', '#8b5cf6', '#ec4899'
+            ],
+            borderWidth: 2,
+            borderColor: '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: { boxWidth: 12, padding: 10, font: { size: 11, family: 'Plus Jakarta Sans' } }
+            }
+          },
+          cutout: '65%'
+        }
+      });
+    }
+
+    // 3. Category Horizontal Bar Chart
+    const ctxCategory = document.getElementById('categoryBarChart');
+    if (ctxCategory) {
+      new Chart(ctxCategory, {
+        type: 'bar',
+        data: {
+          labels: {!! json_encode($kategoriLabels) !!},
+          datasets: [{
+            label: 'Jumlah Pengaduan',
+            data: {!! json_encode($kategoriValues) !!},
+            backgroundColor: 'rgba(245, 158, 11, 0.8)',
+            borderColor: '#f59e0b',
+            borderWidth: 1,
+            borderRadius: 6
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              ticks: { stepSize: 1 }
+            },
+            y: {
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+  });
+</script>
 @endsection

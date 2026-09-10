@@ -13,10 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('news', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('news')) {
+            Schema::create('news', function (Blueprint $table) {
+                $table->id('id_berita');
+                $table->string('title');
+                $table->text('intro')->nullable();
+                $table->text('main');
+                $table->text('quote')->nullable();
+                $table->text('conclusion')->nullable();
+                $table->string('image')->nullable();
+                $table->string('author', 100);
+                $table->timestamps();
+            });
+        }
     }
 
     /**

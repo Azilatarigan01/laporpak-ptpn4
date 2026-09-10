@@ -24,11 +24,17 @@ Route::get('/news/{id}', [NewsController::class, 'detail'])->name('news.detail')
 Route::get('/detailblog', [NewsController::class, 'detailnews'])->name('detail');
 Route::get('/about', fn() => view('about'))->name('about');
 
+// Halaman Panduan & Tata Cara Pengaduan
+Route::get('/panduan', fn() => view('panduan'))->name('panduan');
+Route::get('/pengaduan/panduan', fn() => view('panduan'))->name('pengaduan.panduan');
+
 // Halaman Pengaduan Publik
 Route::get('/pengaduan', [PengaduanController::class, 'beranda'])->name('pengaduan.beranda');
 Route::get('/pengaduan/about', fn() => view('pengaduan.about'))->name('pengaduan.about');
-Route::get('/pengaduan/cek-status', fn() => view('pengaduan.cek-status'))->name('pengaduan.cek-status');
+Route::match(['get', 'post'], '/pengaduan/cek-status', [PengaduanController::class, 'cekStatus'])->name('pengaduan.cek-status');
 Route::post('/cek-status-pengaduan', [PengaduanController::class, 'cekStatus'])->name('cekStatusPengaduan');
+Route::get('/pengaduan/{id}/cetak-pdf', [PengaduanController::class, 'cetakPdf'])->name('pengaduan.cetakPDF');
+Route::get('/pengaduan/{id}/cetak-disposisi', [PengaduanController::class, 'cetakDisposisi'])->name('pengaduan.cetakDisposisi');
 
 // Form Pengaduan (Tanpa Login)
 Route::post('/pengaduan/add', [PengaduanController::class, 'store'])->name('pengaduan.store');
@@ -106,6 +112,11 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::delete('/pengaduan/{id}', [PengaduanController::class, 'destroy'])->name('pengaduan.destroy');
     Route::get('/pengaduan/search', [PengaduanController::class, 'search'])->name('pengaduan.search');
 
+    // Rekapitulasi & Export Laporan Bulanan (Excel & PDF Direksi)
+    Route::get('/laporan/rekap', [PengaduanController::class, 'rekapLaporan'])->name('admin.pengaduan.rekap');
+    Route::get('/laporan/export-excel', [PengaduanController::class, 'exportExcel'])->name('admin.pengaduan.exportExcel');
+    Route::get('/laporan/export-pdf', [PengaduanController::class, 'exportPdf'])->name('admin.pengaduan.exportPdf');
+
     // News Management
     Route::get('/news', [NewsController::class, 'index'])->name('news.list');
     Route::get('/news/add', [NewsController::class, 'add'])->name('news.add');
@@ -120,4 +131,7 @@ Route::prefix('kepala')->middleware(['kepala_bagian'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('kepala.dashboard');
     Route::get('/karyawan/list', [KaryawanController::class, 'karyawanlist'])->name('kepala.karyawan.list');
     Route::get('/pengaduan/list', [PengaduanController::class, 'pengaduanlist'])->name('kepala.pengaduan.list');
+    Route::get('/laporan/rekap', [PengaduanController::class, 'rekapLaporan'])->name('kepala.pengaduan.rekap');
+    Route::get('/laporan/export-excel', [PengaduanController::class, 'exportExcel'])->name('kepala.pengaduan.exportExcel');
+    Route::get('/laporan/export-pdf', [PengaduanController::class, 'exportPdf'])->name('kepala.pengaduan.exportPdf');
 });

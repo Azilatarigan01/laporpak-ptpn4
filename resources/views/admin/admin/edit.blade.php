@@ -5,8 +5,8 @@
   <div class="col-12 mb-4">
     <div class="d-flex justify-content-between align-items-center">
       <div>
-        <h3 class="fw-bold text-dark mb-1">Edit Akun Administrator</h3>
-        <p class="text-muted mb-0">Perbarui data admin, email, dan kata sandi login.</p>
+        <h3 class="fw-bold text-dark mb-1">Edit Akun Petugas / Personalia</h3>
+        <p class="text-muted mb-0">Perbarui data petugas, peran bagian, email, dan kata sandi login.</p>
       </div>
       <a href="{{ route('admin.list') }}" class="btn btn-outline-secondary">
         <i class="mdi mdi-arrow-left me-1"></i> Kembali ke Daftar
@@ -19,19 +19,29 @@
   <div class="col-lg-8">
     <div class="card shadow-sm border-0">
       <div class="card-header bg-white py-3 px-4">
-        <h5 class="fw-bold text-dark mb-0"><i class="mdi mdi-account-edit me-2 text-success"></i>Edit Admin: {{ $getRecord->name }}</h5>
+        <h5 class="fw-bold text-dark mb-0"><i class="mdi mdi-account-edit me-2 text-success"></i>Edit Petugas: {{ $getRecord->name }}</h5>
       </div>
       <div class="card-body p-4">
         <form action="{{ route('admin.update', $getRecord->id) }}" method="POST" enctype="multipart/form-data">
           @csrf
 
           <div class="row g-3">
-            <div class="col-12">
+            <div class="col-md-7">
               <label class="form-label fw-bold text-dark">Nama Lengkap <span class="text-danger">*</span></label>
               <input type="text" class="form-control form-control-lg @error('name') is-invalid @enderror" name="name" value="{{ old('name', $getRecord->name) }}" required>
               @error('name')
                 <div class="invalid-feedback">{{ $message }}</div>
               @enderror
+            </div>
+
+            <div class="col-md-5">
+              <label class="form-label fw-bold text-dark">Peran / Bagian</label>
+              <select name="jabatan" class="form-select form-select-lg">
+                <option value="Bagian Personalia & SDM" {{ ($getRecord->jabatan ?? '') == 'Bagian Personalia & SDM' ? 'selected' : '' }}>Bagian Personalia & SDM</option>
+                <option value="Asisten SDM & Umum (APK)" {{ ($getRecord->jabatan ?? '') == 'Asisten SDM & Umum (APK)' ? 'selected' : '' }}>Asisten SDM & Umum (APK)</option>
+                <option value="Staf Personalia & Tata Usaha" {{ ($getRecord->jabatan ?? '') == 'Staf Personalia & Tata Usaha' ? 'selected' : '' }}>Staf Personalia & Tata Usaha</option>
+                <option value="Administrator Sistem" {{ ($getRecord->jabatan ?? '') == 'Administrator Sistem' ? 'selected' : '' }}>Administrator Sistem</option>
+              </select>
             </div>
 
             <div class="col-md-6">

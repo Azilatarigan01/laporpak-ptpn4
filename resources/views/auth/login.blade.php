@@ -67,8 +67,8 @@
         <a href="{{ url('/') }}">
           <img src="{{ asset('assets/img/logoo.png') }}" alt="Logo" style="height: 55px;" class="mb-2">
         </a>
-        <h4 class="fw-bold text-dark mb-1">Login Portal Manajemen</h4>
-        <p class="text-muted small">PTPN IV Regional II Kebun Dolok Sinumbah</p>
+        <h4 class="fw-bold text-dark mb-1">Login Petugas & Personalia</h4>
+        <p class="text-muted small">Portal Pengelolaan Aspirasi Lapor Pak! PTPN IV</p>
       </div>
 
       @if(session('error'))

@@ -100,12 +100,13 @@ class KepalaBagianController extends Controller
 
     public function edit($id)
     {
-        $data['getRecord'] = User::getSingle($id);
-        if (!empty($data['getRecord']) && $data['getRecord']->user_type == 2) {
+        $record = User::where('id', $id)->first();
+        if ($record && ($record->user_type == 2 || $record->user_type == '2')) {
+            $data['getRecord'] = $record;
             $data['header_title'] = "Edit Pimpinan / Kepala Bagian";
             return view('admin.kepalabagian.edit', $data);
         } else {
-            abort(404);
+            return redirect()->route('kepala.list')->with('error', 'Data pimpinan tidak ditemukan.');
         }
     }
 

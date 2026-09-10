@@ -70,32 +70,68 @@ class DashboardController extends Controller
         $totalNews = News::count();
         $totalPimpinan = User::where('user_type', 2)->where('is_delete', 0)->count();
 
-        // Data tren mingguan
-        $mingguanData = [
-            'Senin' => 0,
-            'Selasa' => 0,
-            'Rabu' => 0,
-            'Kamis' => 0,
-            'Jumat' => 0,
-            'Sabtu' => 0,
-            'Minggu' => 0
-        ];
+        // Data tren bulanan tahun berjalan (Januari - Desember)
+        $currentYear = now()->year;
+        $monthlyCounts = array_fill(1, 12, 0);
+        $monthlySelesaiCounts = array_fill(1, 12, 0);
 
         try {
-            $mingguan = Pengaduan::selectRaw('DAYOFWEEK(tgl_pengaduan) as day_of_week, COUNT(*) as count')
-                ->where('tgl_pengaduan', '>=', now()->subDays(30))
-                ->groupBy('day_of_week')
+            $monthData = Pengaduan::selectRaw('MONTH(tgl_pengaduan) as bln, COUNT(*) as total, SUM(CASE WHEN status = "Selesai" THEN 1 ELSE 0 END) as total_selesai')
+                ->whereYear('tgl_pengaduan', $currentYear)
+                ->groupBy('bln')
                 ->get();
 
-            $days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-            foreach ($mingguan as $data) {
-                if (isset($days[$data->day_of_week - 1])) {
-                    $dayName = $days[$data->day_of_week - 1];
-                    $mingguanData[$dayName] = (int) $data->count;
-                }
+            foreach ($monthData as $m) {
+                $monthlyCounts[(int) $m->bln] = (int) $m->total;
+                $monthlySelesaiCounts[(int) $m->bln] = (int) $m->total_selesai;
             }
-        } catch (\Throwable $e) {
-            // fallback default
+        } catch (\Throwable $e) {}
+
+        $monthlyLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        $monthlyValues = array_values($monthlyCounts);
+        $monthlySelesaiValues = array_values($monthlySelesaiCounts);
+
+        // Data Distribusi per Afdeling (Realisasi)
+        $afdelingLabels = [];
+        $afdelingValues = [];
+        try {
+            $afdelingStats = Pengaduan::join('realisasi', 'pengaduan.id_realisasi', '=', 'realisasi.id_realisasi')
+                ->selectRaw('realisasi.nama_realisasi, COUNT(*) as count')
+                ->groupBy('realisasi.nama_realisasi')
+                ->orderBy('count', 'desc')
+                ->limit(8)
+                ->get();
+
+            foreach ($afdelingStats as $a) {
+                $afdelingLabels[] = $a->nama_realisasi;
+                $afdelingValues[] = (int) $a->count;
+            }
+        } catch (\Throwable $e) {}
+
+        if (empty($afdelingLabels)) {
+            $afdelingLabels = ['Afdeling I', 'Afdeling II', 'Afdeling III', 'Tata Usaha'];
+            $afdelingValues = [0, 0, 0, 0];
+        }
+
+        // Data Distribusi per Kategori
+        $kategoriLabels = [];
+        $kategoriValues = [];
+        try {
+            $kategoriStats = Pengaduan::join('kategori_pengaduan', 'pengaduan.kategori_id', '=', 'kategori_pengaduan.id')
+                ->selectRaw('kategori_pengaduan.nama_kategori, COUNT(*) as count')
+                ->groupBy('kategori_pengaduan.nama_kategori')
+                ->orderBy('count', 'desc')
+                ->get();
+
+            foreach ($kategoriStats as $k) {
+                $kategoriLabels[] = $k->nama_kategori;
+                $kategoriValues[] = (int) $k->count;
+            }
+        } catch (\Throwable $e) {}
+
+        if (empty($kategoriLabels)) {
+            $kategoriLabels = ['Fasilitas', 'Operasional Lapangan', 'K3', 'Lainnya'];
+            $kategoriValues = [0, 0, 0, 0];
         }
 
         $pengaduan = $pengaduanQuery->orderBy('tgl_pengaduan', 'desc')->paginate(10);
@@ -116,7 +152,14 @@ class DashboardController extends Controller
             'persenDiterima',
             'persenDalamProses',
             'persenSelesai',
-            'mingguanData'
+            'monthlyLabels',
+            'monthlyValues',
+            'monthlySelesaiValues',
+            'afdelingLabels',
+            'afdelingValues',
+            'kategoriLabels',
+            'kategoriValues',
+            'currentYear'
         ));
     }
 }

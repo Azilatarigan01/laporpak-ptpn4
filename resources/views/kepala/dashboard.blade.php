@@ -71,6 +71,44 @@
   </div>
 </div>
 
+<!-- Interactive Analytics Charts for Kepala Bagian -->
+<div class="row g-4 mb-4">
+  <!-- Chart 1: Tren Bulanan -->
+  <div class="col-lg-8">
+    <div class="card shadow-sm border-0 h-100" style="border-radius: 20px;">
+      <div class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="fw-bold text-dark mb-0"><i class="bi bi-graph-up text-success me-2"></i>Tren Pengaduan Karyawan {{ $currentYear }}</h5>
+          <small class="text-muted">Laporan masuk vs terselesaikan per bulan</small>
+        </div>
+        <a href="{{ route('kepala.pengaduan.rekap') }}" class="btn btn-sm btn-outline-success rounded-pill px-3">
+          <i class="bi bi-file-earmark-spreadsheet me-1"></i> Rekap & Export
+        </a>
+      </div>
+      <div class="card-body p-4">
+        <div style="height: 250px; position: relative;">
+          <canvas id="monthlyTrendChartKepala"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart 2: Distribusi per Afdeling -->
+  <div class="col-lg-4">
+    <div class="card shadow-sm border-0 h-100" style="border-radius: 20px;">
+      <div class="card-header bg-white py-3 px-4">
+        <h5 class="fw-bold text-dark mb-0"><i class="bi bi-pie-chart-fill text-info me-2"></i>Distribusi Unit Kerja</h5>
+        <small class="text-muted">Proporsi keluhan per afdeling</small>
+      </div>
+      <div class="card-body p-4 d-flex align-items-center justify-content-center">
+        <div style="height: 230px; width: 100%; position: relative;">
+          <canvas id="afdelingDoughnutChartKepala"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Complaints Table -->
 <div class="card shadow-sm border-0" style="border-radius: 20px;">
   <div class="card-header bg-white py-4 px-4 d-flex justify-content-between align-items-center">
@@ -138,4 +176,73 @@
     </div>
   </div>
 </div>
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const ctxMonthly = document.getElementById('monthlyTrendChartKepala');
+    if (ctxMonthly) {
+      new Chart(ctxMonthly, {
+        type: 'bar',
+        data: {
+          labels: {!! json_encode($monthlyLabels) !!},
+          datasets: [
+            {
+              label: 'Pengaduan Masuk',
+              data: {!! json_encode($monthlyValues) !!},
+              backgroundColor: 'rgba(45, 106, 79, 0.75)',
+              borderColor: '#2d6a4f',
+              borderWidth: 1.5,
+              borderRadius: 6
+            },
+            {
+              label: 'Pengaduan Selesai',
+              data: {!! json_encode($monthlySelesaiValues) !!},
+              type: 'line',
+              borderColor: '#0284c7',
+              backgroundColor: '#0284c7',
+              borderWidth: 2.5,
+              pointRadius: 4,
+              tension: 0.3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { beginAtZero: true, ticks: { stepSize: 1 } },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    const ctxAfdeling = document.getElementById('afdelingDoughnutChartKepala');
+    if (ctxAfdeling) {
+      new Chart(ctxAfdeling, {
+        type: 'doughnut',
+        data: {
+          labels: {!! json_encode($afdelingLabels) !!},
+          datasets: [{
+            data: {!! json_encode($afdelingValues) !!},
+            backgroundColor: ['#2d6a4f', '#52b788', '#0284c7', '#38bdf8', '#f59e0b', '#fbbf24', '#8b5cf6'],
+            borderWidth: 2,
+            borderColor: '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 10, padding: 8, font: { size: 10 } } }
+          },
+          cutout: '65%'
+        }
+      });
+    }
+  });
+</script>
 @endsection

@@ -249,12 +249,13 @@
       <nav class="d-none d-xl-flex align-items-center gap-1">
         <a href="{{ url('/') }}" class="eco-nav-link">Beranda</a>
         <a href="{{ url('about') }}" class="eco-nav-link">Tentang Kami</a>
+        <a href="{{ url('panduan') }}" class="eco-nav-link">Panduan Alur</a>
         <a href="{{ url('pengaduan') }}" class="eco-nav-link active">Layanan Pengaduan</a>
         <a href="{{ route('detail') }}" class="eco-nav-link">Berita Kebun</a>
-        <a href="{{ url('/#leadership') }}" class="eco-nav-link">Pimpinan</a>
+        <a href="{{ url('/#leadership') }}" class="eco-nav-link">Struktur Organisasi</a>
         <a href="{{ route('pengaduan.cek-status') }}" class="eco-nav-link">Cek Status</a>
         <a href="{{ url('login') }}" class="btn-eco-pill ms-2">
-          <i class="bi bi-person-fill"></i> Portal Login
+          <i class="bi bi-shield-lock-fill"></i> Login Petugas
         </a>
       </nav>
 
@@ -270,6 +271,7 @@
       <div class="d-flex flex-column gap-2">
         <a href="{{ url('/') }}" class="text-white text-decoration-none py-1"><i class="bi bi-house me-2"></i>Beranda</a>
         <a href="{{ url('about') }}" class="text-white text-decoration-none py-1"><i class="bi bi-info-circle me-2"></i>Tentang Kami</a>
+        <a href="{{ url('panduan') }}" class="text-white text-decoration-none py-1"><i class="bi bi-journal-text me-2"></i>Panduan Alur</a>
         <a href="{{ url('pengaduan') }}" class="text-white text-decoration-none py-1"><i class="bi bi-megaphone me-2"></i>Layanan Pengaduan</a>
         <a href="{{ route('detail') }}" class="text-white text-decoration-none py-1"><i class="bi bi-newspaper me-2"></i>Berita Kebun</a>
         <a href="{{ route('pengaduan.cek-status') }}" class="text-white text-decoration-none py-1"><i class="bi bi-search me-2"></i>Cek Status Laporan</a>

@@ -39,10 +39,10 @@ class NewsController extends Controller
 
         $news = new News();
         $news->title = trim($request->title);
-        $news->intro = $request->intro;
+        $news->intro = $request->intro ?? '';
         $news->main = $request->main;
-        $news->quote = $request->quote;
-        $news->conclusion = $request->conclusion;
+        $news->quote = $request->quote ?? '';
+        $news->conclusion = $request->conclusion ?? '';
         $news->author = trim($request->author);
 
         if ($request->hasFile('image')) {
@@ -85,10 +85,10 @@ class NewsController extends Controller
 
         $news = News::where('id_berita', $id)->firstOrFail();
         $news->title = trim($request->title);
-        $news->intro = $request->intro;
+        $news->intro = $request->intro ?? '';
         $news->main = $request->main;
-        $news->quote = $request->quote;
-        $news->conclusion = $request->conclusion;
+        $news->quote = $request->quote ?? '';
+        $news->conclusion = $request->conclusion ?? '';
         $news->author = trim($request->author);
 
         if ($request->hasFile('image')) {

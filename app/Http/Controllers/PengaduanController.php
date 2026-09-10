@@ -11,6 +11,8 @@ use App\Models\Karyawan;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class PengaduanController extends Controller
 {
@@ -96,6 +98,9 @@ class PengaduanController extends Controller
 
         $pengaduan->save();
 
+        // Dispatch Notifikasi Otomatis ke Telegram Bot Personalia / Admin
+        $this->kirimNotifikasiOtomatis($pengaduan);
+
         return redirect('/pengaduan')->with('success', 'Laporan pengaduan Anda berhasil dikirim! Silakan simpan kode pengaduan Anda: ' . $pengaduan->kode_pengaduan . ' untuk memantau status tindak lanjut.');
     }
 
@@ -154,6 +159,9 @@ class PengaduanController extends Controller
 
         $pengaduan->save();
 
+        // Dispatch Notifikasi Otomatis ke Telegram Bot Personalia / Admin
+        $this->kirimNotifikasiOtomatis($pengaduan);
+
         return redirect()->route('pengaduan.list')->with('success', 'Data pengaduan baru berhasil diinput manual oleh Admin dengan kode: ' . $pengaduan->kode_pengaduan);
     }
 
@@ -175,6 +183,10 @@ class PengaduanController extends Controller
 
     public function cekStatus(Request $request)
     {
+        if ($request->isMethod('get') && !$request->filled('kode')) {
+            return view('pengaduan.cek-status');
+        }
+
         $request->validate([
             'kode' => 'required',
         ]);
@@ -190,7 +202,7 @@ class PengaduanController extends Controller
         if ($pengaduan) {
             return view('pengaduan.status', ['pengaduan' => $pengaduan]);
         } else {
-            return back()->withInput()->with('error', 'Kode pengaduan atau NIKSAP "' . e($request->kode) . '" tidak ditemukan. Pastikan data yang dimasukkan sudah sesuai.');
+            return redirect()->route('pengaduan.cek-status')->withInput()->with('error', 'Kode pengaduan atau NIKSAP "' . e($request->kode) . '" tidak ditemukan. Pastikan data yang dimasukkan sudah sesuai.');
         }
     }
 
@@ -294,6 +306,214 @@ class PengaduanController extends Controller
         } catch (\Throwable $e) {
             // Fallback rendering HTML preview directly with print prompt if PDF renderer encounters an environment error
             return view('admin.pengaduan.cetak-pdf', compact('pengaduan'));
+        }
+    }
+
+    /**
+     * Halaman Rekapitulasi & Laporan Eksekutif Pengaduan
+     */
+    public function rekapLaporan(Request $request)
+    {
+        $kategoriList = KategoriPengaduan::all();
+        $realisasiList = Realisasi::all();
+
+        $query = Pengaduan::with(['area', 'realisasi', 'posisi', 'karyawan', 'kategori_pengaduan']);
+
+        if ($request->filled('start_date')) {
+            $query->whereDate('tgl_pengaduan', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $query->whereDate('tgl_pengaduan', '<=', $request->end_date);
+        }
+        if ($request->filled('id_realisasi')) {
+            $query->where('id_realisasi', $request->id_realisasi);
+        }
+        if ($request->filled('kategori_id')) {
+            $query->where('kategori_id', $request->kategori_id);
+        }
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $allRecords = (clone $query)->get();
+        $pengaduan = $query->orderBy('tgl_pengaduan', 'desc')->paginate(15);
+
+        // Summary Stats
+        $stats = [
+            'total' => $allRecords->count(),
+            'diterima' => $allRecords->where('status', 'Diterima')->count(),
+            'proses' => $allRecords->where('status', 'Dalam Proses')->count(),
+            'selesai' => $allRecords->where('status', 'Selesai')->count(),
+        ];
+
+        return view('admin.pengaduan.rekap', compact('pengaduan', 'kategoriList', 'realisasiList', 'stats'));
+    }
+
+    /**
+     * Export Rekapitulasi Laporan ke Excel (.csv kompatibel MS Excel)
+     */
+    public function exportExcel(Request $request)
+    {
+        $query = Pengaduan::with(['area', 'realisasi', 'posisi', 'karyawan', 'kategori_pengaduan']);
+
+        if ($request->filled('start_date')) {
+            $query->whereDate('tgl_pengaduan', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $query->whereDate('tgl_pengaduan', '<=', $request->end_date);
+        }
+        if ($request->filled('id_realisasi')) {
+            $query->where('id_realisasi', $request->id_realisasi);
+        }
+        if ($request->filled('kategori_id')) {
+            $query->where('kategori_id', $request->kategori_id);
+        }
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $records = $query->orderBy('tgl_pengaduan', 'desc')->get();
+
+        $fileName = 'Rekap_Pengaduan_PTPN4_DOS_' . Carbon::now()->format('Ymd_His') . '.csv';
+
+        $headers = [
+            "Content-type" => "text/csv; charset=UTF-8",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        ];
+
+        $columns = [
+            'No',
+            'Kode Pengaduan',
+            'Waktu Masuk',
+            'NIKSAP',
+            'Nama Karyawan',
+            'Area Kerja',
+            'Bagian / Afdeling',
+            'Jabatan',
+            'Nomor HP',
+            'Kategori Pengaduan',
+            'Uraian Masalah / Aspirasi',
+            'Status Penanganan',
+            'Catatan Tanggapan Pimpinan'
+        ];
+
+        $callback = function () use ($records, $columns) {
+            $file = fopen('php://output', 'w');
+            // Write UTF-8 BOM for Microsoft Excel compatibility
+            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+            fputcsv($file, $columns, ';');
+
+            foreach ($records as $index => $row) {
+                fputcsv($file, [
+                    $index + 1,
+                    $row->kode_pengaduan,
+                    $row->tgl_pengaduan ? Carbon::parse($row->tgl_pengaduan)->format('d/m/Y H:i') : '-',
+                    "'" . $row->niksap,
+                    $row->karyawan->nama_karyawan ?? 'Karyawan',
+                    $row->area->nama_area ?? '-',
+                    $row->realisasi->nama_realisasi ?? '-',
+                    $row->posisi->nama_posisi ?? '-',
+                    $row->no_hp ?? '-',
+                    $row->kategori_pengaduan->nama_kategori ?? 'Umum',
+                    str_replace(["\r", "\n"], ' ', $row->deskripsi),
+                    $row->status,
+                    str_replace(["\r", "\n"], ' ', $row->balasan ?? '-')
+                ], ';');
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    /**
+     * Export Rekapitulasi Laporan ke PDF Laporan Eksekutif Direksi
+     */
+    public function exportPdf(Request $request)
+    {
+        $query = Pengaduan::with(['area', 'realisasi', 'posisi', 'karyawan', 'kategori_pengaduan']);
+
+        if ($request->filled('start_date')) {
+            $query->whereDate('tgl_pengaduan', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $query->whereDate('tgl_pengaduan', '<=', $request->end_date);
+        }
+        if ($request->filled('id_realisasi')) {
+            $query->where('id_realisasi', $request->id_realisasi);
+        }
+        if ($request->filled('kategori_id')) {
+            $query->where('kategori_id', $request->kategori_id);
+        }
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $records = $query->orderBy('tgl_pengaduan', 'desc')->get();
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
+
+        try {
+            $pdf = Pdf::loadView('admin.pengaduan.rekap-pdf', compact('records', 'startDate', 'endDate'))
+                      ->setPaper('a4', 'landscape');
+            return $pdf->stream('Laporan_Rekapitulasi_Pengaduan_PTPN4.pdf');
+        } catch (\Throwable $e) {
+            return view('admin.pengaduan.rekap-pdf', compact('records', 'startDate', 'endDate'));
+        }
+    }
+
+    /**
+     * Cetak Lembar Disposisi Tindak Lanjut Lapangan
+     */
+    public function cetakDisposisi($id)
+    {
+        $pengaduan = Pengaduan::with(['area', 'realisasi', 'posisi', 'karyawan', 'kategori_pengaduan'])->findOrFail($id);
+        return view('admin.pengaduan.cetak-disposisi', compact('pengaduan'));
+    }
+
+    /**
+     * Kirim notifikasi otomatis ke Telegram Bot Grup Personalia / Admin & WA jika disetting
+     */
+    private function kirimNotifikasiOtomatis($pengaduan)
+    {
+        try {
+            $token = env('TELEGRAM_BOT_TOKEN');
+            $chatId = env('TELEGRAM_CHAT_ID');
+
+            if (!empty($token) && !empty($chatId)) {
+                $pengaduan->loadMissing(['karyawan', 'area', 'realisasi', 'kategori_pengaduan']);
+                
+                $namaPelapor = $pengaduan->karyawan->nama_karyawan ?? 'Karyawan';
+                $afdeling = $pengaduan->realisasi->nama_realisasi ?? ($pengaduan->area->nama_area ?? '-');
+                $kategori = $pengaduan->kategori_pengaduan->nama_kategori ?? 'Umum / Fasilitas';
+                $tgl = Carbon::parse($pengaduan->tgl_pengaduan)->translatedFormat('d M Y, H:i') . ' WIB';
+                $link = url('/pengaduan/cek-status?kode=' . $pengaduan->kode_pengaduan);
+                
+                $text = "📢 *PENGADUAN BARU MASUK!* 📢\n";
+                $text .= "🏢 *PTPN IV Regional II Kebun Dolok Sinumbah*\n";
+                $text .= "━━━━━━━━━━━━━━━━━━━━\n";
+                $text .= "🎫 *Kode Tiket:* `{$pengaduan->kode_pengaduan}`\n";
+                $text .= "👤 *Pelapor:* {$namaPelapor} (NIKSAP: {$pengaduan->niksap})\n";
+                $text .= "📍 *Afdeling/Unit:* {$afdeling}\n";
+                $text .= "🏷 *Kategori:* {$kategori}\n";
+                $text .= "📅 *Waktu:* {$tgl}\n";
+                $text .= "📞 *Kontak Pelapor:* {$pengaduan->no_hp}\n";
+                $text .= "━━━━━━━━━━━━━━━━━━━━\n";
+                $text .= "📝 *Uraian Pengaduan:*\n" . mb_substr($pengaduan->deskripsi, 0, 300) . (mb_strlen($pengaduan->deskripsi) > 300 ? '...' : '') . "\n\n";
+                $text .= "🔗 *Buka Lembar Laporan:*\n{$link}";
+
+                Http::timeout(5)->withoutVerifying()->post("https://api.telegram.org/bot{$token}/sendMessage", [
+                    'chat_id' => $chatId,
+                    'text' => $text,
+                    'parse_mode' => 'Markdown',
+                ]);
+            }
+        } catch (\Throwable $e) {
+            Log::warning('Telegram Notification Dispatch Error: ' . $e->getMessage());
         }
     }
 }
