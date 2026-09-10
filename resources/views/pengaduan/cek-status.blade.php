@@ -192,6 +192,20 @@
 </head>
 
 <body>
+  <!-- Top Corporate Announcement Bar -->
+  <div class="d-none d-md-block" style="background: #041a10; color: #94a3b8; font-size: 0.78rem; padding: 7px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-2">
+        <span style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #fbbf24; font-weight: 700; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem;">BUMN UNTUK INDONESIA</span>
+        <span>PT Perkebunan Nusantara IV (Persero) Regional II • Kebun Dolok Sinumbah</span>
+      </div>
+      <div class="d-flex align-items-center gap-4 text-white-50">
+        <span><i class="bi bi-shield-lock-fill text-success me-1"></i>Pelacakan Real-Time Terenkripsi</span>
+        <span><i class="bi bi-clock-history text-warning me-1"></i>Layanan 24/7</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Header -->
   <header class="eco-header">
     <div class="container d-flex align-items-center justify-content-between">
@@ -206,6 +220,7 @@
       <nav class="d-none d-xl-flex align-items-center gap-1">
         <a href="{{ url('/') }}" class="eco-nav-link">Beranda</a>
         <a href="{{ url('about') }}" class="eco-nav-link">Tentang Kami</a>
+        <a href="{{ url('panduan') }}" class="eco-nav-link">Panduan Alur</a>
         <a href="{{ url('pengaduan') }}" class="eco-nav-link">Layanan Pengaduan</a>
         <a href="{{ route('detail') }}" class="eco-nav-link">Berita Kebun</a>
         <a href="{{ url('/#leadership') }}" class="eco-nav-link">Struktur Organisasi</a>
@@ -216,7 +231,7 @@
       </nav>
 
       <div class="d-flex align-items-center gap-2 d-xl-none">
-        <a href="{{ url('login') }}" class="btn btn-sm btn-success px-3 rounded-pill">Login</a>
+        <a href="{{ url('login') }}" class="btn btn-sm btn-success px-3 rounded-pill fw-bold">Login</a>
         <button class="btn btn-dark text-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mobileNav">
           <i class="bi bi-list fs-3"></i>
         </button>
@@ -227,13 +242,15 @@
       <div class="d-flex flex-column gap-2">
         <a href="{{ url('/') }}" class="text-white text-decoration-none py-1"><i class="bi bi-house me-2"></i>Beranda</a>
         <a href="{{ url('about') }}" class="text-white text-decoration-none py-1"><i class="bi bi-info-circle me-2"></i>Tentang Kami</a>
+        <a href="{{ url('panduan') }}" class="text-white text-decoration-none py-1"><i class="bi bi-journal-text me-2"></i>Panduan Alur</a>
         <a href="{{ url('pengaduan') }}" class="text-white text-decoration-none py-1"><i class="bi bi-megaphone me-2"></i>Layanan Pengaduan</a>
         <a href="{{ route('detail') }}" class="text-white text-decoration-none py-1"><i class="bi bi-newspaper me-2"></i>Berita Kebun</a>
         <a href="{{ route('pengaduan.cek-status') }}" class="text-white text-decoration-none py-1"><i class="bi bi-search me-2"></i>Cek Status Laporan</a>
-        <a href="{{ url('login') }}" class="btn btn-success mt-2"><i class="bi bi-box-arrow-in-right me-1"></i>Login Portal</a>
+        <a href="{{ url('login') }}" class="btn btn-success mt-2"><i class="bi bi-box-arrow-in-right me-1"></i>Login Petugas</a>
       </div>
     </div>
   </header>
+
 
   <main>
     <!-- Page Hero Banner -->
