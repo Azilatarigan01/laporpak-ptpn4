@@ -214,10 +214,10 @@
   <header class="eco-header">
     <div class="container d-flex align-items-center justify-content-between">
       <a href="{{ url('/') }}" class="d-flex align-items-center text-decoration-none">
-        <img src="{{ asset('assets/img/logoo.png') }}" alt="PTPN IV Logo" style="height: 42px;" class="me-2">
-        <div>
-          <h1 class="eco-brand-title">Dolok Sinumbah</h1>
-          <span class="eco-brand-sub">PTPN IV Regional II</span>
+        <img src="{{ asset('assets/img/logo1.png') }}" alt="PTPN IV Logo" style="height: 44px; width: auto;" class="me-3">
+        <div class="d-flex flex-column">
+          <div class="eco-brand-title text-uppercase" style="font-size: 1.15rem; font-weight: 800; letter-spacing: 0.04em; color: #ffffff;">PTPN IV REGIONAL II</div>
+          <span class="eco-brand-sub" style="font-size: 0.72rem; color: #74c69d; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;">Kebun Dolok Sinumbah</span>
         </div>
       </a>
 

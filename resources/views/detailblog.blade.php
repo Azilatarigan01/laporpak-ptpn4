@@ -103,8 +103,8 @@
     /* Page Hero */
     .page-hero {
       position: relative;
-      background: linear-gradient(180deg, rgba(7, 30, 19, 0.92) 0%, rgba(13, 40, 24, 0.88) 60%, rgba(19, 60, 36, 0.95) 100%), url('{{ asset('assets/img/sawit.jpg') }}') center/cover no-repeat;
-      padding: 170px 0 110px 0;
+      background: linear-gradient(135deg, rgba(6, 26, 16, 0.90) 0%, rgba(11, 35, 21, 0.85) 50%, rgba(17, 53, 32, 0.92) 100%), url("{{ asset('assets/img/hero-carousel/hero-carousel-1.jpg') }}") center/cover no-repeat;
+      padding: 175px 0 105px 0;
       color: #ffffff;
       text-align: center;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -192,10 +192,10 @@
   <header class="eco-header fixed-top">
     <div class="container d-flex align-items-center justify-content-between">
       <a href="{{ url('/') }}" class="d-flex align-items-center text-decoration-none">
-        <img src="{{ asset('assets/img/logoo.png') }}" alt="PTPN IV Logo" style="height: 42px;" class="me-2">
-        <div>
-          <h1 class="eco-brand-title">Dolok Sinumbah</h1>
-          <span class="eco-brand-sub">PTPN IV Regional II</span>
+        <img src="{{ asset('assets/img/logo1.png') }}" alt="PTPN IV Logo" style="height: 44px; width: auto;" class="me-3">
+        <div class="d-flex flex-column">
+          <div class="eco-brand-title text-uppercase" style="font-size: 1.15rem; font-weight: 800; letter-spacing: 0.04em; color: #ffffff;">PTPN IV REGIONAL II</div>
+          <span class="eco-brand-sub" style="font-size: 0.72rem; color: #74c69d; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;">Kebun Dolok Sinumbah</span>
         </div>
       </a>
 

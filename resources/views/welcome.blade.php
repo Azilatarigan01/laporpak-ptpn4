@@ -72,52 +72,47 @@
 
     /* Top Navbar EcoBuild Style */
     .eco-header {
-      background: rgba(7, 30, 19, 0.96);
+      background: rgba(7, 30, 19, 0.95);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 12px 0;
+      padding: 14px 0;
       transition: all 0.3s ease;
       z-index: 1000;
     }
-    .eco-header .container {
-      max-width: 1420px;
-    }
     .eco-brand-title {
-      font-size: 1.15rem;
+      font-size: 1.25rem;
       font-weight: 800;
       color: #ffffff;
       margin: 0;
       line-height: 1.15;
-      white-space: nowrap !important;
     }
     .eco-brand-sub {
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       color: var(--eco-lime);
       font-weight: 600;
-      letter-spacing: 0.05em;
-      white-space: nowrap !important;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
     .eco-nav-link {
       color: #e2e8f0 !important;
       font-weight: 600;
-      font-size: 0.84rem;
-      padding: 6px 11px !important;
-      border-radius: 18px;
+      font-size: 0.92rem;
+      padding: 8px 14px !important;
+      border-radius: 20px;
       transition: all 0.25s ease;
       text-decoration: none;
-      white-space: nowrap !important;
     }
     .eco-nav-link:hover, .eco-nav-link.active {
       color: #ffffff !important;
-      background: rgba(82, 183, 136, 0.2);
+      background: rgba(82, 183, 136, 0.15);
     }
     .btn-eco-pill {
       background: linear-gradient(135deg, #52b788 0%, #2d6a4f 100%);
       color: #ffffff !important;
       font-weight: 700;
-      font-size: 0.82rem;
-      padding: 8px 18px;
+      font-size: 0.88rem;
+      padding: 10px 22px;
       border-radius: 30px;
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 4px 15px rgba(82, 183, 136, 0.35);
@@ -126,8 +121,6 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      white-space: nowrap !important;
-      flex-shrink: 0 !important;
     }
     .btn-eco-pill:hover {
       background: linear-gradient(135deg, #74c69d 0%, #40916c 100%);
@@ -178,43 +171,42 @@
       transform: translateY(-2px);
     }
 
-    /* Hero Section (Clean Eco-Corporate Atmosphere) */
+    /* Hero Section (Lush Plantation Luxury Atmosphere with Authentic Photo) */
     .eco-hero {
       position: relative;
-      background: linear-gradient(180deg, #071e13 0%, #0d2818 55%, #133c24 100%);
+      background: linear-gradient(135deg, rgba(6, 26, 16, 0.90) 0%, rgba(11, 35, 21, 0.85) 50%, rgba(17, 53, 32, 0.92) 100%), url("{{ asset('assets/img/hero-carousel/hero-carousel-1.jpg') }}") center/cover no-repeat fixed;
       color: #ffffff;
-      padding: 155px 0 95px 0;
+      padding: 175px 0 115px 0;
       overflow: hidden;
     }
     .eco-hero::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: 
-        radial-gradient(circle at 85% 20%, rgba(82, 183, 136, 0.18) 0%, transparent 45%),
-        radial-gradient(circle at 10% 80%, rgba(45, 106, 79, 0.25) 0%, transparent 50%);
-      opacity: 0.9;
+      background: radial-gradient(circle at 85% 20%, rgba(82, 183, 136, 0.25) 0%, transparent 50%),
+                  radial-gradient(circle at 10% 80%, rgba(45, 106, 79, 0.3) 0%, transparent 50%);
       pointer-events: none;
     }
     .hero-badge-pill {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(82, 183, 136, 0.18);
-      border: 1px solid rgba(116, 198, 157, 0.4);
+      background: rgba(82, 183, 136, 0.2);
+      border: 1px solid rgba(116, 198, 157, 0.45);
       padding: 8px 18px;
       border-radius: 30px;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       font-weight: 700;
-      color: var(--eco-lime);
-      margin-bottom: 24px;
-      backdrop-filter: blur(6px);
+      color: #74c69d;
+      margin-bottom: 22px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     }
     .hero-title-main {
-      font-size: 3.2rem;
+      font-size: 3.4rem;
       font-weight: 800;
       line-height: 1.15;
-      letter-spacing: -0.04em;
+      letter-spacing: -0.035em;
       color: #ffffff;
     }
     .text-emerald-glow {
@@ -222,9 +214,9 @@
       text-shadow: 0 0 35px rgba(82, 183, 136, 0.45);
     }
     .hero-desc-text {
-      font-size: 1.1rem;
-      line-height: 1.7;
-      color: #cbd5e1;
+      font-size: 1.12rem;
+      line-height: 1.75;
+      color: #d1d5db;
       max-width: 620px;
       font-weight: 400;
     }
@@ -232,15 +224,15 @@
     /* Floating Feature Glass Badges in Hero */
     .hero-glass-pill {
       background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.16);
       border-radius: 16px;
-      padding: 12px 18px;
+      padding: 14px 18px;
       backdrop-filter: blur(12px);
       display: inline-flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       color: #ffffff;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
       transition: all 0.3s ease;
     }
     .hero-glass-pill:hover {
@@ -248,26 +240,26 @@
       transform: translateY(-3px);
     }
     .hero-glass-pill i {
-      font-size: 1.6rem;
+      font-size: 1.75rem;
       color: var(--eco-lime);
     }
 
     /* Hero Right Visual Card */
     .hero-estate-card {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 28px;
       padding: 24px;
       backdrop-filter: blur(16px);
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
       position: relative;
     }
     .hero-estate-card img {
-      border-radius: 16px;
+      border-radius: 20px;
       width: 100%;
-      height: 260px;
+      height: 290px;
       object-fit: cover;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
     }
 
     /* Section Subheadings */
@@ -718,16 +710,16 @@
   <header class="eco-header fixed-top">
     <div class="container d-flex align-items-center justify-content-between">
       <!-- Brand Logo -->
-      <a href="{{ url('/') }}" class="d-flex align-items-center text-decoration-none gap-2" style="white-space: nowrap !important; flex-shrink: 0 !important;">
-        <img src="{{ asset('assets/img/logoo.png') }}" alt="PTPN IV Logo" style="height: 44px; width: auto;" class="me-1">
-        <div class="d-flex flex-column text-start" style="white-space: nowrap !important;">
-          <div class="fw-bold text-white fs-5 lh-1" style="letter-spacing: -0.01em; white-space: nowrap !important;">PTPN IV <span style="color: #74c69d; font-size: 0.95rem; font-weight: 700;">REGIONAL II</span></div>
-          <span class="text-white-50 small mt-1" style="font-size: 0.72rem; letter-spacing: 0.04em; white-space: nowrap !important;">Kebun Dolok Sinumbah &bull; Lapor Pak!</span>
+      <a href="{{ url('/') }}" class="d-flex align-items-center text-decoration-none">
+        <img src="{{ asset('assets/img/logo1.png') }}" alt="PTPN IV Logo" style="height: 44px; width: auto;" class="me-3">
+        <div class="d-flex flex-column">
+          <div class="eco-brand-title text-uppercase" style="font-size: 1.15rem; font-weight: 800; letter-spacing: 0.04em; color: #ffffff;">PTPN IV REGIONAL II</div>
+          <span class="eco-brand-sub" style="font-size: 0.72rem; color: #74c69d; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;">Kebun Dolok Sinumbah</span>
         </div>
       </a>
 
       <!-- Desktop Navmenu -->
-      <nav id="navmenu" class="navmenu d-none d-xl-flex align-items-center gap-1" style="white-space: nowrap !important; flex-shrink: 0 !important;">
+      <nav id="navmenu" class="navmenu d-none d-xl-flex align-items-center gap-1">
         <a href="{{ url('/') }}" class="eco-nav-link active">Beranda</a>
         <a href="{{ url('about') }}" class="eco-nav-link">Tentang Kami</a>
         <a href="{{ url('panduan') }}" class="eco-nav-link">Panduan Alur</a>
@@ -771,7 +763,7 @@
           <!-- Hero Left Content -->
           <div class="col-lg-7" data-aos="fade-up" data-aos-duration="900">
             <div class="hero-badge-pill">
-              <i class="bi bi-shield-fill-check"></i> Sistem Layanan Aspirasi & Pengaduan Karyawan Resmi
+              <i class="bi bi-shield-fill-check"></i> Portal Resmi Kebun Dolok Sinumbah
             </div>
             
             <h1 class="hero-title-main mb-3">
@@ -780,7 +772,7 @@
             </h1>
 
             <p class="hero-desc-text mb-4">
-              PT Perkebunan Nusantara IV Regional II Kebun Dolok Sinumbah berkomitmen menciptakan tata kelola perkebunan kelapa sawit unggul, harmonis, dan transparan melalui keterbukaan komunikasi dan perlindungan aspirasi insan perkebunan.
+              PT Perkebunan Nusantara IV Regional II Kebun Dolok Sinumbah berkomitmen menciptakan tata kelola perkebunan kelapa sawit unggul, harmonis, dan transparan melalui keterbukaan komunikasi dan pengelolaan aspirasi insan perkebunan secara profesional.
             </p>
 
             <div class="d-flex flex-wrap gap-3 mb-5">
@@ -815,15 +807,15 @@
           <!-- Hero Right Visual Card -->
           <div class="col-lg-5" data-aos="zoom-in" data-aos-delay="200" data-aos-duration="900">
             <div class="hero-estate-card">
-              <img src="{{ asset('assets/img/hero-carousel/4sawit.jpg') }}" alt="Kebun Kelapa Sawit Dolok Sinumbah">
-              <div class="mt-3 text-white">
-                <div class="d-flex justify-content-between align-items-center mb-1">
+              <img src="{{ asset('assets/img/1sawit.jpg') }}" alt="Kebun Sawit Dolok Sinumbah">
+              <div class="mt-4 text-white">
+                <div class="d-flex justify-content-between align-items-center mb-2">
                   <span class="badge bg-success bg-opacity-25 text-light border border-success border-opacity-50 px-3 py-1 rounded-pill">
                     <i class="bi bi-geo-alt-fill me-1"></i> Kebun Dolok Sinumbah
                   </span>
                   <small class="text-white-50"><i class="bi bi-patch-check-fill text-warning me-1"></i>Verified Unit</small>
                 </div>
-                <h5 class="fw-bold mb-0">PTPN IV Regional II</h5>
+                <h5 class="fw-bold mb-1">PTPN IV Regional II</h5>
                 <p class="text-white-50 small mb-0">Hutabayu Raja, Kabupaten Simalungun, Sumatera Utara</p>
               </div>
             </div>
@@ -1127,7 +1119,7 @@
                     } elseif ($item->image && file_exists(public_path('storage/' . $item->image))) {
                       $newsImg = asset('storage/' . $item->image);
                     } else {
-                      $newsImg = asset('assets/img/hero-carousel/hero-carousel-1.jpg');
+                      $newsImg = asset('assets/img/sawit.jpg');
                     }
                   @endphp
                   <img src="{{ $newsImg }}" class="eco-news-img" alt="{{ $item->title }}">
@@ -1335,7 +1327,7 @@
                 <i class="bi bi-search me-2"></i> Cek Status Pengaduan Anda
               </a>
               <a href="{{ url('login') }}" class="btn btn-light border fw-bold py-2 rounded-pill text-muted">
-                <i class="bi bi-lock-fill me-2"></i> Login Khusus Petugas / Personalia
+                <i class="bi bi-lock-fill me-2"></i> Login Khusus Admin / Pimpinan
               </a>
             </div>
           </div>
