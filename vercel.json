@@ -2,21 +2,21 @@
   "version": 2,
   "functions": {
     "api/index.php": {
-      "runtime": "vercel-php@0.6.2"
+      "runtime": "vercel-php@0.7.2"
     }
   },
   "routes": [
     {
       "src": "/(build|assets|profil|storage|template|uploads)/(.*)",
-      "dest": "/public/$1/$2"
+      "dest": "/$1/$2"
     },
     {
       "src": "/favicon.ico",
-      "dest": "/public/favicon.ico"
+      "dest": "/favicon.ico"
     },
     {
       "src": "/robots.txt",
-      "dest": "/public/robots.txt"
+      "dest": "/robots.txt"
     },
     {
       "src": "/(.*)",

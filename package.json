@@ -2,17 +2,15 @@
     "private": true,
     "scripts": {
         "dev": "vite",
-        "build": "vite build",
+        "build": "vite build && node -e \"const fs = require('fs'); fs.cpSync('public', 'dist', {recursive: true});\"",
         "test": "php artisan test"
     },
     "devDependencies": {
         "axios": "^1.1.2",
+        "chart.js": "^4.4.7",
         "laravel-vite-plugin": "^0.7.2",
         "lodash": "^4.17.19",
         "postcss": "^8.1.14",
         "vite": "^4.0.0"
-    },
-    "dependencies": {
-        "chart.js": "^4.4.7"
     }
 }
