@@ -64,36 +64,20 @@ class User extends Authenticatable
 
     public static function getKepala($limit = 10)
     {
-        $query = self::where('user_type', 2)->where('is_delete', 0);
-
-        try {
-            if (Schema::hasColumn('users', 'urutan')) {
-                $query->orderBy('urutan', 'asc')->orderBy('id', 'asc');
-            } else {
-                $query->orderBy('id', 'asc');
-            }
-        } catch (\Throwable $e) {
-            $query->orderBy('id', 'asc');
-        }
-
-        return $query->paginate($limit);
+        return self::where('user_type', 2)
+            ->where('is_delete', 0)
+            ->orderBy('urutan', 'asc')
+            ->orderBy('id', 'asc')
+            ->paginate($limit);
     }
 
     public static function getPimpinanAll()
     {
-        $query = self::where('user_type', 2)->where('is_delete', 0);
-
-        try {
-            if (Schema::hasColumn('users', 'urutan')) {
-                $query->orderBy('urutan', 'asc')->orderBy('id', 'asc');
-            } else {
-                $query->orderBy('id', 'asc');
-            }
-        } catch (\Throwable $e) {
-            $query->orderBy('id', 'asc');
-        }
-
-        return $query->get();
+        return self::where('user_type', 2)
+            ->where('is_delete', 0)
+            ->orderBy('urutan', 'asc')
+            ->orderBy('id', 'asc')
+            ->get();
     }
 
     public static function getSingle($id)

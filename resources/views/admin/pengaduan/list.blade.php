@@ -90,8 +90,13 @@
                   </div>
                 @endif
                 <div>
-                  <h6 class="mb-0 fw-bold text-dark">{{ $item->karyawan->nama_karyawan ?? 'Karyawan' }}</h6>
-                  <small class="text-muted"><i class="mdi mdi-card-account-details-outline me-1"></i>NIK: {{ $item->niksap ?? ($item->karyawan->niksap ?? '-') }} | HP: {{ $item->no_hp ?? '-' }}</small>
+                  <div class="d-flex align-items-center gap-1">
+                    @if($item->is_anonim)
+                      <span class="badge bg-dark text-white me-1" style="font-size: 0.68rem;"><i class="mdi mdi-shield-lock-outline"></i> ANONIM</span>
+                    @endif
+                    <h6 class="mb-0 fw-bold text-dark">{{ $item->is_anonim ? 'Karyawan (Identitas Dilindungi)' : ($item->karyawan->nama_karyawan ?? 'Karyawan') }}</h6>
+                  </div>
+                  <small class="text-muted"><i class="mdi mdi-card-account-details-outline me-1"></i>NIK: {{ $item->is_anonim ? '[DIRAHASIAKAN]' : ($item->niksap ?? ($item->karyawan->niksap ?? '-')) }} | HP: {{ $item->no_hp ?? '-' }}</small>
                 </div>
               </div>
             </td>
@@ -113,6 +118,9 @@
                 <span class="badge" style="background-color: #dcfce7; color: #166534; border: 1px solid #86efac;">
                   <i class="mdi mdi-check-circle-outline me-1"></i> Diterima
                 </span>
+                @if($item->isOverdue())
+                  <br><span class="badge bg-danger text-white mt-1" style="font-size: 0.65rem;" title="Melewati target respon 3 hari kerja">⚠️ Overdue SLA</span>
+                @endif
               @elseif($item->status == 'Dalam Proses')
                 <span class="badge" style="background-color: #fef3c7; color: #92400e; border: 1px solid #fde68a;">
                   <i class="mdi mdi-progress-clock me-1"></i> Dalam Proses
@@ -121,6 +129,9 @@
                 <span class="badge" style="background-color: #e0f2fe; color: #075985; border: 1px solid #bae6fd;">
                   <i class="mdi mdi-check-all me-1"></i> Selesai
                 </span>
+                @if($item->rating)
+                  <br><span class="badge bg-warning text-dark mt-1" style="font-size: 0.68rem;" title="Ulasan: {{ $item->feedback_pelapor ?? 'Puas' }}">★ {{ $item->rating }}/5 CSAT</span>
+                @endif
               @else
                 <span class="badge bg-secondary">{{ $item->status }}</span>
               @endif

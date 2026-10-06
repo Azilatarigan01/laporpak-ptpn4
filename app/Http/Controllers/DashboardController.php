@@ -55,11 +55,18 @@ class DashboardController extends Controller
             });
         }
 
-        // Statistik Status
-        $statusDiterima = Pengaduan::where('status', 'Diterima')->count();
-        $statusDalamProses = Pengaduan::where('status', 'Dalam Proses')->count();
-        $statusSelesai = Pengaduan::where('status', 'Selesai')->count();
-        $totalPengaduan = Pengaduan::count();
+        // Statistik Status (Single Fast Aggregation Query)
+        $statusStats = Pengaduan::selectRaw('
+            COUNT(*) as total,
+            SUM(CASE WHEN status = "Diterima" THEN 1 ELSE 0 END) as diterima,
+            SUM(CASE WHEN status = "Dalam Proses" THEN 1 ELSE 0 END) as dalam_proses,
+            SUM(CASE WHEN status = "Selesai" THEN 1 ELSE 0 END) as selesai
+        ')->first();
+
+        $totalPengaduan = (int) ($statusStats->total ?? 0);
+        $statusDiterima = (int) ($statusStats->diterima ?? 0);
+        $statusDalamProses = (int) ($statusStats->dalam_proses ?? 0);
+        $statusSelesai = (int) ($statusStats->selesai ?? 0);
 
         $persenDiterima = $totalPengaduan ? round(($statusDiterima / $totalPengaduan) * 100, 1) : 0;
         $persenDalamProses = $totalPengaduan ? round(($statusDalamProses / $totalPengaduan) * 100, 1) : 0;

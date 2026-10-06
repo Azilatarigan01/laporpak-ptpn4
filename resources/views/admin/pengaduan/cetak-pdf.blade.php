@@ -314,12 +314,12 @@
         <tr>
             <td class="col-label">Nama Lengkap Karyawan</td>
             <td class="col-colon">:</td>
-            <td class="col-val"><strong>{{ $pengaduan->karyawan->nama_karyawan ?? 'Karyawan PTPN IV' }}</strong></td>
+            <td class="col-val"><strong>{{ $pengaduan->is_anonim ? 'Karyawan (Identitas Dirahasiakan / Whistleblower)' : ($pengaduan->karyawan->nama_karyawan ?? 'Karyawan PTPN IV') }}</strong></td>
         </tr>
         <tr>
             <td class="col-label">NIKSAP / NIK Karyawan</td>
             <td class="col-colon">:</td>
-            <td class="col-val">{{ $pengaduan->niksap ?? '-' }}</td>
+            <td class="col-val">{{ $pengaduan->is_anonim ? 'DIRAHASIAKAN SISTEM (WBS)' : ($pengaduan->niksap ?? '-') }}</td>
         </tr>
         <tr>
             <td class="col-label">Area Penugasan</td>

@@ -358,15 +358,20 @@
               <div class="row g-4 mb-4">
                 <div class="col-md-6">
                   <div class="p-4 bg-light rounded-4 h-100 border">
-                    <h6 class="fw-bold text-success mb-3"><i class="bi bi-person-badge-fill me-2"></i>Identitas Pelapor</h6>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <h6 class="fw-bold text-success mb-0"><i class="bi bi-person-badge-fill me-2"></i>Identitas Pelapor</h6>
+                      @if($pengaduan->is_anonim)
+                        <span class="badge bg-dark text-white"><i class="bi bi-shield-lock-fill me-1"></i> Anonim (WBS)</span>
+                      @endif
+                    </div>
                     <table class="table table-sm table-borderless mb-0">
                       <tr>
                         <td class="text-muted" style="width: 35%;">Nama</td>
-                        <td class="fw-bold text-dark">: {{ $pengaduan->karyawan->nama_karyawan ?? 'Karyawan' }}</td>
+                        <td class="fw-bold text-dark">: {{ $pengaduan->is_anonim ? 'Karyawan (Identitas Dilindungi)' : ($pengaduan->karyawan->nama_karyawan ?? 'Karyawan') }}</td>
                       </tr>
                       <tr>
                         <td class="text-muted">NIKSAP</td>
-                        <td class="text-dark">: {{ $pengaduan->niksap }}</td>
+                        <td class="text-dark">: {{ $pengaduan->is_anonim ? '[DIRAHASIAKAN / WBS]' : $pengaduan->niksap }}</td>
                       </tr>
                       <tr>
                         <td class="text-muted">Area Kerja</td>
@@ -402,6 +407,12 @@
                           @endif
                         </td>
                       </tr>
+                      @if($pengaduan->tgl_tanggapan && $pengaduan->tgl_pengaduan)
+                        <tr>
+                          <td class="text-muted">Durasi Respon</td>
+                          <td class="text-primary fw-bold">: {{ $pengaduan->tgl_pengaduan->diffForHumans($pengaduan->tgl_tanggapan, true) }}</td>
+                        </tr>
+                      @endif
                     </table>
                   </div>
                 </div>
@@ -420,11 +431,21 @@
                 <label class="fw-bold text-dark mb-2"><i class="bi bi-chat-left-quote-fill me-1 text-primary"></i>Tanggapan Resmi Personalia / Pimpinan Kebun:</label>
                 @if(!empty($pengaduan->balasan))
                   <div class="p-4 rounded-4 border-start border-4 border-success shadow-sm" style="background-color: #f0fdf4; color: #166534; white-space: pre-line; line-height: 1.7;">
-                    <div class="d-flex align-items-center mb-2">
-                      <i class="bi bi-shield-check fs-4 me-2 text-success"></i>
-                      <strong class="fs-6">Balasan dari Personalia / Manajemen Kantor:</strong>
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-2 pb-2 border-bottom border-success border-opacity-25">
+                      <div class="d-flex align-items-center">
+                        <i class="bi bi-shield-check fs-4 me-2 text-success"></i>
+                        <strong class="fs-6">Balasan dari Personalia / Manajemen Kantor:</strong>
+                      </div>
+                      <small class="text-muted mt-1 mt-md-0">
+                        Oleh: <strong>{{ $pengaduan->petugas_nama ?? 'Admin / Personalia' }}</strong> 
+                        @if($pengaduan->tgl_tanggapan)
+                          ({{ \Carbon\Carbon::parse($pengaduan->tgl_tanggapan)->isoFormat('D MMM Y, HH:mm') }} WIB)
+                        @endif
+                      </small>
                     </div>
-                    {{ $pengaduan->balasan }}
+                    <div class="pt-1">
+                      {{ $pengaduan->balasan }}
+                    </div>
                   </div>
                 @else
                   <div class="p-4 bg-light rounded-4 text-muted border text-center">
@@ -432,6 +453,51 @@
                   </div>
                 @endif
               </div>
+
+              <!-- CSAT / Survei Kepuasan Layanan jika Status Selesai -->
+              @if($pengaduan->status == 'Selesai')
+                <div class="mb-4 p-4 rounded-4 border bg-light">
+                  @if($pengaduan->rating)
+                    <h6 class="fw-bold text-warning mb-2"><i class="bi bi-star-fill me-1"></i> Penilaian Kepuasan Pelapor (CSAT):</h6>
+                    <div class="d-flex align-items-center gap-1 fs-4 text-warning mb-2">
+                      @for($i = 1; $i <= 5; $i++)
+                        <i class="bi {{ $i <= $pengaduan->rating ? 'bi-star-fill' : 'bi-star' }}"></i>
+                      @endfor
+                      <span class="ms-2 fw-bold text-dark fs-6">{{ $pengaduan->rating }} / 5 Bintang</span>
+                    </div>
+                    @if($pengaduan->feedback_pelapor)
+                      <p class="text-muted small mb-0 fst-italic">"{{ $pengaduan->feedback_pelapor }}"</p>
+                    @endif
+                  @else
+                    <h6 class="fw-bold text-dark mb-1"><i class="bi bi-hand-thumbs-up-fill text-success me-1"></i> Survei Kepuasan Layanan Pengaduan:</h6>
+                    <p class="text-muted small mb-3">Bagaimana kepuasan Anda terhadap penanganan dan tindak lanjut laporan ini oleh pihak manajemen?</p>
+                    
+                    <form action="{{ route('pengaduan.submitRating', $pengaduan->id_pengaduan) }}" method="POST">
+                      @csrf
+                      <div class="row g-3 align-items-center">
+                        <div class="col-md-5">
+                          <label class="form-label small fw-bold">Beri Rating Kepuasan:</label>
+                          <select name="rating" class="form-select form-select-sm" required>
+                            <option value="">-- Pilih Bintang Penilaian --</option>
+                            <option value="5">⭐⭐⭐⭐⭐ Sangat Puas (5/5)</option>
+                            <option value="4">⭐⭐⭐⭐ Puas (4/5)</option>
+                            <option value="3">⭐⭐⭐ Cukup Puas (3/5)</option>
+                            <option value="2">⭐⭐ Kurang Puas (2/5)</option>
+                            <option value="1">⭐ Tidak Puas (1/5)</option>
+                          </select>
+                        </div>
+                        <div class="col-md-7">
+                          <label class="form-label small fw-bold">Komentar / Ulasan Singkat (Opsional):</label>
+                          <div class="input-group input-group-sm">
+                            <input type="text" name="feedback_pelapor" class="form-control" placeholder="Contoh: Respon cepat dan fasilitas sudah diperbaiki.">
+                            <button type="submit" class="btn btn-success fw-bold px-3">Kirim Penilaian</button>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  @endif
+                </div>
+              @endif
 
               <!-- Action Buttons -->
               <div class="d-flex flex-wrap gap-3 justify-content-between pt-4 border-top">

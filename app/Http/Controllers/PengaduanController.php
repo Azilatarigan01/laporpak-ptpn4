@@ -18,7 +18,7 @@ class PengaduanController extends Controller
 {
     public function list()
     {
-        $pengaduan = Pengaduan::with(['area', 'realisasi', 'posisi', 'karyawan', 'kategori_pengaduan'])
+        $pengaduan = Pengaduan::with(['area', 'realisasi', 'posisi.realisasi.area', 'karyawan', 'kategori_pengaduan'])
             ->orderBy('tgl_pengaduan', 'desc')
             ->paginate(10);
 
@@ -96,10 +96,16 @@ class PengaduanController extends Controller
             $pengaduan->foto = '';
         }
 
+        $pengaduan->is_anonim = $request->boolean('is_anonim') || $request->input('is_anonim') == '1';
         $pengaduan->save();
 
         // Dispatch Notifikasi Otomatis ke Telegram Bot Personalia / Admin
         $this->kirimNotifikasiOtomatis($pengaduan);
+
+        // Dispatch Notifikasi WhatsApp ke Pelapor (jika nomor HP diisi & gateway aktif)
+        $namaP = $pengaduan->is_anonim ? 'Karyawan' : ($pengaduan->karyawan->nama_karyawan ?? 'Karyawan');
+        $pesanWa = "Halo {$namaP},\n\nLaporan pengaduan Anda berhasil diterima oleh sistem *Lapor Pak! PTPN IV Kebun Dolok Sinumbah*.\n\nNomor Tiket: *{$pengaduan->kode_pengaduan}*\nStatus: *Diterima*\n\nSimpan nomor tiket ini untuk memantau status tindak lanjut di:\n" . url('/pengaduan/cek-status?kode=' . $pengaduan->kode_pengaduan);
+        $this->kirimWhatsAppPelapor($pengaduan->no_hp, $pesanWa);
 
         return redirect('/pengaduan')->with('success', 'Laporan pengaduan Anda berhasil dikirim! Silakan simpan kode pengaduan Anda: ' . $pengaduan->kode_pengaduan . ' untuk memantau status tindak lanjut.');
     }
@@ -157,6 +163,7 @@ class PengaduanController extends Controller
             $pengaduan->foto = '';
         }
 
+        $pengaduan->is_anonim = $request->boolean('is_anonim') || $request->input('is_anonim') == '1';
         $pengaduan->save();
 
         // Dispatch Notifikasi Otomatis ke Telegram Bot Personalia / Admin
@@ -223,12 +230,37 @@ class PengaduanController extends Controller
         if ($pengaduan) {
             $pengaduan->status = $request->status;
             $pengaduan->balasan = $request->balasan;
+            $pengaduan->tgl_tanggapan = Carbon::now('Asia/Jakarta');
+            $pengaduan->petugas_nama = auth()->check() ? auth()->user()->name : 'Petugas / Admin';
             $pengaduan->save();
+
+            // Kirim notifikasi WhatsApp ke pelapor (jika gateway aktif dan no_hp tersedia)
+            $namaPelapor = $pengaduan->is_anonim ? 'Karyawan' : ($pengaduan->karyawan->nama_karyawan ?? 'Karyawan');
+            $pesanWa = "Halo {$namaPelapor},\n\nStatus laporan pengaduan Anda (#{$pengaduan->kode_pengaduan}) telah diperbarui menjadi: *{$pengaduan->status}*.\n\n*Catatan Respon Petugas:*\n" . ($pengaduan->balasan ?: 'Dalam penanganan unit terkait') . "\n\nPantau perkembangan dan lembar resmi di:\n" . url('/pengaduan/cek-status?kode=' . $pengaduan->kode_pengaduan);
+            $this->kirimWhatsAppPelapor($pengaduan->no_hp, $pesanWa);
 
             return redirect()->back()->with('success', 'Status dan respon tindak lanjut pengaduan (' . $pengaduan->kode_pengaduan . ') berhasil diperbarui!');
         }
 
         return redirect()->back()->with('error', 'Data pengaduan tidak ditemukan.');
+    }
+
+    /**
+     * Pelapor memberikan penilaian kepuasan layanan (CSAT) & feedback ulasan
+     */
+    public function submitRating(Request $request, $id)
+    {
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'feedback_pelapor' => 'nullable|string|max:1000'
+        ]);
+
+        $pengaduan = Pengaduan::where('id_pengaduan', $id)->firstOrFail();
+        $pengaduan->rating = (int)$request->rating;
+        $pengaduan->feedback_pelapor = trim($request->feedback_pelapor);
+        $pengaduan->save();
+
+        return redirect()->back()->with('success', 'Terima kasih atas penilaian kepuasan dan ulasan yang Anda berikan!');
     }
 
     public function search(Request $request)
@@ -283,7 +315,7 @@ class PengaduanController extends Controller
 
     public function pengaduanlist()
     {
-        $pengaduan = Pengaduan::with(['area', 'realisasi', 'posisi', 'karyawan', 'kategori_pengaduan'])
+        $pengaduan = Pengaduan::with(['area', 'realisasi', 'posisi.realisasi.area', 'karyawan', 'kategori_pengaduan'])
             ->orderBy('tgl_pengaduan', 'desc')
             ->paginate(10);
 
@@ -317,7 +349,7 @@ class PengaduanController extends Controller
         $kategoriList = KategoriPengaduan::all();
         $realisasiList = Realisasi::all();
 
-        $query = Pengaduan::with(['area', 'realisasi', 'posisi', 'karyawan', 'kategori_pengaduan']);
+        $query = Pengaduan::with(['area', 'realisasi', 'posisi.realisasi.area', 'karyawan', 'kategori_pengaduan']);
 
         if ($request->filled('start_date')) {
             $query->whereDate('tgl_pengaduan', '>=', $request->start_date);
@@ -335,16 +367,22 @@ class PengaduanController extends Controller
             $query->where('status', $request->status);
         }
 
-        $allRecords = (clone $query)->get();
-        $pengaduan = $query->orderBy('tgl_pengaduan', 'desc')->paginate(15);
+        // Summary Stats via single lightweight database aggregation
+        $statsRaw = (clone $query)->selectRaw('
+            COUNT(*) as total,
+            SUM(CASE WHEN status = "Diterima" THEN 1 ELSE 0 END) as diterima,
+            SUM(CASE WHEN status = "Dalam Proses" THEN 1 ELSE 0 END) as proses,
+            SUM(CASE WHEN status = "Selesai" THEN 1 ELSE 0 END) as selesai
+        ')->first();
 
-        // Summary Stats
         $stats = [
-            'total' => $allRecords->count(),
-            'diterima' => $allRecords->where('status', 'Diterima')->count(),
-            'proses' => $allRecords->where('status', 'Dalam Proses')->count(),
-            'selesai' => $allRecords->where('status', 'Selesai')->count(),
+            'total' => (int)($statsRaw->total ?? 0),
+            'diterima' => (int)($statsRaw->diterima ?? 0),
+            'proses' => (int)($statsRaw->proses ?? 0),
+            'selesai' => (int)($statsRaw->selesai ?? 0),
         ];
+
+        $pengaduan = $query->orderBy('tgl_pengaduan', 'desc')->paginate(15);
 
         return view('admin.pengaduan.rekap', compact('pengaduan', 'kategoriList', 'realisasiList', 'stats'));
     }
@@ -388,6 +426,7 @@ class PengaduanController extends Controller
             'No',
             'Kode Pengaduan',
             'Waktu Masuk',
+            'Sifat Laporan',
             'NIKSAP',
             'Nama Karyawan',
             'Area Kerja',
@@ -397,7 +436,8 @@ class PengaduanController extends Controller
             'Kategori Pengaduan',
             'Uraian Masalah / Aspirasi',
             'Status Penanganan',
-            'Catatan Tanggapan Pimpinan'
+            'Catatan Tanggapan Pimpinan',
+            'Rating Kepuasan (CSAT)'
         ];
 
         $callback = function () use ($records, $columns) {
@@ -411,16 +451,18 @@ class PengaduanController extends Controller
                     $index + 1,
                     $row->kode_pengaduan,
                     $row->tgl_pengaduan ? Carbon::parse($row->tgl_pengaduan)->format('d/m/Y H:i') : '-',
-                    "'" . $row->niksap,
-                    $row->karyawan->nama_karyawan ?? 'Karyawan',
+                    $row->is_anonim ? 'Anonim (WBS)' : 'Terbuka / Reguler',
+                    $row->is_anonim ? 'DIRAHASIAKAN' : "'" . $row->niksap,
+                    $row->is_anonim ? 'Karyawan (Identitas Dirahasiakan)' : ($row->karyawan->nama_karyawan ?? 'Karyawan'),
                     $row->area->nama_area ?? '-',
                     $row->realisasi->nama_realisasi ?? '-',
                     $row->posisi->nama_posisi ?? '-',
-                    $row->no_hp ?? '-',
+                    $row->is_anonim ? 'Dirahasiakan' : ($row->no_hp ?? '-'),
                     $row->kategori_pengaduan->nama_kategori ?? 'Umum',
                     str_replace(["\r", "\n"], ' ', $row->deskripsi),
                     $row->status,
-                    str_replace(["\r", "\n"], ' ', $row->balasan ?? '-')
+                    str_replace(["\r", "\n"], ' ', $row->balasan ?? '-'),
+                    $row->rating ? $row->rating . '/5 Bintang' : '-'
                 ], ';');
             }
 
@@ -476,7 +518,7 @@ class PengaduanController extends Controller
     }
 
     /**
-     * Kirim notifikasi otomatis ke Telegram Bot Grup Personalia / Admin & WA jika disetting
+     * Kirim notifikasi otomatis ke Telegram Bot Grup Personalia / Admin
      */
     private function kirimNotifikasiOtomatis($pengaduan)
     {
@@ -487,7 +529,10 @@ class PengaduanController extends Controller
             if (!empty($token) && !empty($chatId)) {
                 $pengaduan->loadMissing(['karyawan', 'area', 'realisasi', 'kategori_pengaduan']);
                 
-                $namaPelapor = $pengaduan->karyawan->nama_karyawan ?? 'Karyawan';
+                $namaPelapor = $pengaduan->is_anonim 
+                    ? '🔒 [DIRAHASIAKAN / ANONIM - WBS]' 
+                    : ($pengaduan->karyawan->nama_karyawan ?? 'Karyawan');
+                $niksap = $pengaduan->is_anonim ? 'DIRAHASIAKAN (WBS)' : $pengaduan->niksap;
                 $afdeling = $pengaduan->realisasi->nama_realisasi ?? ($pengaduan->area->nama_area ?? '-');
                 $kategori = $pengaduan->kategori_pengaduan->nama_kategori ?? 'Umum / Fasilitas';
                 $tgl = Carbon::parse($pengaduan->tgl_pengaduan)->translatedFormat('d M Y, H:i') . ' WIB';
@@ -497,16 +542,17 @@ class PengaduanController extends Controller
                 $text .= "🏢 *PTPN IV Regional II Kebun Dolok Sinumbah*\n";
                 $text .= "━━━━━━━━━━━━━━━━━━━━\n";
                 $text .= "🎫 *Kode Tiket:* `{$pengaduan->kode_pengaduan}`\n";
-                $text .= "👤 *Pelapor:* {$namaPelapor} (NIKSAP: {$pengaduan->niksap})\n";
+                $text .= "👤 *Pelapor:* {$namaPelapor}\n";
+                $text .= "🆔 *NIKSAP:* `{$niksap}`\n";
                 $text .= "📍 *Afdeling/Unit:* {$afdeling}\n";
                 $text .= "🏷 *Kategori:* {$kategori}\n";
                 $text .= "📅 *Waktu:* {$tgl}\n";
-                $text .= "📞 *Kontak Pelapor:* {$pengaduan->no_hp}\n";
+                $text .= "📞 *Kontak:* " . ($pengaduan->is_anonim ? 'Tersimpan Rahasia' : $pengaduan->no_hp) . "\n";
                 $text .= "━━━━━━━━━━━━━━━━━━━━\n";
                 $text .= "📝 *Uraian Pengaduan:*\n" . mb_substr($pengaduan->deskripsi, 0, 300) . (mb_strlen($pengaduan->deskripsi) > 300 ? '...' : '') . "\n\n";
                 $text .= "🔗 *Buka Lembar Laporan:*\n{$link}";
 
-                Http::timeout(5)->withoutVerifying()->post("https://api.telegram.org/bot{$token}/sendMessage", [
+                Http::timeout(3)->withoutVerifying()->post("https://api.telegram.org/bot{$token}/sendMessage", [
                     'chat_id' => $chatId,
                     'text' => $text,
                     'parse_mode' => 'Markdown',
@@ -514,6 +560,34 @@ class PengaduanController extends Controller
             }
         } catch (\Throwable $e) {
             Log::warning('Telegram Notification Dispatch Error: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Kirim notifikasi WhatsApp ke pelapor (menggunakan Fonnte Gateway jika token diatur)
+     */
+    private function kirimWhatsAppPelapor($noHp, $pesan)
+    {
+        try {
+            $token = env('FONNTE_TOKEN');
+            if (empty($token) || empty($noHp)) {
+                return;
+            }
+
+            $target = preg_replace('/[^0-9]/', '', (string)$noHp);
+            if (str_starts_with($target, '08')) {
+                $target = '628' . substr($target, 2);
+            }
+
+            Http::timeout(3)->withoutVerifying()->withHeaders([
+                'Authorization' => $token,
+            ])->post('https://api.fonnte.com/send', [
+                'target' => $target,
+                'message' => $pesan,
+                'countryCode' => '62',
+            ]);
+        } catch (\Throwable $e) {
+            Log::warning('WhatsApp Notification Dispatch Error: ' . $e->getMessage());
         }
     }
 }

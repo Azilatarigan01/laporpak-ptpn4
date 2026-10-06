@@ -439,8 +439,23 @@
                 </div>
               </div>
 
+              <!-- Opsi Perlindungan Whistleblower / Anonim -->
+              <div class="p-3 mb-4 rounded-3 border" style="background-color: #f0fdf4; border-color: #bbf7d0 !important;">
+                <div class="form-check form-switch d-flex align-items-center gap-3 ps-0 mb-0">
+                  <input class="form-check-input ms-0 mt-0" type="checkbox" name="is_anonim" id="isAnonimCheck" value="1" style="width: 2.8em; height: 1.5em; cursor: pointer;">
+                  <label class="form-check-label mb-0" for="isAnonimCheck" style="cursor: pointer;">
+                    <span class="d-flex align-items-center gap-2 fw-bold text-success fs-6">
+                      <i class="bi bi-shield-lock-fill"></i> Laporkan Sebagai Anonim / Rahasia (Whistleblower Protection)
+                    </span>
+                    <span class="d-block text-muted small mt-1">
+                      Jika diaktifkan, nama dan NIKSAP Anda akan disamarkan dari tampilan publik dan pimpinan unit. Sistem hanya mencantumkan kode tiket unik untuk menjamin kerahasiaan Anda.
+                    </span>
+                  </label>
+                </div>
+              </div>
+
               <!-- Submit Button -->
-              <div class="text-center pt-4">
+              <div class="text-center pt-2">
                 <button type="submit" class="btn-submit-pengaduan">
                   <i class="bi bi-send-check-fill fs-5"></i>
                   <span>Kirim Laporan Pengaduan</span>

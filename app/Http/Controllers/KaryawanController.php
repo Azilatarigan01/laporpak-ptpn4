@@ -12,7 +12,7 @@ class KaryawanController extends Controller
     public function list()
     {
         $karyawan = Karyawan::with(['posisi.realisasi.area'])->orderBy('id_karyawan', 'desc')->paginate(10);
-        $totalKaryawan = Karyawan::count();
+        $totalKaryawan = $karyawan->total();
 
         return view('admin.karyawan.list', compact('karyawan', 'totalKaryawan'));
     }
@@ -20,7 +20,7 @@ class KaryawanController extends Controller
     public function karyawanlist()
     {
         $karyawan = Karyawan::with(['posisi.realisasi.area'])->orderBy('id_karyawan', 'desc')->paginate(10);
-        $totalKaryawan = Karyawan::count();
+        $totalKaryawan = $karyawan->total();
 
         return view('kepala.karyawan.list', compact('karyawan', 'totalKaryawan'));
     }

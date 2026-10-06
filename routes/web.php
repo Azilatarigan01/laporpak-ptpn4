@@ -34,13 +34,16 @@ Route::get('/pengaduan/about', fn() => view('pengaduan.about'))->name('pengaduan
 Route::match(['get', 'post'], '/pengaduan/cek-status', [PengaduanController::class, 'cekStatus'])->name('pengaduan.cek-status');
 Route::post('/cek-status-pengaduan', [PengaduanController::class, 'cekStatus'])->name('cekStatusPengaduan');
 Route::get('/pengaduan/{id}/cetak-pdf', [PengaduanController::class, 'cetakPdf'])->name('pengaduan.cetakPDF');
-Route::get('/pengaduan/{id}/cetak-disposisi', [PengaduanController::class, 'cetakDisposisi'])->name('pengaduan.cetakDisposisi');
+Route::post('/pengaduan/{id}/rating', [PengaduanController::class, 'submitRating'])->name('pengaduan.submitRating');
 
 // Form Pengaduan (Tanpa Login)
 Route::post('/pengaduan/add', [PengaduanController::class, 'store'])->name('pengaduan.store');
-Route::match(['put', 'post'], '/pengaduan/update-status/{id?}', [PengaduanController::class, 'updateStatus'])->name('pengaduan.updateStatus');
-Route::get('/pengaduan/status/{status}', [PengaduanController::class, 'filterByStatus'])->name('pengaduan.status');
-Route::get('/pengaduan/realisasi/{id_realisasi}', [PengaduanController::class, 'filterByRealisasi'])->name('pengaduan.realisasi');
+
+// Rute Tindak Lanjut Pengaduan Terproteksi Petugas (Admin & Kepala Bagian)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/pengaduan/{id}/cetak-disposisi', [PengaduanController::class, 'cetakDisposisi'])->name('pengaduan.cetakDisposisi');
+    Route::match(['put', 'post'], '/pengaduan/update-status/{id?}', [PengaduanController::class, 'updateStatus'])->name('pengaduan.updateStatus');
+});
 
 // Dropdown Controller Routes (AJAX Select2)
 Route::get('/selectArea', [DropdownController::class, 'area'])->name('area.index');
@@ -111,6 +114,8 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::get('/pengaduan/{id}/cetak-pdf', [PengaduanController::class, 'cetakPdf'])->name('pengaduan.cetakPDF');
     Route::delete('/pengaduan/{id}', [PengaduanController::class, 'destroy'])->name('pengaduan.destroy');
     Route::get('/pengaduan/search', [PengaduanController::class, 'search'])->name('pengaduan.search');
+    Route::get('/pengaduan/status/{status}', [PengaduanController::class, 'filterByStatus'])->name('pengaduan.status');
+    Route::get('/pengaduan/realisasi/{id_realisasi}', [PengaduanController::class, 'filterByRealisasi'])->name('pengaduan.realisasi');
 
     // Rekapitulasi & Export Laporan Bulanan (Excel & PDF Direksi)
     Route::get('/laporan/rekap', [PengaduanController::class, 'rekapLaporan'])->name('admin.pengaduan.rekap');

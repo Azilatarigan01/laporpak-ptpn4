@@ -16,6 +16,9 @@ class Pengaduan extends Model
 
     protected $casts = [
         'tgl_pengaduan' => 'datetime',
+        'tgl_tanggapan' => 'datetime',
+        'is_anonim' => 'boolean',
+        'rating' => 'integer',
     ];
 
     protected $fillable = [
@@ -32,8 +35,46 @@ class Pengaduan extends Model
         'status',
         'balasan',
         'kode_pengaduan',
-        'kategori_id'
+        'kategori_id',
+        'is_anonim',
+        'rating',
+        'feedback_pelapor',
+        'tgl_tanggapan',
+        'petugas_nama',
     ];
+
+    /**
+     * Tampilan nama pelapor dengan proteksi kerahasiaan jika anonim
+     */
+    public function getNamaPelaporDisplayAttribute()
+    {
+        if ($this->is_anonim) {
+            return 'Karyawan (Identitas Dirahasiakan / Anonim)';
+        }
+        return $this->karyawan->nama_karyawan ?? 'Karyawan';
+    }
+
+    /**
+     * Tampilan NIKSAP pelapor dengan proteksi kerahasiaan jika anonim
+     */
+    public function getNiksapDisplayAttribute()
+    {
+        if ($this->is_anonim) {
+            return 'DIRAHASIAKAN (WBS)';
+        }
+        return $this->niksap ?? '-';
+    }
+
+    /**
+     * Indikator apakah aduan telah melewati target SLA respon (>3 hari kerja)
+     */
+    public function isOverdue()
+    {
+        if ($this->status === 'Diterima' && $this->tgl_pengaduan) {
+            return $this->tgl_pengaduan->diffInDays(now()) >= 3;
+        }
+        return false;
+    }
 
     public function area()
     {

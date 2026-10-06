@@ -12,33 +12,19 @@ class KepalaBagianController extends Controller
 {
     public function list()
     {
-        $query = User::where('user_type', 2)->where('is_delete', 0);
+        $data['getRecord'] = User::where('user_type', 2)
+            ->where('is_delete', 0)
+            ->orderBy('urutan', 'asc')
+            ->orderBy('id', 'asc')
+            ->paginate(20);
 
-        try {
-            if (Schema::hasColumn('users', 'urutan')) {
-                $query->orderBy('urutan', 'asc')->orderBy('id', 'asc');
-            } else {
-                $query->orderBy('id', 'asc');
-            }
-        } catch (\Throwable $e) {
-            $query->orderBy('id', 'asc');
-        }
-
-        $data['getRecord'] = $query->paginate(20);
         $data['header_title'] = "Manajemen Pimpinan & Kepala Bagian";
         return view('admin.kepalabagian.list', $data);
     }
 
     public function add()
     {
-        $maxOrder = 1;
-        try {
-            if (Schema::hasColumn('users', 'urutan')) {
-                $maxOrder = (int) User::where('user_type', 2)->where('is_delete', 0)->max('urutan') + 1;
-            }
-        } catch (\Throwable $e) {
-            $maxOrder = 1;
-        }
+        $maxOrder = (int) User::where('user_type', 2)->where('is_delete', 0)->max('urutan') + 1;
 
         $data['header_title'] = "Tambah Pimpinan / Kepala Bagian";
         $data['suggested_order'] = $maxOrder;

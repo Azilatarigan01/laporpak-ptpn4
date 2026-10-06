@@ -41,8 +41,13 @@
           <tr>
             <td class="ps-4 fw-bold text-muted">{{ $pengaduan->firstItem() + $index }}</td>
             <td>
-              <h6 class="mb-0 fw-bold text-dark">{{ $item->karyawan->nama_karyawan ?? 'Karyawan' }}</h6>
-              <small class="text-muted">NIK: {{ $item->niksap }} | HP: {{ $item->no_hp }}</small>
+              <div class="d-flex align-items-center gap-1">
+                @if($item->is_anonim)
+                  <span class="badge bg-dark text-white me-1" style="font-size: 0.68rem;"><i class="mdi mdi-shield-lock-outline"></i> ANONIM</span>
+                @endif
+                <h6 class="mb-0 fw-bold text-dark">{{ $item->is_anonim ? 'Karyawan (Identitas Dilindungi)' : ($item->karyawan->nama_karyawan ?? 'Karyawan') }}</h6>
+              </div>
+              <small class="text-muted">NIK: {{ $item->is_anonim ? '[DIRAHASIAKAN]' : $item->niksap }} | HP: {{ $item->no_hp }}</small>
             </td>
             <td>
               <span class="badge bg-light text-dark font-monospace border fw-bold">{{ $item->kode_pengaduan }}</span>
@@ -57,10 +62,16 @@
             <td class="text-center">
               @if($item->status == 'Diterima')
                 <span class="badge" style="background-color: #dcfce7; color: #166534; border: 1px solid #86efac;">Diterima</span>
+                @if($item->isOverdue())
+                  <br><span class="badge bg-danger text-white mt-1" style="font-size: 0.65rem;" title="Melewati target SLA 3 hari kerja">⚠️ Overdue SLA</span>
+                @endif
               @elseif($item->status == 'Dalam Proses')
                 <span class="badge" style="background-color: #fef3c7; color: #92400e; border: 1px solid #fde68a;">Dalam Proses</span>
               @elseif($item->status == 'Selesai')
                 <span class="badge" style="background-color: #e0f2fe; color: #075985; border: 1px solid #bae6fd;">Selesai</span>
+                @if($item->rating)
+                  <br><span class="badge bg-warning text-dark mt-1" style="font-size: 0.68rem;">★ {{ $item->rating }}/5 CSAT</span>
+                @endif
               @else
                 <span class="badge bg-secondary">{{ $item->status }}</span>
               @endif
