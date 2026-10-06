@@ -16,6 +16,12 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Ensure database exists and is selected
+--
+CREATE DATABASE IF NOT EXISTS `lapor`;
+USE `lapor`;
+
+--
 -- Table structure for table `area`
 --
 
