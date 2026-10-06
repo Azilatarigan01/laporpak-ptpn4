@@ -9,6 +9,10 @@
   },
   "routes": [
     {
+      "src": "/build/(.*)",
+      "dest": "/public/build/$1"
+    },
+    {
       "src": "/(assets|profil|storage|template|uploads)/(.*)",
       "dest": "/public/$1/$2"
     },
@@ -26,8 +30,9 @@
     }
   ],
   "env": {
+    "VERCEL": "1",
     "APP_ENV": "production",
-    "APP_DEBUG": "false",
+    "APP_DEBUG": "true",
     "APP_CONFIG_CACHE": "/tmp/config.php",
     "APP_EVENTS_CACHE": "/tmp/events.php",
     "APP_PACKAGES_CACHE": "/tmp/packages.php",

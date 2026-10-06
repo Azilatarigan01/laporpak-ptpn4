@@ -1,6 +1,10 @@
 <?php
 
-// Forward Vercel requests to Laravel public/index.php
+// Display errors for debugging serverless invocation
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
+
 // Create required /tmp directories for serverless environment
 $storageDirs = [
     '/tmp/storage/framework/views',
@@ -12,8 +16,22 @@ $storageDirs = [
 
 foreach ($storageDirs as $dir) {
     if (!is_dir($dir)) {
-        @mkdir($dir, 0755, true);
+        @mkdir($dir, 0777, true);
     }
 }
 
-require __DIR__ . '/../public/index.php';
+// Redirect storage and cache to /tmp
+putenv('APP_STORAGE=/tmp/storage');
+putenv('VIEW_COMPILED_PATH=/tmp/storage/framework/views');
+
+try {
+    require __DIR__ . '/../public/index.php';
+} catch (\Throwable $e) {
+    http_response_code(500);
+    header('Content-Type: text/plain');
+    echo "SERVERLESS BOOTSTRAP ERROR:\n";
+    echo $e->getMessage() . "\n";
+    echo "File: " . $e->getFile() . ":" . $e->getLine() . "\n";
+    echo $e->getTraceAsString();
+}
+
