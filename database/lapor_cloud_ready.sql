@@ -16,10 +16,9 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Ensure database exists and is selected
+-- Use default pre-created TiDB Cloud database
 --
-CREATE DATABASE IF NOT EXISTS `lapor`;
-USE `lapor`;
+USE `test`;
 
 --
 -- Table structure for table `area`
