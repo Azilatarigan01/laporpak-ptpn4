@@ -4,7 +4,7 @@
   "outputDirectory": "public",
   "functions": {
     "api/index.php": {
-      "runtime": "vercel-php@0.6.2"
+      "runtime": "vercel-php@0.7.1"
     }
   },
   "routes": [
@@ -17,12 +17,8 @@
       "dest": "/public/$1/$2"
     },
     {
-      "src": "/favicon.ico",
-      "dest": "/public/favicon.ico"
-    },
-    {
-      "src": "/robots.txt",
-      "dest": "/public/robots.txt"
+      "src": "/(.*)\\.(ico|txt|png|jpg|jpeg|gif|svg|webp|css|js|woff|woff2|ttf|eot)$",
+      "dest": "/public/$1.$2"
     },
     {
       "src": "/(.*)",
