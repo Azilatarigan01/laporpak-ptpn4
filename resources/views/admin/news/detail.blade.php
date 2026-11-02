@@ -15,9 +15,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-  <!-- Vendor CSS Files -->
-  <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
-  <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet" />
+  <!-- Vendor CSS Files (High-Speed Cloud CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
   <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet" />
 
   <style>
@@ -67,7 +67,7 @@
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
       <a href="{{ url('/') }}" class="logo d-flex align-items-center text-decoration-none">
-        <img src="{{ asset('assets/img/logoo.png') }}" alt="Logo" style="height: 44px;" class="me-2"> 
+        <img src="{{ asset('assets/img/logoo.png') }}" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Logo_PTPN_IV.png/640px-Logo_PTPN_IV.png';" alt="Logo" style="height: 44px;" class="me-2"> 
         <h1 class="sitename text-white" style="font-size: 1.25rem; font-weight: 800; margin: 0;">Dolok Sinumbah</h1>
       </a>
 
@@ -191,6 +191,6 @@
     </div>
   </footer>
 
-  <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

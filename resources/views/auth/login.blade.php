@@ -14,10 +14,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-  <!-- Vendor CSS Files -->
-  <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
-  <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet" />
-
+  <!-- Vendor CSS Files (High-Speed Cloud CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
   <!-- Main CSS File -->
   <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet" />
 
@@ -65,7 +64,7 @@
     <div class="p-4 p-md-5">
       <div class="text-center mb-4">
         <a href="{{ url('/') }}">
-          <img src="{{ asset('assets/img/logoo.png') }}" alt="Logo" style="height: 55px;" class="mb-2">
+          <img src="{{ asset('assets/img/logoo.png') }}" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Logo_PTPN_IV.png/640px-Logo_PTPN_IV.png';" alt="Logo" style="height: 55px;" class="mb-2">
         </a>
         <h4 class="fw-bold text-dark mb-1">Login Petugas & Personalia</h4>
         <p class="text-muted small">Portal Pengelolaan Aspirasi Lapor Pak! PTPN IV</p>
@@ -121,12 +120,6 @@
           </button>
         </div>
 
-        <div class="p-3 bg-light rounded-3 border mb-3 text-start small">
-          <div class="fw-bold text-dark mb-1"><i class="bi bi-info-circle-fill text-success me-1"></i> Akun Login Default:</div>
-          <div class="text-muted"><strong>Admin:</strong> <code>admin@gmail.com</code> | Pass: <code>123456</code></div>
-          <div class="text-muted"><strong>Kepala Bagian:</strong> <code>kepalabagian@gmail.com</code> | Pass: <code>123456</code></div>
-        </div>
-
         <div class="text-center">
           <a href="{{ url('/') }}" class="small text-muted text-decoration-none">
             <i class="bi bi-arrow-left me-1"></i> Kembali ke Beranda Utama
@@ -155,5 +148,6 @@
       });
     }
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

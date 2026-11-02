@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\WorkdayHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -66,14 +67,40 @@ class Pengaduan extends Model
     }
 
     /**
-     * Indikator apakah aduan telah melewati target SLA respon (>3 hari kerja)
+     * Indikator apakah aduan telah melewati target SLA respon (> 3 hari kerja).
+     * Secara ketat mengecualikan:
+     * - Akhir pekan (Sabtu & Minggu)
+     * - Hari Libur Nasional & Cuti Bersama (berdasarkan SKB 3 Menteri di config/holidays.php)
      */
     public function isOverdue()
     {
         if ($this->status === 'Diterima' && $this->tgl_pengaduan) {
-            return $this->tgl_pengaduan->diffInDays(now()) >= 3;
+            return WorkdayHelper::isOverdue($this->tgl_pengaduan, 3);
         }
         return false;
+    }
+
+    /**
+     * Tanggal jatuh tempo SLA respon (3 hari kerja sejak pengaduan efektif masuk)
+     */
+    public function getSlaDueDateAttribute()
+    {
+        if (!$this->tgl_pengaduan) {
+            return null;
+        }
+        return WorkdayHelper::calculateDueDate($this->tgl_pengaduan, 3);
+    }
+
+    /**
+     * Jumlah hari kerja yang telah terlewati sejak aduan diajukan
+     */
+    public function getHariKerjaBerlaluAttribute()
+    {
+        if (!$this->tgl_pengaduan) {
+            return 0;
+        }
+        $endDate = ($this->status === 'Selesai' && $this->tgl_tanggapan) ? $this->tgl_tanggapan : now();
+        return WorkdayHelper::countWorkdaysElapsed($this->tgl_pengaduan, $endDate);
     }
 
     public function area()

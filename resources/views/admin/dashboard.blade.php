@@ -2,29 +2,21 @@
 
 @section('container')
 <!-- Top Welcome Greeting Box in Content Area -->
-<div class="row mb-4">
+<div class="row mb-3">
   <div class="col-12">
-    <div class="card border-0 shadow-sm p-4 text-white" style="background: linear-gradient(135deg, #071e13 0%, #0d2818 50%, #133c24 100%); border-radius: 20px; position: relative; overflow: hidden;">
+    <div class="card border-0 shadow-sm p-3 p-md-4 text-white" style="background: linear-gradient(135deg, #071e13 0%, #0d2818 50%, #133c24 100%); border-radius: 16px; position: relative; overflow: hidden;">
       <div class="position-relative" style="z-index: 2;">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
           <div>
-            <div class="d-flex align-items-center gap-2 mb-2">
-              <span class="badge bg-success bg-opacity-25 text-light border border-success border-opacity-50 px-3 py-1 rounded-pill fw-bold">
-                <i class="bi bi-shield-check me-1"></i> Panel Administrator Sistem
-              </span>
-              <span class="badge bg-white bg-opacity-10 text-light px-3 py-1 rounded-pill small">
-                <i class="bi bi-calendar3 me-1"></i> <span id="heroLiveDate">{{ \Carbon\Carbon::now('Asia/Jakarta')->translatedFormat('l, d F Y') }}</span>
-              </span>
-            </div>
-            <h2 class="fw-bold text-white mb-1 font-display">Halo, {{ Auth::user()->name }} 👋</h2>
-            <p class="text-white-50 mb-0" style="font-size: 0.95rem;">Selamat datang di Panel Utama Lapor Pak! — Pantau dan kelola aspirasi karyawan Kebun Dolok Sinumbah secara terpadu dan real-time.</p>
+            <h3 class="fw-bold text-white mb-1 font-display fs-4">Halo, {{ Auth::user()->name }} 👋</h3>
+            <p class="text-white-50 mb-0 small">Pantau dan kelola aspirasi karyawan Kebun Dolok Sinumbah secara terpadu dan real-time.</p>
           </div>
-          <div class="d-flex align-items-center gap-2">
-            <a href="{{ route('pengaduan.add') }}" class="btn btn-outline-light px-3 py-2 rounded-pill fw-bold text-nowrap">
-              <i class="bi bi-plus-circle me-1"></i> Tambah Pengaduan
+          <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
+            <a href="{{ route('pengaduan.add') }}" class="btn btn-sm btn-outline-light px-3 py-1.5 rounded-pill fw-bold text-nowrap">
+              <i class="bi bi-plus-circle me-1"></i> Buat Aduan
             </a>
-            <a href="{{ route('pengaduan.list') }}" class="btn btn-success shadow px-4 py-2 rounded-pill fw-bold text-nowrap">
-              <i class="bi bi-file-earmark-text me-1"></i> Data Pengaduan
+            <a href="{{ route('pengaduan.list') }}" class="btn btn-sm btn-success shadow-sm px-3 py-1.5 rounded-pill fw-bold text-nowrap">
+              <i class="bi bi-file-earmark-text me-1"></i> Data Aduan
             </a>
           </div>
         </div>

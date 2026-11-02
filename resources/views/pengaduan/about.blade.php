@@ -14,10 +14,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-  <!-- Vendor CSS Files -->
-  <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
-  <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet" />
-  <link href="{{ asset('assets/vendor/aos/aos.css') }}" rel="stylesheet" />
+  <!-- Vendor CSS Files (High-Speed Cloud CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
   <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet" />
 
   <style>
@@ -97,7 +97,7 @@
     /* Page Hero */
     .page-hero {
       position: relative;
-      background: linear-gradient(135deg, rgba(6, 26, 16, 0.90) 0%, rgba(11, 35, 21, 0.85) 50%, rgba(17, 53, 32, 0.92) 100%), url("{{ asset('assets/img/hero-carousel/hero-carousel-1.jpg') }}") center/cover no-repeat;
+      background: linear-gradient(135deg, rgba(6, 26, 16, 0.90) 0%, rgba(11, 35, 21, 0.85) 50%, rgba(17, 53, 32, 0.92) 100%), url("{{ asset('assets/img/hero-carousel/hero-carousel-1.jpg') }}"), url("https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1400&q=80") center/cover no-repeat;
       padding: 175px 0 95px 0;
       color: #ffffff;
       text-align: center;
@@ -133,7 +133,7 @@
   <header class="eco-header fixed-top">
     <div class="container d-flex align-items-center justify-content-between">
       <a href="{{ url('/') }}" class="d-flex align-items-center text-decoration-none">
-        <img src="{{ asset('assets/img/logo1.png') }}" alt="PTPN IV Logo" style="height: 44px; width: auto;" class="me-3">
+        <img src="{{ asset('assets/img/logo1.png') }}" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Logo_PTPN_IV.png/640px-Logo_PTPN_IV.png';" alt="PTPN IV Logo" style="height: 44px; width: auto;" class="me-3">
         <div class="d-flex flex-column">
           <div class="eco-brand-title text-uppercase" style="font-size: 1.15rem; font-weight: 800; letter-spacing: 0.04em; color: #ffffff;">PTPN IV REGIONAL II</div>
           <span class="eco-brand-sub" style="font-size: 0.72rem; color: #74c69d; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;">Kebun Dolok Sinumbah</span>
@@ -202,15 +202,15 @@
   <footer class="eco-footer">
     <div class="container text-center">
       <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
-        <img src="{{ asset('assets/img/logoo.png') }}" alt="Logo" style="height: 32px;">
+        <img src="{{ asset('assets/img/logoo.png') }}" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Logo_PTPN_IV.png/640px-Logo_PTPN_IV.png';" alt="Logo" style="height: 32px;">
         <span class="text-white fw-bold">PTPN IV Regional II Kebun Dolok Sinumbah</span>
       </div>
       <p class="text-white-50 small mb-0">&copy; {{ date('Y') }} PT Perkebunan Nusantara IV (Persero). Seluruh Hak Cipta Dilindungi.</p>
     </div>
   </footer>
 
-  <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-  <script src="{{ asset('assets/vendor/aos/aos.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
   <script>
     if (typeof AOS !== 'undefined') {
       AOS.init({ duration: 800, once: true });

@@ -16,10 +16,7 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Use default pre-created TiDB Cloud database
---
-USE `test`;
-
+-- Ready for any MySQL database (InfinityFree, cPanel, Local, Cloud)
 --
 -- Table structure for table `area`
 --

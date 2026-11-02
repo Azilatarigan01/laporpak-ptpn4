@@ -15,13 +15,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-  <!-- Vendor CSS Files -->
-  <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
-  <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet" />
-  <link href="{{ asset('assets/vendor/aos/aos.css') }}" rel="stylesheet" />
-  <link href="{{ asset('assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" />
-  <link href="{{ asset('assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet" />
-  <link href="{{ asset('assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet" />
+  <!-- Vendor CSS Files (High-Speed Cloud CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet" />
 
   <!-- Main CSS File -->
   <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet" />
@@ -711,7 +711,7 @@
     <div class="container d-flex align-items-center justify-content-between">
       <!-- Brand Logo -->
       <a href="{{ url('/') }}" class="d-flex align-items-center text-decoration-none">
-        <img src="{{ asset('assets/img/logo1.png') }}" alt="PTPN IV Logo" style="height: 44px; width: auto;" class="me-3">
+        <img src="{{ asset('assets/img/logo1.png') }}" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Logo_PTPN_IV.png/640px-Logo_PTPN_IV.png';" alt="PTPN IV Logo" style="height: 44px; width: auto;" class="me-3">
         <div class="d-flex flex-column">
           <div class="eco-brand-title text-uppercase" style="font-size: 1.15rem; font-weight: 600; letter-spacing: 0.04em; color: #ffffff;">PTPN IV REGIONAL II</div>
           <span class="eco-brand-sub" style="font-size: 0.72rem; color: #74c69d; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;">Kebun Dolok Sinumbah</span>
@@ -722,11 +722,33 @@
       <nav id="navmenu" class="navmenu d-none d-xl-flex align-items-center gap-1">
         <a href="{{ url('/') }}" class="eco-nav-link active">Beranda</a>
         <a href="{{ url('about') }}" class="eco-nav-link">Tentang Kami</a>
-        <a href="{{ url('panduan') }}" class="eco-nav-link">Panduan Alur</a>
-        <a href="{{ url('pengaduan') }}" class="eco-nav-link">Layanan Pengaduan</a>
+
+        <!-- Dropdown: Layanan Pengaduan -->
+        <div class="dropdown">
+          <a href="#" class="eco-nav-link dropdown-toggle" id="layananDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="user-select:none;">
+            Layanan Pengaduan
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark shadow-lg border-0" style="border-radius:14px; min-width:200px; background:#071e13; padding:8px;" aria-labelledby="layananDropdown">
+            <li>
+              <a class="dropdown-item rounded-3 py-2" href="{{ url('pengaduan') }}" style="color:#d1fae5; font-weight:600; font-size:0.9rem;">
+                <i class="bi bi-megaphone-fill me-2 text-success"></i>Buat Pengaduan
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item rounded-3 py-2" href="{{ url('panduan') }}" style="color:#d1fae5; font-weight:600; font-size:0.9rem;">
+                <i class="bi bi-journal-text me-2 text-success"></i>Panduan Alur
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item rounded-3 py-2" href="{{ route('pengaduan.cek-status') }}" style="color:#d1fae5; font-weight:600; font-size:0.9rem;">
+                <i class="bi bi-search me-2 text-success"></i>Cek Status Laporan
+              </a>
+            </li>
+          </ul>
+        </div>
+
         <a href="{{ route('detail') }}" class="eco-nav-link">Berita Kebun</a>
         <a href="#leadership" class="eco-nav-link">Struktur Organisasi</a>
-        <a href="{{ route('pengaduan.cek-status') }}" class="eco-nav-link">Cek Status</a>
         <a href="{{ url('login') }}" class="btn-eco-pill ms-2">
           <i class="bi bi-shield-lock-fill"></i> Login Petugas
         </a>
@@ -746,10 +768,19 @@
       <div class="d-flex flex-column gap-2">
         <a href="{{ url('/') }}" class="text-white text-decoration-none py-1"><i class="bi bi-house me-2"></i>Beranda</a>
         <a href="{{ url('about') }}" class="text-white text-decoration-none py-1"><i class="bi bi-info-circle me-2"></i>Tentang Kami</a>
-        <a href="{{ url('panduan') }}" class="text-white text-decoration-none py-1"><i class="bi bi-journal-text me-2"></i>Panduan Alur</a>
-        <a href="{{ url('pengaduan') }}" class="text-white text-decoration-none py-1"><i class="bi bi-megaphone me-2"></i>Layanan Pengaduan</a>
+
+        <!-- Layanan Pengaduan Group (Mobile) -->
+        <div class="ps-0">
+          <div class="text-success fw-bold small py-1" style="font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase;"><i class="bi bi-megaphone me-2"></i>Layanan Pengaduan</div>
+          <div class="d-flex flex-column gap-1 ps-3">
+            <a href="{{ url('pengaduan') }}" class="text-white-50 text-decoration-none py-1" style="font-size:0.92rem;"><i class="bi bi-megaphone-fill me-2"></i>Buat Pengaduan</a>
+            <a href="{{ url('panduan') }}" class="text-white-50 text-decoration-none py-1" style="font-size:0.92rem;"><i class="bi bi-journal-text me-2"></i>Panduan Alur</a>
+            <a href="{{ route('pengaduan.cek-status') }}" class="text-white-50 text-decoration-none py-1" style="font-size:0.92rem;"><i class="bi bi-search me-2"></i>Cek Status Laporan</a>
+          </div>
+        </div>
+
         <a href="{{ route('detail') }}" class="text-white text-decoration-none py-1"><i class="bi bi-newspaper me-2"></i>Berita Kebun</a>
-        <a href="{{ route('pengaduan.cek-status') }}" class="text-white text-decoration-none py-1"><i class="bi bi-search me-2"></i>Cek Status Laporan</a>
+        <a href="#leadership" class="text-white text-decoration-none py-1"><i class="bi bi-diagram-3 me-2"></i>Struktur Organisasi</a>
         <a href="{{ url('login') }}" class="btn btn-success mt-2"><i class="bi bi-box-arrow-in-right me-1"></i>Login Portal</a>
       </div>
     </div>
@@ -807,7 +838,7 @@
           <!-- Hero Right Visual Card -->
           <div class="col-lg-5" data-aos="zoom-in" data-aos-delay="200" data-aos-duration="900">
             <div class="hero-estate-card">
-              <img src="{{ asset('assets/img/1sawit.jpg') }}" alt="Kebun Sawit Dolok Sinumbah">
+              <img src="{{ asset('assets/img/ptpn2.jpg') }}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1200&q=80';" alt="Kebun Sawit Dolok Sinumbah">
               <div class="mt-4 text-white">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                   <span class="badge bg-success bg-opacity-25 text-light border border-success border-opacity-50 px-3 py-1 rounded-pill">
@@ -1240,7 +1271,7 @@
                 </div>
                 <div class="pimpinan-avatar-wrap">
                   <div class="pimpinan-avatar-frame">
-                    <img src="{{ asset('assets/img/team/team-1.jpg') }}" class="pimpinan-avatar-img" alt="Manajer Kebun">
+                    <img src="{{ asset('assets/img/team/team-1.jpg') }}" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Tri+Mangkurat&background=16a34a&color=fff&size=200';" class="pimpinan-avatar-img" alt="Manajer Kebun">
                   </div>
                 </div>
                 <div class="pimpinan-info-box">
@@ -1338,7 +1369,7 @@
       <div class="row pt-4 border-top border-secondary border-opacity-25 small text-muted justify-content-between align-items-center">
         <div class="col-md-6 mb-3 mb-md-0">
           <div class="d-flex align-items-center gap-2">
-            <img src="{{ asset('assets/img/logoo.png') }}" alt="Logo" style="height: 32px;">
+            <img src="{{ asset('assets/img/logoo.png') }}" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Logo_PTPN_IV.png/640px-Logo_PTPN_IV.png';" alt="Logo" style="height: 32px;">
             <span class="text-white fw-bold">PTPN IV Regional II Kebun Dolok Sinumbah</span>
           </div>
           <div class="text-white-50 mt-1">
@@ -1355,11 +1386,11 @@
     </div>
   </footer>
 
-  <!-- Vendor JS Files -->
-  <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-  <script src="{{ asset('assets/vendor/aos/aos.js') }}"></script>
-  <script src="{{ asset('assets/vendor/glightbox/js/glightbox.min.js') }}"></script>
-  <script src="{{ asset('assets/vendor/swiper/swiper-bundle.min.js') }}"></script>
+  <!-- Vendor JS Files (High-Speed Cloud CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="{{ asset('assets/js/main.js') }}"></script>
   <script>
     if (typeof AOS !== 'undefined') {

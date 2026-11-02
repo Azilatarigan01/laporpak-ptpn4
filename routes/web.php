@@ -140,3 +140,48 @@ Route::prefix('kepala')->middleware(['kepala_bagian'])->group(function () {
     Route::get('/laporan/export-excel', [PengaduanController::class, 'exportExcel'])->name('kepala.pengaduan.exportExcel');
     Route::get('/laporan/export-pdf', [PengaduanController::class, 'exportPdf'])->name('kepala.pengaduan.exportPdf');
 });
+
+// Helper Shared Hosting (InfinityFree/cPanel): Membersihkan cache saat deploy tanpa SSH terminal
+Route::get('/hosting-setup', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+        return '<div style="font-family:sans-serif;padding:30px;text-align:center;">'
+            . '<h2 style="color:#198754;">✓ Konfigurasi Berhasil!</h2>'
+            . '<p>Cache aplikasi, konfigurasi, dan route Laravel telah berhasil dibersihkan dan disinkronkan.</p>'
+            . '<a href="' . url('/') . '" style="display:inline-block;padding:10px 20px;background:#198754;color:#fff;text-decoration:none;border-radius:6px;font-weight:bold;">Buka Halaman Utama</a>'
+            . '</div>';
+    } catch (\Exception $e) {
+        return '<h3 style="color:red;font-family:sans-serif;">Error: ' . $e->getMessage() . '</h3>';
+    }
+});
+
+// Helper Test Notifikasi Telegram Bot
+Route::get('/test-telegram', function () {
+    $token = env('TELEGRAM_BOT_TOKEN');
+    $chatId = env('TELEGRAM_CHAT_ID');
+
+    if (empty($token) || empty($chatId)) {
+        return '<div style="font-family:sans-serif;padding:30px;color:red;">'
+            . '<h3>⚠️ Token Telegram Belum Diisi!</h3>'
+            . '<p>Pastikan <code>TELEGRAM_BOT_TOKEN</code> dan <code>TELEGRAM_CHAT_ID</code> sudah ada di file <code>.env</code> server.</p>'
+            . '</div>';
+    }
+
+    try {
+        $res = \Illuminate\Support\Facades\Http::timeout(5)->withoutVerifying()->post("https://api.telegram.org/bot{$token}/sendMessage", [
+            'chat_id' => $chatId,
+            'text' => "🔔 *TES NOTIFIKASI SUKSES!* 🔔\nSistem Lapor Pak PTPN IV Kebun Dolok Sinumbah di InfinityFree berhasil terhubung ke Telegram Bot Personalia.",
+            'parse_mode' => 'Markdown',
+        ]);
+        return '<div style="font-family:sans-serif;padding:30px;color:green;">'
+            . '<h3>✓ Notifikasi Telegram Berhasil Dikirim!</h3>'
+            . '<p>Silakan periksa grup/chat Telegram Anda sekarang.</p>'
+            . '<pre style="background:#f4f4f4;padding:10px;border-radius:6px;">' . htmlspecialchars($res->body()) . '</pre>'
+            . '</div>';
+    } catch (\Throwable $e) {
+        return '<div style="font-family:sans-serif;padding:30px;color:red;">'
+            . '<h3>⚠️ Gagal Terhubung ke Telegram:</h3>'
+            . '<p>' . htmlspecialchars($e->getMessage()) . '</p>'
+            . '</div>';
+    }
+});

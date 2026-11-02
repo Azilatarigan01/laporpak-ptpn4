@@ -12,12 +12,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap 5 CSS -->
-    <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet" />
+    <!-- Bootstrap 5 CSS (Cloud CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
     
-    <!-- Material Design Icons for legacy icons support -->
-    <link rel="stylesheet" href="{{ asset('template/vendors/mdi/css/materialdesignicons.min.css') }}">
+    <!-- Material Design Icons for legacy icons support (Cloud CDN) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
     
     <link rel="shortcut icon" href="{{ asset('assets/img/logoo.png') }}" />
     
@@ -182,22 +182,25 @@
             top: 0;
             left: 260px;
             right: 0;
-            height: 70px;
+            height: 64px;
             background: #ffffff;
             border-bottom: 1px solid var(--slate-200);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 28px;
+            padding: 0 20px;
             z-index: 1030;
             transition: all 0.3s ease;
+            flex-wrap: nowrap;
+            white-space: nowrap;
         }
 
         .topbar-left {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 10px;
+            flex-shrink: 0;
         }
 
         /* Main Content Wrapper */
@@ -383,7 +386,7 @@
     <aside class="admin-sidebar" id="adminSidebar">
         <!-- Brand Header inside Sidebar -->
         <a class="sidebar-brand-wrapper" href="{{ Auth::user()->user_type == 1 ? route('admin.dashboard') : route('kepala.dashboard') }}">
-            <img src="{{ asset('assets/img/logoo.png') }}" alt="Logo PTPN IV">
+            <img src="{{ asset('assets/img/logoo.png') }}" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Logo_PTPN_IV.png/640px-Logo_PTPN_IV.png';" alt="Logo PTPN IV">
             <div>
                 <h1 class="sidebar-brand-title">Lapor Pak!</h1>
                 <p class="sidebar-brand-sub">Kebun Dolok Sinumbah</p>
@@ -498,40 +501,34 @@
     <header class="admin-topbar">
         <!-- Left: Mobile Toggle & System Role Badge -->
         <div class="topbar-left">
-            <button class="btn btn-light d-lg-none border-0 p-2" type="button" id="sidebarToggleBtn">
+            <button class="btn btn-light d-lg-none border-0 p-2 me-1" type="button" id="sidebarToggleBtn">
                 <i class="bi bi-list fs-4"></i>
             </button>
-            <div class="d-flex align-items-center gap-2">
-                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 rounded-pill fw-bold">
-                    <i class="bi bi-shield-check me-1"></i> {{ Auth::user()->jabatan ?: (Auth::user()->user_type == 1 ? 'Administrator / Bagian Personalia' : 'Petugas Unit') }}
-                </span>
-                <span class="text-muted small fw-semibold d-none d-md-inline">&bull; PTPN IV Regional II</span>
-            </div>
+            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 rounded-pill fw-bold small text-truncate" style="max-width: 250px;">
+                <i class="bi bi-shield-check me-1"></i> {{ Auth::user()->jabatan ?: (Auth::user()->user_type == 1 ? 'Administrator' : 'Kepala Bagian') }}
+            </span>
         </div>
 
-        <!-- Right: Live Realtime Clock & User Actions -->
-        <div class="d-flex align-items-center gap-3">
-            <!-- Live Realtime Clock Badge -->
-            <span class="badge bg-light text-dark border px-3 py-2 rounded-pill small fw-semibold d-none d-lg-inline-flex align-items-center gap-2 shadow-sm">
+        <!-- Right: Live Clock & User Actions -->
+        <div class="d-flex align-items-center gap-2 gap-md-3">
+            <!-- Compact Clock Badge -->
+            <span class="badge bg-light text-dark border px-3 py-2 rounded-pill small fw-semibold d-none d-xl-inline-flex align-items-center gap-2 shadow-sm">
                 <i class="bi bi-clock-history text-success"></i>
-                <span id="realtimeLiveClock">{{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}</span>
+                <span id="realtimeLiveClock">{{ \Carbon\Carbon::now()->translatedFormat('d M Y') }}</span>
             </span>
 
-            <a href="{{ url('/') }}" target="_blank" class="btn btn-sm btn-outline-success rounded-pill px-3 d-none d-sm-inline-flex align-items-center gap-1">
-                <i class="bi bi-globe"></i> <span>Buka Website</span>
+            <a href="{{ url('/') }}" target="_blank" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1.5 d-none d-sm-inline-flex align-items-center gap-1" title="Lihat Website Publik">
+                <i class="bi bi-globe"></i> <span class="d-none d-md-inline">Website</span>
             </a>
 
             <!-- Dropdown User -->
             <div class="dropdown">
                 <a href="#" class="d-flex align-items-center gap-2 text-decoration-none dropdown-toggle text-dark" data-bs-toggle="dropdown" aria-expanded="false">
-                    <div class="text-end d-none d-lg-block" style="line-height: 1.2;">
-                        <div class="fw-bold small text-dark">{{ Auth::user()->name }}</div>
-                        <small class="text-muted" style="font-size: 0.72rem;">{{ Auth::user()->email }}</small>
-                    </div>
+                    <span class="fw-bold small text-dark d-none d-md-inline text-truncate" style="max-width: 140px;">{{ Auth::user()->name }}</span>
                     @if(Auth::user()->profil && file_exists(public_path('uploads/profiles/' . Auth::user()->profil)))
-                        <img class="rounded-circle shadow-sm border border-2 border-success" src="{{ asset('uploads/profiles/' . Auth::user()->profil) }}" alt="Profile" style="width: 40px; height: 40px; object-fit: cover;"> 
+                        <img class="rounded-circle shadow-sm border border-2 border-success" src="{{ asset('uploads/profiles/' . Auth::user()->profil) }}" alt="Profile" style="width: 36px; height: 36px; object-fit: cover;"> 
                     @else
-                        <div class="rounded-circle text-white d-flex align-items-center justify-content-center shadow-sm" style="width: 40px; height: 40px; font-weight: 800; font-size: 1rem; background: linear-gradient(135deg, #2d6a4f 0%, #133c24 100%);">
+                        <div class="rounded-circle text-white d-flex align-items-center justify-content-center shadow-sm" style="width: 36px; height: 36px; font-weight: 800; font-size: 0.9rem; background: linear-gradient(135deg, #2d6a4f 0%, #133c24 100%);">
                             {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                         </div>
                     @endif
@@ -599,7 +596,7 @@
     </main>
 
     <!-- Scripts -->
-    <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 

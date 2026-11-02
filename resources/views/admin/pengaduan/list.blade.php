@@ -119,7 +119,7 @@
                   <i class="mdi mdi-check-circle-outline me-1"></i> Diterima
                 </span>
                 @if($item->isOverdue())
-                  <br><span class="badge bg-danger text-white mt-1" style="font-size: 0.65rem;" title="Melewati target respon 3 hari kerja">⚠️ Overdue SLA</span>
+                  <br><span class="badge bg-danger text-white mt-1" style="font-size: 0.65rem;" title="Melewati target SLA > 3 hari kerja (Telah berlalu {{ $item->hari_kerja_berlalu }} hari kerja; akhir pekan & cuti bersama tidak dihitung)">⚠️ Overdue SLA</span>
                 @endif
               @elseif($item->status == 'Dalam Proses')
                 <span class="badge" style="background-color: #fef3c7; color: #92400e; border: 1px solid #fde68a;">
