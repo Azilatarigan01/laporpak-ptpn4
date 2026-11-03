@@ -144,7 +144,16 @@ CREATE TABLE `kategori_pengaduan` (
 
 LOCK TABLES `kategori_pengaduan` WRITE;
 /*!40000 ALTER TABLE `kategori_pengaduan` DISABLE KEYS */;
-INSERT INTO `kategori_pengaduan` VALUES (1,'Konflik Kerja','2025-01-28 15:45:30','2025-01-28 15:45:30'),(2,'Fasilitas Kantor','2025-01-28 15:45:30','2025-01-28 15:45:30'),(3,'Keamanan','2025-01-28 15:45:30','2025-01-28 16:00:29');
+INSERT INTO `kategori_pengaduan` VALUES 
+(1,'Infrastruktur & Akses Jalan Kebun (Pasar Rintis & Titi Panen)','2025-01-28 15:45:30','2026-11-03 20:50:00'),
+(2,'Fasilitas Perumahan Karyawan (Air Bersih, Listrik & Pondok)','2025-01-28 15:45:30','2026-11-03 20:50:00'),
+(3,'Peralatan Kerja & Perlengkapan K3 (Alat Pelindung Diri / APD)','2025-01-28 15:45:30','2026-11-03 20:50:00'),
+(4,'Operasional Panen, TPH & Angkutan TBS (Restan Buah Sawit)','2026-11-03 20:50:00','2026-11-03 20:50:00'),
+(5,'Pemeliharaan Tanaman, Pemupukan & Perlindungan Hayati','2026-11-03 20:50:00','2026-11-03 20:50:00'),
+(6,'Kesejahteraan Karyawan, Premi Kerja & BPJS Ketenagakerjaan','2026-11-03 20:50:00','2026-11-03 20:50:00'),
+(7,'Keamanan Kebun, Ternak Liar & Pencegahan Pencurian TBS','2026-11-03 20:50:00','2026-11-03 20:50:00'),
+(8,'Fasilitas Kantor Afdeling, Jaringan & Administrasi Kerja','2026-11-03 20:50:00','2026-11-03 20:50:00'),
+(9,'Aspirasi, Saran Perbaikan & Lainnya','2026-11-03 20:50:00','2026-11-03 20:50:00');
 /*!40000 ALTER TABLE `kategori_pengaduan` ENABLE KEYS */;
 UNLOCK TABLES;
 

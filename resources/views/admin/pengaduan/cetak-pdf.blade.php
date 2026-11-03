@@ -3,98 +3,98 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surat Lembar Pengaduan & Aspirasi - {{ $pengaduan->kode_pengaduan }}</title>
+    <title>Surat Lembar Pengaduan Resmi - {{ $pengaduan->kode_pengaduan }}</title>
     @php
-        $logoPath = public_path('assets/img/logoo.png');
-        $logoBase64 = '';
-        if (file_exists($logoPath)) {
-            $logoBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath));
-        } else {
-            $logoBase64 = asset('assets/img/logoo.png');
+        $logoJpg = public_path('assets/img/logoo.jpg');
+        $logoPng = public_path('assets/img/logoo.png');
+        $logoSrc = '';
+        if (file_exists($logoJpg)) {
+            $logoSrc = 'data:image/jpeg;base64,' . base64_encode(file_get_contents($logoJpg));
+        } elseif (extension_loaded('gd') && file_exists($logoPng)) {
+            $logoSrc = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPng));
+        } elseif (file_exists($logoPng)) {
+            $logoSrc = $logoPng;
         }
     @endphp
     <style>
         @page {
-            size: A4 portrait;
-            margin: 15mm 15mm 15mm 15mm;
+            size: a4 portrait;
+            margin: 12mm 15mm 10mm 15mm;
         }
         * {
             box-sizing: border-box;
         }
         body {
-            font-family: 'Times New Roman', Times, serif, 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Times New Roman', Times, serif;
             color: #111827;
-            font-size: 11pt;
-            line-height: 1.45;
+            font-size: 10pt;
+            line-height: 1.35;
             margin: 0;
             padding: 0;
             background-color: #ffffff;
         }
         
         /* Kop Surat Resmi PTPN IV */
-        .kop-surat {
+        .header-table {
             width: 100%;
-            border-bottom: 3px double #0f5132;
-            padding-bottom: 8px;
-            margin-bottom: 16px;
-        }
-        .kop-table {
-            width: 100%;
+            border-bottom: 2.5px solid #0f5132;
+            padding-bottom: 6px;
+            margin-bottom: 10px;
             border-collapse: collapse;
         }
-        .kop-logo {
-            width: 90px;
+        .header-logo {
+            width: 75px;
             text-align: left;
             vertical-align: middle;
-            padding-right: 12px;
+            padding-right: 10px;
         }
-        .kop-logo img {
-            max-height: 75px;
-            max-width: 85px;
+        .header-logo img {
+            max-height: 60px;
+            max-width: 70px;
             object-fit: contain;
             display: block;
         }
-        .kop-text {
+        .header-text {
             text-align: center;
             vertical-align: middle;
         }
-        .kop-text .corp-title {
-            font-size: 14pt;
+        .header-text .corp-name {
+            font-size: 13pt;
             font-weight: bold;
             color: #0f5132;
-            margin: 0;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            margin: 0;
         }
-        .kop-text .unit-title {
-            font-size: 12pt;
+        .header-text .unit-name {
+            font-size: 11pt;
             font-weight: bold;
             color: #1e293b;
-            margin: 2px 0;
             text-transform: uppercase;
+            margin: 2px 0;
         }
-        .kop-text .address-text {
-            font-size: 8.5pt;
+        .header-text .address {
+            font-size: 8pt;
             color: #475569;
             margin: 0;
-            line-height: 1.3;
+            line-height: 1.25;
         }
-        
-        /* Nomor Dokumen & Judul Surat */
-        .doc-header-box {
+
+        /* Judul Dokumen & Nomor Registrasi */
+        .doc-header {
             text-align: center;
-            margin-bottom: 18px;
+            margin-bottom: 8px;
         }
-        .doc-title-main {
-            font-size: 12.5pt;
+        .doc-title {
+            font-size: 11.5pt;
             font-weight: bold;
             text-decoration: underline;
             text-transform: uppercase;
-            margin: 0 0 4px 0;
             color: #0f172a;
+            margin-bottom: 2px;
         }
-        .doc-reg-number {
-            font-size: 9.5pt;
+        .doc-reg {
+            font-size: 9pt;
             color: #334155;
             font-weight: 600;
         }
@@ -102,38 +102,38 @@
         /* Metadata Baris Surat */
         .meta-table {
             width: 100%;
-            margin-bottom: 14px;
-            font-size: 10pt;
+            margin-bottom: 8px;
+            font-size: 9pt;
             border-collapse: collapse;
         }
         .meta-table td {
-            padding: 3px 0;
+            padding: 1px 0;
             vertical-align: top;
         }
 
-        /* Section Headings */
+        /* Section Header */
         .section-header {
             background-color: #f1f5f9;
             color: #0f5132;
-            padding: 5px 10px;
-            font-size: 10.5pt;
+            padding: 4px 8px;
+            font-size: 9.5pt;
             font-weight: bold;
-            border-left: 4px solid #0f5132;
-            margin-top: 14px;
-            margin-bottom: 8px;
+            border-left: 3.5px solid #0f5132;
+            margin-top: 8px;
+            margin-bottom: 5px;
             text-transform: uppercase;
         }
 
-        /* Content Tables */
+        /* Content Table */
         table.formal-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 10px;
+            margin-bottom: 4px;
         }
         table.formal-table td {
-            padding: 5px 8px;
+            padding: 3px 6px;
             vertical-align: top;
-            font-size: 10pt;
+            font-size: 9.5pt;
         }
         table.formal-table td.col-label {
             width: 28%;
@@ -142,169 +142,114 @@
             border-bottom: 1px dashed #e2e8f0;
         }
         table.formal-table td.col-colon {
-            width: 3%;
+            width: 2%;
             text-align: center;
             border-bottom: 1px dashed #e2e8f0;
         }
         table.formal-table td.col-val {
-            width: 69%;
+            width: 70%;
             color: #0f172a;
             border-bottom: 1px dashed #e2e8f0;
         }
 
-        /* Statement Box */
+        /* Box Isi Pernyataan */
         .content-box {
             border: 1px solid #cbd5e1;
             background-color: #fafafa;
-            border-radius: 4px;
-            padding: 10px 14px;
-            font-size: 10pt;
-            line-height: 1.6;
-            min-height: 55px;
-            white-space: pre-line;
+            border-radius: 3px;
+            padding: 6px 10px;
+            font-size: 9.5pt;
+            line-height: 1.45;
+            min-height: 42px;
             color: #1e293b;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
             text-align: justify;
         }
 
         /* Status Badge */
-        .status-pill {
+        .badge {
             display: inline-block;
-            padding: 2px 10px;
-            font-size: 8.5pt;
+            padding: 1px 8px;
+            font-size: 8pt;
             font-weight: bold;
-            border-radius: 4px;
+            border-radius: 3px;
             text-transform: uppercase;
         }
-        .status-diterima { background-color: #dcfce7; color: #166534; border: 1px solid #86efac; }
-        .status-proses { background-color: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
-        .status-selesai { background-color: #e0f2fe; color: #075985; border: 1px solid #bae6fd; }
+        .badge-diterima { background-color: #dcfce7; color: #166534; border: 1px solid #86efac; }
+        .badge-proses { background-color: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+        .badge-selesai { background-color: #e0f2fe; color: #075985; border: 1px solid #bae6fd; }
 
-        /* Signature Area */
-        .ttd-container {
+        /* Tanda Tangan */
+        .signature-table {
             width: 100%;
-            margin-top: 25px;
+            margin-top: 14px;
             page-break-inside: avoid;
-        }
-        .ttd-table {
-            width: 100%;
             border-collapse: collapse;
         }
-        .ttd-table td {
+        .signature-table td {
             width: 50%;
             text-align: center;
             vertical-align: top;
-            font-size: 10pt;
-            padding: 0 15px;
+            font-size: 9.5pt;
         }
-        .ttd-space {
-            height: 60px;
+        .signature-space {
+            height: 48px;
         }
 
-        /* Footer Stamp Note */
-        .official-footer {
-            margin-top: 20px;
+        /* Footer */
+        .footer-note {
+            margin-top: 10px;
             border-top: 1px solid #e2e8f0;
-            padding-top: 6px;
-            font-size: 8pt;
+            padding-top: 4px;
+            font-size: 7.5pt;
             color: #64748b;
             text-align: center;
-        }
-
-        /* Print Controls for Browser View */
-        .print-control-bar {
-            background: #0f5132;
-            color: #ffffff;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .btn-print {
-            background: #ffffff;
-            color: #0f5132;
-            font-weight: bold;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 10pt;
-            text-decoration: none;
-        }
-        .btn-print:hover {
-            background: #d8f3dc;
-        }
-        @media print {
-            .print-control-bar {
-                display: none !important;
-            }
-            body {
-                background: #ffffff !important;
-                padding: 0 !important;
-            }
-            @page {
-                margin: 12mm 12mm 12mm 12mm;
-            }
         }
     </style>
 </head>
 <body>
 
-    <!-- On-screen Print Toolbar (Hidden during actual print) -->
-    <div class="print-control-bar">
-        <div>
-            <strong>Pratinjau Dokumen Resmi Pengaduan: #{{ $pengaduan->kode_pengaduan }}</strong>
-            <span style="font-size: 8.5pt; opacity: 0.85; margin-left: 10px;">(PTPN IV Regional II Kebun Dolok Sinumbah)</span>
-        </div>
-        <div style="display: flex; gap: 10px;">
-            <button onclick="window.print()" class="btn-print">
-                &#128438; Cetak Dokumen / Simpan PDF
-            </button>
-        </div>
-    </div>
-
     <!-- KOP SURAT RESMI PTPN IV -->
-    <div class="kop-surat">
-        <table class="kop-table">
-            <tr>
-                <td class="kop-logo">
-                    <img src="{{ $logoBase64 }}" alt="Logo PTPN IV">
-                </td>
-                <td class="kop-text">
-                    <div class="corp-title">PT PERKEBUNAN NUSANTARA IV (PERSERO)</div>
-                    <div class="unit-title">REGIONAL II &bull; KEBUN DOLOK SINUMBAH</div>
-                    <div class="address-text">
-                        Kecamatan Hutabayu Raja, Kabupaten Simalungun, Sumatera Utara 21182<br>
-                        Telepon: (061) 4154666 / (0622) 123456 &bull; Email: kebun.doloksinumbah@ptpn4.co.id
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
+    <table class="header-table">
+        <tr>
+            <td class="header-logo">
+                @if(!empty($logoSrc))
+                    <img src="{{ $logoSrc }}" alt="Logo PTPN IV">
+                @else
+                    <div style="font-weight: bold; font-size: 14pt; color: #0f5132;">PTPN IV</div>
+                @endif
+            </td>
+            <td class="header-text">
+                <div class="corp-name">PT PERKEBUNAN NUSANTARA IV (PERSERO)</div>
+                <div class="unit-name">REGIONAL II &bull; KEBUN DOLOK SINUMBAH</div>
+                <div class="address">
+                    Kecamatan Hutabayu Raja, Kabupaten Simalungun, Sumatera Utara 21182<br>
+                    Telepon: (061) 4154666 &bull; Email: kebun.doloksinumbah@ptpn4.co.id
+                </div>
+            </td>
+        </tr>
+    </table>
 
-    <!-- JUDUL & NOMOR REGISTER SURAT RESMI -->
-    <div class="doc-header-box">
-        <div class="doc-title-main">LEMBAR ASPIRASI & BERITA ACARA PENGADUAN KARYAWAN</div>
-        <div class="doc-reg-number">Nomor Registrasi Sistem: <strong>{{ $pengaduan->kode_pengaduan }}</strong></div>
+    <!-- JUDUL & NOMOR REGISTER -->
+    <div class="doc-header">
+        <div class="doc-title">LEMBAR ASPIRASI & BERITA ACARA PENGADUAN KARYAWAN</div>
+        <div class="doc-reg">Nomor Registrasi: <strong>{{ $pengaduan->kode_pengaduan }}</strong></div>
     </div>
 
     <!-- METADATA TANGGAL & SIFAT -->
     <table class="meta-table">
         <tr>
             <td style="width: 15%;"><strong>Tanggal Terbit</strong></td>
-            <td style="width: 3%;">:</td>
-            <td style="width: 45%;">{{ $pengaduan->tgl_pengaduan ? \Carbon\Carbon::parse($pengaduan->tgl_pengaduan)->translatedFormat('d F Y - H:i') : now()->translatedFormat('d F Y') }} WIB</td>
-            <td style="width: 12%;"><strong>Sifat</strong></td>
-            <td style="width: 3%;">:</td>
-            <td style="width: 22%;">Penting / Rahasia</td>
+            <td style="width: 2%;">:</td>
+            <td style="width: 48%;">{{ $pengaduan->tgl_pengaduan ? \Carbon\Carbon::parse($pengaduan->tgl_pengaduan)->translatedFormat('d F Y - H:i') : now()->translatedFormat('d F Y - H:i') }} WIB</td>
+            <td style="width: 10%;"><strong>Sifat</strong></td>
+            <td style="width: 2%;">:</td>
+            <td style="width: 23%;">Penting / Internal</td>
         </tr>
         <tr>
             <td><strong>Perihal</strong></td>
             <td>:</td>
-            <td colspan="4">Laporan Aspirasi & Penanganan Keluhan Fasilitas/Operasional Kerja Karyawan</td>
+            <td colspan="4">Laporan Penanganan Keluhan Fasilitas & Operasional Kerja Lapangan</td>
         </tr>
     </table>
 
@@ -314,15 +259,15 @@
         <tr>
             <td class="col-label">Nama Lengkap Karyawan</td>
             <td class="col-colon">:</td>
-            <td class="col-val"><strong>{{ $pengaduan->is_anonim ? 'Karyawan (Identitas Dirahasiakan / Whistleblower)' : ($pengaduan->karyawan->nama_karyawan ?? 'Karyawan PTPN IV') }}</strong></td>
+            <td class="col-val"><strong>{{ $pengaduan->karyawan->nama_karyawan ?? 'Karyawan PTPN IV' }}</strong></td>
         </tr>
         <tr>
-            <td class="col-label">NIKSAP / NIK Karyawan</td>
+            <td class="col-label">NIKSAP Karyawan</td>
             <td class="col-colon">:</td>
-            <td class="col-val">{{ $pengaduan->is_anonim ? 'DIRAHASIAKAN SISTEM (WBS)' : ($pengaduan->niksap ?? '-') }}</td>
+            <td class="col-val">{{ $pengaduan->niksap ?? ($pengaduan->karyawan->niksap ?? '-') }}</td>
         </tr>
         <tr>
-            <td class="col-label">Area Penugasan</td>
+            <td class="col-label">Unit & Area Penugasan</td>
             <td class="col-colon">:</td>
             <td class="col-val">{{ $pengaduan->posisi->realisasi->area->nama_area ?? ($pengaduan->area->nama_area ?? 'Kebun Dolok Sinumbah') }}</td>
         </tr>
@@ -349,75 +294,65 @@
         <tr>
             <td class="col-label">Kategori Laporan</td>
             <td class="col-colon">:</td>
-            <td class="col-val">{{ $pengaduan->kategori_pengaduan->nama_kategori ?? 'Umum / Fasilitas Operasional' }}</td>
+            <td class="col-val"><strong>{{ $pengaduan->kategori_pengaduan->nama_kategori ?? 'Umum / Fasilitas Operasional' }}</strong></td>
         </tr>
         <tr>
-            <td class="col-label">Status Penanganan Saat Ini</td>
+            <td class="col-label">Status Penanganan</td>
             <td class="col-colon">:</td>
             <td class="col-val">
                 @if($pengaduan->status == 'Diterima')
-                    <span class="status-pill status-diterima">DITERIMA SISTEM (ANTREAN VERIFIKASI)</span>
+                    <span class="badge badge-diterima">DITERIMA SISTEM</span>
                 @elseif($pengaduan->status == 'Dalam Proses')
-                    <span class="status-pill status-proses">DALAM PROSES TINDAK LANJUT</span>
+                    <span class="badge badge-proses">DALAM PROSES TINDAK LANJUT</span>
                 @elseif($pengaduan->status == 'Selesai')
-                    <span class="status-pill status-selesai">SELESAI DITANGANI / TUNTAS</span>
+                    <span class="badge badge-selesai">SELESAI DITANGANI</span>
                 @else
-                    <span class="status-pill">{{ strtoupper($pengaduan->status) }}</span>
+                    <span class="badge">{{ strtoupper($pengaduan->status) }}</span>
                 @endif
             </td>
         </tr>
     </table>
 
-    <div style="font-weight: 600; font-size: 9.5pt; color: #334155; margin-bottom: 4px;">Uraian Kronologis & Pokok Permasalahan:</div>
+    <div style="font-weight: 600; font-size: 9pt; color: #334155; margin-top: 4px; margin-bottom: 2px;">Uraian Kronologis & Pokok Masalah:</div>
     <div class="content-box">
-        {{ $pengaduan->deskripsi }}
+        {!! nl2br(e($pengaduan->deskripsi)) !!}
     </div>
 
-    <!-- III. CATATAN TINDAK LANJUT PIMPINAN / KEPALA BAGIAN -->
-    <div class="section-header">III. RESPON & CATATAN TINDAK LANJUT MANAJEMEN PIMPINAN</div>
+    <!-- III. CATATAN TINDAK LANJUT -->
+    <div class="section-header">III. RESPON & CATATAN TINDAK LANJUT MANAJEMEN</div>
     <div class="content-box">
         @if(!empty($pengaduan->balasan))
-            {{ $pengaduan->balasan }}
+            {!! nl2br(e($pengaduan->balasan)) !!}
         @else
-            <em>Laporan pengaduan telah terdata secara resmi dan sedang dalam proses koordinasi penanganan lapangan oleh Kepala Bagian / Pimpinan Unit terkait.</em>
+            <em>Laporan pengaduan telah terverifikasi secara resmi dalam sistem Lapor Pak! dan dalam proses koordinasi penanganan lapangan oleh Kepala Bagian terkait.</em>
         @endif
     </div>
 
-    <!-- LEMBAR PENGESAHAN & TANDA TANGAN RESMI -->
-    <div class="ttd-container">
-        <table class="ttd-table">
-            <tr>
-                <td style="width: 50%; vertical-align: bottom; text-align: center;">
-                    Dolok Sinumbah, {{ $pengaduan->tgl_pengaduan ? \Carbon\Carbon::parse($pengaduan->tgl_pengaduan)->translatedFormat('d F Y') : now()->translatedFormat('d F Y') }}<br>
-                    <strong>Karyawan Pelapor,</strong>
-                    <div class="ttd-space"></div>
-                    <u><strong>{{ $pengaduan->karyawan->nama_karyawan ?? 'Karyawan' }}</strong></u><br>
-                    NIKSAP: {{ $pengaduan->niksap ?? '.......................' }}
-                </td>
-                <td style="width: 50%; vertical-align: bottom; text-align: center;">
-                    Dolok Sinumbah, {{ now()->translatedFormat('d F Y') }}<br>
-                    <strong>Mengetahui / Menyetujui,</strong><br>
-                    <span style="font-size: 9pt; color: #334155;">Kepala Bagian / Asisten SDM & Umum</span>
-                    <div class="ttd-space"></div>
-                    <u><strong>( .................................................... )</strong></u><br>
-                    NIKSAP / NIP: .......................................
-                </td>
-            </tr>
-        </table>
-    </div>
+    <!-- LEMBAR PENGESAHAN & TANDA TANGAN -->
+    <table class="signature-table">
+        <tr>
+            <td>
+                Dolok Sinumbah, {{ $pengaduan->tgl_pengaduan ? \Carbon\Carbon::parse($pengaduan->tgl_pengaduan)->translatedFormat('d F Y') : now()->translatedFormat('d F Y') }}<br>
+                <strong>Karyawan Pelapor,</strong>
+                <div class="signature-space"></div>
+                <u><strong>{{ $pengaduan->karyawan->nama_karyawan ?? 'Karyawan Pelapor' }}</strong></u><br>
+                NIKSAP: {{ $pengaduan->niksap ?? ($pengaduan->karyawan->niksap ?? '-') }}
+            </td>
+            <td>
+                Mengetahui / Memverifikasi,<br>
+                <strong>Kepala Bagian / Pimpinan Unit Terkait,</strong>
+                <div class="signature-space"></div>
+                <u><strong>( .................................................... )</strong></u><br>
+                PTPN IV Regional II Dolok Sinumbah
+            </td>
+        </tr>
+    </table>
 
     <!-- CATATAN RESMI SISTEM -->
-    <div class="official-footer">
-        Dokumen ini diterbitkan secara sah melalui <strong>Sistem Informasi Aspirasi & Pengaduan Karyawan (Lapor Pak!) PTPN IV Regional II Kebun Dolok Sinumbah</strong>.<br>
-        Kode Registrasi Laporan: <strong>{{ $pengaduan->kode_pengaduan }}</strong> | Dicetak pada: {{ now()->translatedFormat('d F Y H:i:s') }} WIB
+    <div class="footer-note">
+        Dokumen ini diterbitkan secara sah melalui <strong>Sistem Informasi Aspirasi & Pengaduan Karyawan (Lapor Pak!) PTPN IV Kebun Dolok Sinumbah</strong>.<br>
+        Kode Registrasi: <strong>{{ $pengaduan->kode_pengaduan }}</strong> &bull; Dicetak pada: {{ now()->translatedFormat('d F Y H:i:s') }} WIB
     </div>
 
-    <script>
-        // Auto trigger print prompt on load if requested via print parameter or direct view
-        window.addEventListener('load', function() {
-            // Optional: un-comment if auto-prompt is desired
-            // window.print();
-        });
-    </script>
 </body>
 </html>

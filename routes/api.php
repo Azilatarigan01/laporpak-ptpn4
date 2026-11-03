@@ -39,14 +39,17 @@ Route::prefix('v1')->group(function () {
     Route::prefix('master')->group(function () {
         Route::get('/kategori', [MasterDataApiController::class, 'kategori']);
         Route::get('/areas', [MasterDataApiController::class, 'areas']);
+        Route::get('/cek-niksap/{niksap}', [MasterDataApiController::class, 'cekNiksap']);
     });
 
     // Pengaduan & Tracking Endpoints
     Route::prefix('pengaduan')->group(function () {
         Route::get('/', [PengaduanApiController::class, 'index']);
         Route::get('/stats', [PengaduanApiController::class, 'stats']);
+        Route::post('/ai-analyze', [PengaduanApiController::class, 'aiAnalyze']);
         Route::post('/', [PengaduanApiController::class, 'store']);
         Route::get('/{kode_pengaduan}', [PengaduanApiController::class, 'show']);
+        Route::get('/{kode_pengaduan}/pdf', [PengaduanApiController::class, 'cetakPdf']);
         Route::post('/{kode_pengaduan}/rating', [PengaduanApiController::class, 'submitRating']);
     });
 

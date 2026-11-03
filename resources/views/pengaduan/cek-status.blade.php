@@ -203,33 +203,70 @@
         </div>
       </a>
 
-      <nav class="d-none d-xl-flex align-items-center gap-1">
+      <!-- Desktop Navmenu -->
+      <nav id="navmenu" class="navmenu d-none d-xl-flex align-items-center gap-1">
         <a href="{{ url('/') }}" class="eco-nav-link">Beranda</a>
         <a href="{{ url('about') }}" class="eco-nav-link">Tentang Kami</a>
-        <a href="{{ url('pengaduan') }}" class="eco-nav-link">Layanan Pengaduan</a>
+
+        <!-- Dropdown: Layanan Pengaduan -->
+        <div class="dropdown">
+          <a href="#" class="eco-nav-link dropdown-toggle active" id="layananDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="user-select:none;">
+            Layanan Pengaduan
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark shadow-lg border-0" style="border-radius:14px; min-width:200px; background:#071e13; padding:8px;" aria-labelledby="layananDropdown">
+            <li>
+              <a class="dropdown-item rounded-3 py-2" href="{{ url('pengaduan') }}" style="color:#d1fae5; font-weight:600; font-size:0.9rem;">
+                <i class="bi bi-megaphone-fill me-2 text-success"></i>Buat Pengaduan
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item rounded-3 py-2" href="{{ url('panduan') }}" style="color:#d1fae5; font-weight:600; font-size:0.9rem;">
+                <i class="bi bi-journal-text me-2 text-success"></i>Panduan Alur
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item rounded-3 py-2 active" href="{{ route('pengaduan.cek-status') }}" style="color:#ffffff; background:rgba(82,183,136,0.25); font-weight:600; font-size:0.9rem;">
+                <i class="bi bi-search me-2 text-success"></i>Cek Status Laporan
+              </a>
+            </li>
+          </ul>
+        </div>
+
         <a href="{{ route('detail') }}" class="eco-nav-link">Berita Kebun</a>
         <a href="{{ url('/#leadership') }}" class="eco-nav-link">Struktur Organisasi</a>
-        <a href="{{ route('pengaduan.cek-status') }}" class="eco-nav-link active">Cek Status</a>
+
         <a href="{{ url('login') }}" class="btn-eco-pill ms-2">
           <i class="bi bi-shield-lock-fill"></i> Login Petugas
         </a>
       </nav>
 
+      <!-- Mobile Button & Toggle -->
       <div class="d-flex align-items-center gap-2 d-xl-none">
         <a href="{{ url('login') }}" class="btn btn-sm btn-success px-3 rounded-pill">Login</a>
-        <button class="btn btn-dark text-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mobileNav">
+        <button class="btn btn-dark text-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mobileNavMenu">
           <i class="bi bi-list fs-3"></i>
         </button>
       </div>
     </div>
 
-    <div class="collapse d-xl-none bg-dark border-top border-secondary p-3 mt-2" id="mobileNav">
+    <!-- Mobile Nav Collapse -->
+    <div class="collapse d-xl-none bg-dark border-top border-secondary p-3 mt-2" id="mobileNavMenu">
       <div class="d-flex flex-column gap-2">
         <a href="{{ url('/') }}" class="text-white text-decoration-none py-1"><i class="bi bi-house me-2"></i>Beranda</a>
         <a href="{{ url('about') }}" class="text-white text-decoration-none py-1"><i class="bi bi-info-circle me-2"></i>Tentang Kami</a>
-        <a href="{{ url('pengaduan') }}" class="text-white text-decoration-none py-1"><i class="bi bi-megaphone me-2"></i>Layanan Pengaduan</a>
+
+        <!-- Layanan Pengaduan Group (Mobile) -->
+        <div class="ps-0">
+          <div class="text-success fw-bold small py-1" style="font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase;"><i class="bi bi-megaphone me-2"></i>Layanan Pengaduan</div>
+          <div class="d-flex flex-column gap-1 ps-3">
+            <a href="{{ url('pengaduan') }}" class="text-white-50 text-decoration-none py-1 small"><i class="bi bi-pencil-square me-2"></i>Buat Pengaduan</a>
+            <a href="{{ url('panduan') }}" class="text-white-50 text-decoration-none py-1 small"><i class="bi bi-journal-text me-2"></i>Panduan Alur</a>
+            <a href="{{ route('pengaduan.cek-status') }}" class="text-white text-decoration-none py-1 small fw-bold"><i class="bi bi-search me-2 text-success"></i>Cek Status Laporan</a>
+          </div>
+        </div>
+
         <a href="{{ route('detail') }}" class="text-white text-decoration-none py-1"><i class="bi bi-newspaper me-2"></i>Berita Kebun</a>
-        <a href="{{ route('pengaduan.cek-status') }}" class="text-white text-decoration-none py-1"><i class="bi bi-search me-2"></i>Cek Status Laporan</a>
+        <a href="{{ url('/#leadership') }}" class="text-white text-decoration-none py-1"><i class="bi bi-people me-2"></i>Struktur Organisasi</a>
         <a href="{{ url('login') }}" class="btn btn-success mt-2"><i class="bi bi-box-arrow-in-right me-1"></i>Login Portal</a>
       </div>
     </div>

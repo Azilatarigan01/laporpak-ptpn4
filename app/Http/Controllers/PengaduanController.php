@@ -96,7 +96,7 @@ class PengaduanController extends Controller
             $pengaduan->foto = '';
         }
 
-        $pengaduan->is_anonim = $request->boolean('is_anonim') || $request->input('is_anonim') == '1';
+        $pengaduan->is_anonim = false;
         $pengaduan->save();
 
         // Dispatch Notifikasi Otomatis ke Telegram Bot Personalia / Admin
@@ -163,7 +163,7 @@ class PengaduanController extends Controller
             $pengaduan->foto = '';
         }
 
-        $pengaduan->is_anonim = $request->boolean('is_anonim') || $request->input('is_anonim') == '1';
+        $pengaduan->is_anonim = false;
         $pengaduan->save();
 
         // Dispatch Notifikasi Otomatis ke Telegram Bot Personalia / Admin
@@ -327,8 +327,14 @@ class PengaduanController extends Controller
      */
     public function cetakPdf($id)
     {
-        $pengaduan = Pengaduan::with(['area', 'realisasi', 'posisi', 'karyawan', 'kategori_pengaduan'])
-            ->where('id_pengaduan', $id)
+        $pengaduan = Pengaduan::with(['area', 'realisasi', 'posisi.realisasi.area', 'karyawan', 'kategori_pengaduan'])
+            ->where(function ($query) use ($id) {
+                if (is_numeric($id)) {
+                    $query->where('id_pengaduan', (int) $id)->orWhere('kode_pengaduan', (string) $id);
+                } else {
+                    $query->where('kode_pengaduan', $id);
+                }
+            })
             ->firstOrFail();
 
         try {

@@ -11,13 +11,13 @@ class Realisasi extends Model
 
     protected $table = 'realisasi';
     protected $primaryKey = 'id_realisasi';
-    
+    public $timestamps = false;
 
     protected $fillable = ['id_area', 'nama_realisasi'];
 
     public function area()
     {
-        return $this->belongsTo(Area::class, 'id_area');
+        return $this->belongsTo(Area::class, 'id_area', 'id_area');
     }
 
     public function posisi()

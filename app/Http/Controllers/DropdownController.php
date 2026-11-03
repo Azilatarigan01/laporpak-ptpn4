@@ -127,4 +127,65 @@ class DropdownController extends Controller
     {
         return $this->posisi($id);
     }
+
+    /**
+     * Verifikasi identitas karyawan via NIKSAP tanpa membocorkan direktori ke publik
+     */
+    public function cekNiksap(Request $request)
+    {
+        $niksap = trim($request->input('niksap', ''));
+
+        if (empty($niksap)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Silakan masukkan nomor NIKSAP Anda.',
+            ], 400);
+        }
+
+        $karyawan = Karyawan::with(['posisi.realisasi.area', 'posisi.area'])
+            ->where('niksap', $niksap)
+            ->first();
+
+        if (!$karyawan) {
+            return response()->json([
+                'success' => false,
+                'message' => 'NIKSAP tidak ditemukan dalam sistem. Mohon pastikan nomor NIKSAP sesuai dengan kartu pengenal karyawan PTPN IV.',
+            ], 404);
+        }
+
+        // Tentukan Unit Kerja: KBN DOS (Kebun) vs PKS DOS (Pabrik Kelapa Sawit)
+        $area = $karyawan->posisi?->area ?? $karyawan->posisi?->realisasi?->area;
+        $areaId = $area?->id_area ?? ($karyawan->posisi?->id_area ?? 1);
+        $namaAreaRaw = $area?->nama_area ?? 'KBN DOS';
+        
+        $unitLabel = ($namaAreaRaw === 'PKS DOS' || $areaId == 2) 
+            ? 'PKS DOS (Pabrik Kelapa Sawit)' 
+            : 'KBN DOS (Kebun Kelapa Sawit)';
+
+        $realisasi = $karyawan->posisi?->realisasi;
+        $realisasiId = $realisasi?->id_realisasi ?? ($karyawan->posisi?->id_realisasi ?? 1);
+        $realisasiNama = $realisasi?->nama_realisasi ?? '-';
+
+        $posisi = $karyawan->posisi;
+        $posisiId = $posisi?->id_posisi ?? 1;
+        $posisiNama = $posisi?->nama_posisi ?? '-';
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data karyawan berhasil diverifikasi.',
+            'data' => [
+                'id_karyawan' => $karyawan->id_karyawan,
+                'nama_karyawan' => $karyawan->nama_karyawan,
+                'niksap' => $karyawan->niksap,
+                'no_hp' => $karyawan->no_hp ?? '',
+                'id_posisi' => $posisiId,
+                'nama_posisi' => $posisiNama,
+                'id_realisasi' => $realisasiId,
+                'nama_realisasi' => $realisasiNama,
+                'id_area' => $areaId,
+                'nama_area' => $namaAreaRaw,
+                'unit_label' => $unitLabel,
+            ]
+        ]);
+    }
 }

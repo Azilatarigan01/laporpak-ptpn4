@@ -45,12 +45,13 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['put', 'post'], '/pengaduan/update-status/{id?}', [PengaduanController::class, 'updateStatus'])->name('pengaduan.updateStatus');
 });
 
-// Dropdown Controller Routes (AJAX Select2)
+// Dropdown Controller Routes (AJAX Select2 & Verifikasi NIKSAP)
 Route::get('/selectArea', [DropdownController::class, 'area'])->name('area.index');
 Route::get('/selectRealisasi/{id}', [DropdownController::class, 'realisasi'])->name('area.realisasi');
 Route::get('/selectPosisi/{id}', [DropdownController::class, 'posisi'])->name('area.posisi');
 Route::get('/selectKaryawan/{id}', [DropdownController::class, 'karyawan'])->name('area.karyawan');
 Route::get('/selectNiksap/{id}', [DropdownController::class, 'niksap'])->name('area.niksap');
+Route::get('/cek-niksap-pelapor', [DropdownController::class, 'cekNiksap'])->name('cekNiksapPelapor');
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -111,7 +112,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::get('/pengaduan/list', [PengaduanController::class, 'list'])->name('pengaduan.list');
     Route::get('/pengaduan/add', [PengaduanController::class, 'add'])->name('pengaduan.add');
     Route::post('/pengaduan/add', [PengaduanController::class, 'insert'])->name('pengaduan.insert');
-    Route::get('/pengaduan/{id}/cetak-pdf', [PengaduanController::class, 'cetakPdf'])->name('pengaduan.cetakPDF');
+    Route::get('/pengaduan/{id}/cetak-pdf', [PengaduanController::class, 'cetakPdf'])->name('admin.pengaduan.cetakPDF');
     Route::delete('/pengaduan/{id}', [PengaduanController::class, 'destroy'])->name('pengaduan.destroy');
     Route::get('/pengaduan/search', [PengaduanController::class, 'search'])->name('pengaduan.search');
     Route::get('/pengaduan/status/{status}', [PengaduanController::class, 'filterByStatus'])->name('pengaduan.status');

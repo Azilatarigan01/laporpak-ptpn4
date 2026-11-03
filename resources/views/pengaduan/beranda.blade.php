@@ -246,35 +246,70 @@
         </div>
       </a>
 
-      <nav class="d-none d-xl-flex align-items-center gap-1">
+      <!-- Desktop Navmenu -->
+      <nav id="navmenu" class="navmenu d-none d-xl-flex align-items-center gap-1">
         <a href="{{ url('/') }}" class="eco-nav-link">Beranda</a>
         <a href="{{ url('about') }}" class="eco-nav-link">Tentang Kami</a>
-        <a href="{{ url('panduan') }}" class="eco-nav-link">Panduan Alur</a>
-        <a href="{{ url('pengaduan') }}" class="eco-nav-link active">Layanan Pengaduan</a>
+
+        <!-- Dropdown: Layanan Pengaduan -->
+        <div class="dropdown">
+          <a href="#" class="eco-nav-link dropdown-toggle active" id="layananDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="user-select:none;">
+            Layanan Pengaduan
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark shadow-lg border-0" style="border-radius:14px; min-width:200px; background:#071e13; padding:8px;" aria-labelledby="layananDropdown">
+            <li>
+              <a class="dropdown-item rounded-3 py-2 active" href="{{ url('pengaduan') }}" style="color:#ffffff; background:rgba(82,183,136,0.25); font-weight:600; font-size:0.9rem;">
+                <i class="bi bi-megaphone-fill me-2 text-success"></i>Buat Pengaduan
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item rounded-3 py-2" href="{{ url('panduan') }}" style="color:#d1fae5; font-weight:600; font-size:0.9rem;">
+                <i class="bi bi-journal-text me-2 text-success"></i>Panduan Alur
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item rounded-3 py-2" href="{{ route('pengaduan.cek-status') }}" style="color:#d1fae5; font-weight:600; font-size:0.9rem;">
+                <i class="bi bi-search me-2 text-success"></i>Cek Status Laporan
+              </a>
+            </li>
+          </ul>
+        </div>
+
         <a href="{{ route('detail') }}" class="eco-nav-link">Berita Kebun</a>
         <a href="{{ url('/#leadership') }}" class="eco-nav-link">Struktur Organisasi</a>
-        <a href="{{ route('pengaduan.cek-status') }}" class="eco-nav-link">Cek Status</a>
+
         <a href="{{ url('login') }}" class="btn-eco-pill ms-2">
           <i class="bi bi-shield-lock-fill"></i> Login Petugas
         </a>
       </nav>
 
+      <!-- Mobile Button & Toggle -->
       <div class="d-flex align-items-center gap-2 d-xl-none">
         <a href="{{ url('login') }}" class="btn btn-sm btn-success px-3 rounded-pill">Login</a>
-        <button class="btn btn-dark text-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mobileNav">
+        <button class="btn btn-dark text-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mobileNavMenu">
           <i class="bi bi-list fs-3"></i>
         </button>
       </div>
     </div>
 
-    <div class="collapse d-xl-none bg-dark border-top border-secondary p-3 mt-2" id="mobileNav">
+    <!-- Mobile Nav Collapse -->
+    <div class="collapse d-xl-none bg-dark border-top border-secondary p-3 mt-2" id="mobileNavMenu">
       <div class="d-flex flex-column gap-2">
         <a href="{{ url('/') }}" class="text-white text-decoration-none py-1"><i class="bi bi-house me-2"></i>Beranda</a>
         <a href="{{ url('about') }}" class="text-white text-decoration-none py-1"><i class="bi bi-info-circle me-2"></i>Tentang Kami</a>
-        <a href="{{ url('panduan') }}" class="text-white text-decoration-none py-1"><i class="bi bi-journal-text me-2"></i>Panduan Alur</a>
-        <a href="{{ url('pengaduan') }}" class="text-white text-decoration-none py-1"><i class="bi bi-megaphone me-2"></i>Layanan Pengaduan</a>
+
+        <!-- Layanan Pengaduan Group (Mobile) -->
+        <div class="ps-0">
+          <div class="text-success fw-bold small py-1" style="font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase;"><i class="bi bi-megaphone me-2"></i>Layanan Pengaduan</div>
+          <div class="d-flex flex-column gap-1 ps-3">
+            <a href="{{ url('pengaduan') }}" class="text-white text-decoration-none py-1 small fw-bold"><i class="bi bi-pencil-square me-2 text-success"></i>Buat Pengaduan</a>
+            <a href="{{ url('panduan') }}" class="text-white-50 text-decoration-none py-1 small"><i class="bi bi-journal-text me-2"></i>Panduan Alur</a>
+            <a href="{{ route('pengaduan.cek-status') }}" class="text-white-50 text-decoration-none py-1 small"><i class="bi bi-search me-2"></i>Cek Status Laporan</a>
+          </div>
+        </div>
+
         <a href="{{ route('detail') }}" class="text-white text-decoration-none py-1"><i class="bi bi-newspaper me-2"></i>Berita Kebun</a>
-        <a href="{{ route('pengaduan.cek-status') }}" class="text-white text-decoration-none py-1"><i class="bi bi-search me-2"></i>Cek Status Laporan</a>
+        <a href="{{ url('/#leadership') }}" class="text-white text-decoration-none py-1"><i class="bi bi-people me-2"></i>Struktur Organisasi</a>
         <a href="{{ url('login') }}" class="btn btn-success mt-2"><i class="bi bi-box-arrow-in-right me-1"></i>Login Portal</a>
       </div>
     </div>
@@ -334,61 +369,80 @@
             <form action="{{ route('pengaduan.store') }}" method="POST" enctype="multipart/form-data">
               @csrf
 
-              <!-- Step 1: Penempatan & Identitas -->
+              <!-- Step 1: Penempatan & Identitas Karyawan via NIKSAP -->
               <div class="mb-4 pb-3 border-bottom">
                 <div class="d-flex align-items-center">
                   <span class="step-badge">1</span>
                   <div>
-                    <h4 class="fw-bold text-dark mb-0">Identitas & Penempatan Kerja</h4>
-                    <small class="text-muted">Pilih hierarki area kerja hingga nama karyawan Anda terpilih secara otomatis.</small>
+                    <h4 class="fw-bold text-dark mb-0">Identitas Karyawan (Verifikasi NIKSAP)</h4>
+                    <small class="text-muted">Masukkan Nomor Induk Karyawan SAP (NIKSAP) Anda untuk memverifikasi data pelapor secara akurat.</small>
                   </div>
                 </div>
               </div>
 
-              <div class="row g-4 mb-5">
-                <!-- 1. Area -->
-                <div class="col-md-6">
-                  <label class="form-label">Area Kerja <span class="text-danger">*</span></label>
-                  <select id="selectArea" name="nama_area" class="form-select" required>
-                    <option value="">-- Pilih Area Kerja --</option>
-                  </select>
+              <!-- Hidden inputs required by database controller -->
+              <input type="hidden" name="nama_area" id="hiddenAreaId" value="{{ old('nama_area') }}">
+              <input type="hidden" name="nama_realisasi" id="hiddenRealisasiId" value="{{ old('nama_realisasi') }}">
+              <input type="hidden" name="nama_posisi" id="hiddenPosisiId" value="{{ old('nama_posisi') }}">
+              <input type="hidden" name="nama_karyawan" id="hiddenKaryawanId" value="{{ old('nama_karyawan') }}">
+
+              <div class="row g-4 mb-4">
+                <!-- 1. Input NIKSAP -->
+                <div class="col-md-7">
+                  <label class="form-label fw-bold text-dark">Nomor Induk Karyawan (NIKSAP) <span class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 text-success"><i class="bi bi-person-badge fs-5"></i></span>
+                    <input type="text" id="inputNiksap" name="niksap" class="form-control form-control-lg border-start-0" placeholder="Ketik nomor NIKSAP Anda..." value="{{ old('niksap') }}" required autocomplete="off">
+                    <button class="btn btn-success px-4 fw-bold" type="button" id="btnCekNiksap">
+                      <span id="btnCekText"><i class="bi bi-search me-1"></i> Periksa</span>
+                      <span id="btnCekSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                    </button>
+                  </div>
+                  <small class="text-muted">Tekan tombol <strong>Periksa</strong> atau tekan <strong>Enter</strong> pada keyboard untuk memuat data karyawan.</small>
                 </div>
 
-                <!-- 2. Realisasi -->
-                <div class="col-md-6">
-                  <label class="form-label">Bagian Realisasi <span class="text-danger">*</span></label>
-                  <select id="selectRealisasi" name="nama_realisasi" class="form-select" disabled required>
-                    <option value="">-- Pilih Bagian Realisasi --</option>
-                  </select>
+                <!-- 2. Nomor HP / WA -->
+                <div class="col-md-5">
+                  <label class="form-label fw-bold text-dark">Nomor WhatsApp / HP Aktif <span class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 text-success"><i class="bi bi-whatsapp fs-5"></i></span>
+                    <input type="tel" id="inputNoHp" name="no_hp" class="form-control form-control-lg border-start-0" placeholder="Contoh: 081234567890" value="{{ old('no_hp') }}" required>
+                  </div>
+                  <small class="text-muted">Untuk menerima update respon & tindak lanjut dari pimpinan.</small>
                 </div>
 
-                <!-- 3. Posisi -->
-                <div class="col-md-6">
-                  <label class="form-label">Posisi / Jabatan <span class="text-danger">*</span></label>
-                  <select id="selectPosisi" name="nama_posisi" class="form-select" disabled required>
-                    <option value="">-- Pilih Posisi / Jabatan --</option>
-                  </select>
-                </div>
+                <!-- 3. Status Verifikasi Data Karyawan -->
+                <div class="col-12">
+                  <div id="niksapFeedbackAlert" class="alert d-none mb-0 p-3" style="border-radius: 14px;"></div>
 
-                <!-- 4. Karyawan -->
-                <div class="col-md-6">
-                  <label class="form-label">Nama Karyawan (Pelapor) <span class="text-danger">*</span></label>
-                  <select id="selectKaryawan" name="nama_karyawan" class="form-select" disabled required>
-                    <option value="">-- Pilih Nama Karyawan --</option>
-                  </select>
-                </div>
-
-                <!-- 5. NIKSAP -->
-                <div class="col-md-6">
-                  <label class="form-label">NIKSAP (Nomor Induk Karyawan) <span class="text-danger">*</span></label>
-                  <input type="text" id="inputNiksap" name="niksap" class="form-control bg-light" placeholder="Terisi otomatis setelah memilih nama karyawan" readonly required value="{{ old('niksap') }}">
-                </div>
-
-                <!-- 6. Nomor HP / WA -->
-                <div class="col-md-6">
-                  <label class="form-label">Nomor WhatsApp / HP Aktif <span class="text-danger">*</span></label>
-                  <input type="tel" name="no_hp" class="form-control" placeholder="Contoh: 081234567890" value="{{ old('no_hp') }}" required>
-                  <small class="text-muted">Untuk menerima update respon dari personalia/pimpinan.</small>
+                  <div id="verifiedEmployeeCard" class="p-3 p-md-4 rounded-4 border d-none" style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-color: #86efac !important;">
+                    <div class="d-flex align-items-start gap-3">
+                      <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0 mt-1" style="width: 52px; height: 52px;">
+                        <i class="bi bi-person-check-fill fs-3"></i>
+                      </div>
+                      <div class="flex-grow-1">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+                          <span class="badge bg-success text-white px-3 py-1 small fw-bold"><i class="bi bi-patch-check-fill me-1"></i>DATA TERVERIFIKASI</span>
+                          <span class="badge bg-dark text-white px-3 py-1 small fw-bold" id="cardUnitBadge">KBN DOS (Kebun)</span>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-2" id="cardNamaKaryawan">-</h4>
+                        <div class="row g-2 text-dark pt-2 border-top border-success border-opacity-25 small">
+                          <div class="col-sm-4">
+                            <span class="text-muted d-block small">Unit Operasional:</span>
+                            <strong class="text-success" id="cardArea">-</strong>
+                          </div>
+                          <div class="col-sm-4">
+                            <span class="text-muted d-block small">Bagian / Afdeling:</span>
+                            <strong class="text-dark" id="cardRealisasi">-</strong>
+                          </div>
+                          <div class="col-sm-4">
+                            <span class="text-muted d-block small">Jabatan / Posisi:</span>
+                            <strong class="text-dark" id="cardPosisi">-</strong>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -439,21 +493,6 @@
                 </div>
               </div>
 
-              <!-- Opsi Perlindungan Whistleblower / Anonim -->
-              <div class="p-3 mb-4 rounded-3 border" style="background-color: #f0fdf4; border-color: #bbf7d0 !important;">
-                <div class="form-check form-switch d-flex align-items-center gap-3 ps-0 mb-0">
-                  <input class="form-check-input ms-0 mt-0" type="checkbox" name="is_anonim" id="isAnonimCheck" value="1" style="width: 2.8em; height: 1.5em; cursor: pointer;">
-                  <label class="form-check-label mb-0" for="isAnonimCheck" style="cursor: pointer;">
-                    <span class="d-flex align-items-center gap-2 fw-bold text-success fs-6">
-                      <i class="bi bi-shield-lock-fill"></i> Laporkan Sebagai Anonim / Rahasia (Whistleblower Protection)
-                    </span>
-                    <span class="d-block text-muted small mt-1">
-                      Jika diaktifkan, nama dan NIKSAP Anda akan disamarkan dari tampilan publik dan pimpinan unit. Sistem hanya mencantumkan kode tiket unik untuk menjamin kerahasiaan Anda.
-                    </span>
-                  </label>
-                </div>
-              </div>
-
               <!-- Submit Button -->
               <div class="text-center pt-2">
                 <button type="submit" class="btn-submit-pengaduan">
@@ -490,116 +529,98 @@
 
   <script>
     $(document).ready(function() {
-      // 1. Initialize Area Select2
-      $("#selectArea").select2({
-        placeholder: 'Pilih Area Kerja...',
-        allowClear: true,
-        ajax: {
-          url: "{{ route('area.index') }}",
-          dataType: 'json',
-          delay: 200,
-          data: function(params) {
-            return { q: params.term };
+      function verifikasiNiksap() {
+        let niksap = $('#inputNiksap').val().trim();
+        if (!niksap) {
+          showFeedback('warning', '<i class="bi bi-exclamation-circle-fill me-2"></i> Silakan ketik nomor NIKSAP Anda terlebih dahulu.');
+          $('#inputNiksap').focus();
+          return;
+        }
+
+        // Tampilkan loading spinner
+        $('#btnCekText').addClass('d-none');
+        $('#btnCekSpinner').removeClass('d-none');
+        $('#btnCekNiksap').prop('disabled', true);
+        $('#niksapFeedbackAlert').addClass('d-none');
+        $('#verifiedEmployeeCard').addClass('d-none');
+
+        $.ajax({
+          url: "{{ route('cekNiksapPelapor') }}",
+          type: "GET",
+          data: { niksap: niksap },
+          dataType: "json",
+          success: function(response) {
+            if (response.success && response.data) {
+              let emp = response.data;
+              $('#hiddenAreaId').val(emp.id_area);
+              $('#hiddenRealisasiId').val(emp.id_realisasi);
+              $('#hiddenPosisiId').val(emp.id_posisi);
+              $('#hiddenKaryawanId').val(emp.id_karyawan);
+
+              // Auto-fill No HP jika tersedia di database dan belum diisi pengguna
+              if (emp.no_hp && !$('#inputNoHp').val()) {
+                $('#inputNoHp').val(emp.no_hp);
+              }
+
+              // Update tampilan kartu verifikasi
+              $('#cardNamaKaryawan').text(emp.nama_karyawan);
+              $('#cardUnitBadge').text(emp.unit_label || emp.nama_area);
+              $('#cardArea').text(emp.nama_area);
+              $('#cardRealisasi').text(emp.nama_realisasi);
+              $('#cardPosisi').text(emp.nama_posisi);
+
+              $('#verifiedEmployeeCard').removeClass('d-none');
+              $('#niksapFeedbackAlert').addClass('d-none');
+            }
           },
-          processResults: function(data) {
-            return { results: data.results || data.data };
+          error: function(xhr) {
+            let msg = 'NIKSAP tidak ditemukan. Pastikan Anda memasukkan nomor NIKSAP yang valid sesuai kartu pengenal karyawan PTPN IV.';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+              msg = xhr.responseJSON.message;
+            }
+            showFeedback('danger', '<i class="bi bi-x-circle-fill me-2"></i> ' + msg);
+            $('#hiddenAreaId').val('');
+            $('#hiddenRealisasiId').val('');
+            $('#hiddenPosisiId').val('');
+            $('#hiddenKaryawanId').val('');
+            $('#verifiedEmployeeCard').addClass('d-none');
+          },
+          complete: function() {
+            $('#btnCekText').removeClass('d-none');
+            $('#btnCekSpinner').addClass('d-none');
+            $('#btnCekNiksap').prop('disabled', false);
           }
+        });
+      }
+
+      function showFeedback(type, message) {
+        let alertBox = $('#niksapFeedbackAlert');
+        alertBox.removeClass('d-none alert-success alert-warning alert-danger')
+                .addClass('alert-' + type)
+                .html(message);
+      }
+
+      // Trigger verifikasi saat tombol diklik
+      $('#btnCekNiksap').on('click', function(e) {
+        e.preventDefault();
+        verifikasiNiksap();
+      });
+
+      // Trigger verifikasi saat tombol Enter ditekan pada input NIKSAP
+      $('#inputNiksap').on('keypress', function(e) {
+        if (e.which === 13) {
+          e.preventDefault();
+          verifikasiNiksap();
         }
       });
 
-      // 2. Area Change -> Realisasi
-      $("#selectArea").on("change", function () {
-        let areaId = $(this).val();
-        $("#selectRealisasi").empty().append('<option value="">-- Pilih Bagian Realisasi --</option>').prop('disabled', !areaId);
-        $("#selectPosisi").empty().append('<option value="">-- Pilih Posisi / Jabatan --</option>').prop('disabled', true);
-        $("#selectKaryawan").empty().append('<option value="">-- Pilih Nama Karyawan --</option>').prop('disabled', true);
-        $("#inputNiksap").val('');
-
-        if (areaId) {
-          $("#selectRealisasi").select2({
-            placeholder: "Pilih Bagian Realisasi...",
-            allowClear: true,
-            ajax: {
-              url: "{{ url('/selectRealisasi') }}/" + areaId,
-              dataType: "json",
-              delay: 200,
-              data: function (params) {
-                return { q: params.term };
-              },
-              processResults: function (data) {
-                return { results: data.results || data.data };
-              }
-            }
-          });
-        }
-      });
-
-      // 3. Realisasi Change -> Posisi
-      $("#selectRealisasi").on("change", function () {
-        let realisasiId = $(this).val();
-        $("#selectPosisi").empty().append('<option value="">-- Pilih Posisi / Jabatan --</option>').prop('disabled', !realisasiId);
-        $("#selectKaryawan").empty().append('<option value="">-- Pilih Nama Karyawan --</option>').prop('disabled', true);
-        $("#inputNiksap").val('');
-
-        if (realisasiId) {
-          $("#selectPosisi").select2({
-            placeholder: "Pilih Posisi / Jabatan...",
-            allowClear: true,
-            ajax: {
-              url: "{{ url('/selectPosisi') }}/" + realisasiId,
-              dataType: "json",
-              delay: 200,
-              data: function (params) {
-                return { q: params.term };
-              },
-              processResults: function (data) {
-                return { results: data.results || data.data };
-              }
-            }
-          });
-        }
-      });
-
-      // 4. Posisi Change -> Karyawan
-      $("#selectPosisi").on("change", function () {
-        let posisiId = $(this).val();
-        $("#selectKaryawan").empty().append('<option value="">-- Pilih Nama Karyawan --</option>').prop('disabled', !posisiId);
-        $("#inputNiksap").val('');
-
-        if (posisiId) {
-          $("#selectKaryawan").select2({
-            placeholder: "Pilih Nama Karyawan...",
-            allowClear: true,
-            ajax: {
-              url: "{{ url('/selectKaryawan') }}/" + posisiId,
-              dataType: "json",
-              delay: 200,
-              data: function (params) {
-                return { q: params.term };
-              },
-              processResults: function (data) {
-                return { results: data.results || data.data };
-              }
-            }
-          });
-        }
-      });
-
-      // 5. Karyawan Change -> Auto-fill NIKSAP
-      $("#selectKaryawan").on("change", function () {
-        let karyawanId = $(this).val();
-        if (karyawanId) {
-          $.ajax({
-            url: "{{ url('/selectNiksap') }}/" + karyawanId,
-            dataType: 'json',
-            success: function(data) {
-              if (data && data.text) {
-                $("#inputNiksap").val(data.text);
-              }
-            }
-          });
-        } else {
-          $("#inputNiksap").val('');
+      // Validasi form sebelum submit
+      $('form').on('submit', function(e) {
+        if (!$('#hiddenKaryawanId').val()) {
+          e.preventDefault();
+          showFeedback('danger', '<i class="bi bi-exclamation-triangle-fill me-2"></i> Mohon klik tombol <strong>Periksa</strong> untuk memverifikasi NIKSAP Anda terlebih dahulu sebelum mengirim pengaduan.');
+          $('#inputNiksap').focus();
+          return false;
         }
       });
     });
